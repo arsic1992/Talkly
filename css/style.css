@@ -1,5 +1,5 @@
 /* =========================================================
-   INDEX BOX  (categories + forum rows)
+   INDEX BOX  (categories + forum cards)
    Flexbox layout. Light is the default, dark is opt-in via
    <html data-theme="dark">
    ========================================================= */
@@ -15,6 +15,7 @@
 	--fx-text: #1c2330;
 	--fx-muted: #6b7686;
 	--fx-accent: #3b6df0;
+	--fx-on-accent: #ffffff;
 	--fx-accent-soft: rgba(59, 109, 240, 0.10);
 }
 
@@ -26,6 +27,7 @@ html[data-theme="dark"] {
 	--fx-text: #e6e9ef;
 	--fx-muted: #8b95a5;
 	--fx-accent: #7c9cff;
+	--fx-on-accent: #0f131a;
 	--fx-accent-soft: rgba(124, 156, 255, 0.14);
 }
 
@@ -68,16 +70,28 @@ html[data-theme="dark"] {
 	border-color: var(--fx-accent);
 }
 
-/* ---------- Category ---------- */
-.fx-cat {
-	margin: 0 0 28px;
+/* =========================================================
+   CATEGORY WRAPPER
+   Resets Forumotion's default .forabg (blue bg image, white
+   border, padding). Extra specificity + !important so the
+   default theme can't win.
+   ========================================================= */
+div.forabg.fx-cat {
+	clear: both;
+	margin: 0 0 34px !important;
+	padding: 0 !important;
+	border: 0 !important;
+	background: none !important;
+	background-image: none !important;
 	font-family: var(--fx-font);
 }
 
 .fx-cat .inner {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	margin: 0;
+	padding: 0;
+	background: none;
 }
 
 .fx-cat ul.topiclist {
@@ -88,119 +102,109 @@ html[data-theme="dark"] {
 	list-style: none;
 }
 
+/* ---------- Category header: a centered chip sitting on the panel's top edge ---------- */
+.fx-cat .inner > ul.topiclist:first-child {
+	position: relative;
+	z-index: 2;
+	margin-bottom: -19px;
+}
+
 .fx-cat li.header {
+	float: none;
+	width: 100%;
 	margin: 0;
 	padding: 0;
-	background: none;
-	border: 0;
+	background: none !important;
+	border: 0 !important;
 }
 
-/* Category title: bold name followed by a hairline that fills the row */
 .fx-cat-head {
 	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.fx-cat-head .table-title {
+	display: inline-flex;
 	align-items: center;
-	gap: 14px;
-	padding: 0 4px;
+	margin: 0;
+	padding: 7px 26px;
+	border-radius: 999px;
+	background: var(--fx-accent);
+	color: var(--fx-on-accent);
+	font-size: 1rem;
+	font-weight: 800;
+	line-height: 1.3;
+	letter-spacing: 0.01em;
 }
 
-.fx-cat-head::after {
-	content: "";
-	flex: 1 1 auto;
-	height: 1px;
-	background: var(--fx-border);
-}
-
-.fx-cat-head .table-title,
 .fx-cat-head .table-title h2 {
 	margin: 0;
-	color: var(--fx-text);
-	font-size: 1.1rem;
-	font-weight: 800;
-	letter-spacing: -0.01em;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
 }
 
-/* overflow hidden lets the flush avatars follow the rounded corners */
+/* ---------- Panel that holds the forum cards ---------- */
 .fx-cat ul.forums {
-	overflow: hidden;
+	flex-flow: row wrap;
+	gap: 12px;
+	padding: 36px 14px 14px;
 	border: 1px solid var(--fx-border);
-	border-radius: 16px;
-	background: var(--fx-surface);
+	border-radius: 20px;
+	background: var(--fx-surface-2);
 }
 
 .fx-cat .container-imgs-list {
 	overflow: auto;
-	padding: 12px;
+	padding: 36px 14px 14px;
 	border: 1px solid var(--fx-border);
-	border-radius: 16px;
-	background: var(--fx-surface);
+	border-radius: 20px;
+	background: var(--fx-surface-2);
 }
 
-/* ---------- Forum row: [avatar] [content] [last post] ---------- */
+/* =========================================================
+   FORUM CARD: [ info + counters ] over [ last post strip ]
+   ========================================================= */
 .fx-cat li.fx-forum {
+	float: none;
+	flex: 1 1 calc(50% - 6px);
 	display: flex;
-	align-items: stretch;
-	min-height: 96px;
+	flex-direction: column;
+	width: auto;
+	min-width: 0;
 	margin: 0;
 	padding: 0;
-	background: none;
-	border: 0;
-	border-bottom: 1px solid var(--fx-border);
-	transition: background 0.15s;
-}
-
-.fx-cat li.fx-forum:last-child {
-	border-bottom: 0;
+	overflow: hidden;
+	border: 1px solid var(--fx-border) !important;
+	border-radius: 14px;
+	background: var(--fx-surface) !important;
+	font-size: 1rem;
+	transition: border-color 0.15s;
 }
 
 .fx-cat li.fx-forum:hover {
-	background: var(--fx-surface-2);
+	border-color: var(--fx-accent) !important;
 }
 
-/* ----- Left: square avatar, flush with the panel edge ----- */
-.fx-spine {
-	position: relative;
-	flex: 0 0 96px;
-	background: var(--fx-surface-2);
-	border-right: 1px solid var(--fx-border);
+/* ----- Top: info on the left, counters on the right ----- */
+.fx-card-body {
+	flex: 1 1 auto;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 16px 18px;
 }
 
-.fx-spine .lastpost-avatar {
-	position: absolute;
-	inset: 0;
-	display: block;
-}
-
-.fx-spine .lastpost-avatar img {
-	display: block;
-	width: 100% !important;
-	height: 100% !important;
-	max-width: none !important;
-	max-height: none !important;
-	object-fit: cover;
-	border-radius: 0;
-}
-
-/* folder image (new / old / locked) as a badge on the avatar corner */
-.fx-state {
-	position: absolute;
-	right: 6px;
-	bottom: 6px;
-	width: 26px;
-	height: 26px;
-	border: 1px solid var(--fx-border);
-	border-radius: 50%;
-	background: var(--fx-surface) center / 16px no-repeat;
-}
-
-/* ----- Middle: content ----- */
 .fx-forum-main {
 	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	gap: 3px;
 	min-width: 0;
-	padding: 14px 18px;
 }
 
 .fx-forum-main .hierarchy {
@@ -228,6 +232,7 @@ html[data-theme="dark"] {
 }
 
 .fx-forum-meta {
+	margin-top: 4px;
 	color: var(--fx-muted);
 	font-size: 0.8rem;
 }
@@ -245,16 +250,89 @@ html[data-theme="dark"] {
 	text-decoration: underline;
 }
 
-/* latest topic, styled like a quote of the newest thread */
+/* Counters: number with its label underneath */
+.fx-stats {
+	flex: 0 0 auto;
+	display: flex;
+	gap: 6px;
+}
+
+.fx-stat {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-width: 58px;
+	padding: 7px 10px;
+	border-radius: 10px;
+	background: var(--fx-surface-2);
+	line-height: 1.25;
+}
+
+.fx-stat b {
+	color: var(--fx-text);
+	font-size: 1.05rem;
+	font-weight: 800;
+}
+
+.fx-stat .fx-label {
+	display: block !important;
+	color: var(--fx-muted);
+	font-size: 0.7rem;
+	font-weight: 700;
+}
+
+/* ----- Bottom: last post strip ----- */
+.fx-last {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 14px;
+	border-top: 1px solid var(--fx-border);
+	background: var(--fx-surface-2);
+	font-family: var(--fx-font);
+}
+
+/* square avatar, far left */
+.fx-av {
+	position: relative;
+	flex: 0 0 44px;
+	height: 44px;
+	overflow: hidden;
+	border-radius: 8px;
+	background: var(--fx-border);
+}
+
+.fx-av:not(:has(img)) {
+	display: none;
+}
+
+.fx-av .lastpost-avatar {
+	position: absolute;
+	inset: 0;
+	display: block;
+}
+
+.fx-av .lastpost-avatar img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	max-height: none !important;
+	object-fit: cover;
+	border-radius: 0;
+}
+
+/* latest topic, fills the middle */
+.fx-last-mid {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
 .fx-last-topic {
 	display: block;
-	max-width: 100%;
-	margin-top: 4px;
-	padding-left: 9px;
 	overflow: hidden;
-	border-left: 2px solid var(--fx-accent);
 	color: var(--fx-text);
-	font-size: 0.82rem;
+	font-size: 0.86rem;
 	font-weight: 700;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -265,64 +343,18 @@ html[data-theme="dark"] {
 	color: var(--fx-accent);
 }
 
-/* Topics / posts counters */
-.fx-stats {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-	margin-top: 6px;
-}
-
-.fx-pill {
-	display: inline-flex;
-	align-items: baseline;
-	gap: 4px;
-	padding: 3px 11px;
-	border-radius: 999px;
-	background: var(--fx-surface-2);
+/* date, username and go-to-last-post image, far right */
+.fx-last-by {
+	flex: 0 0 auto;
+	max-width: 50%;
 	color: var(--fx-muted);
-	font-size: 0.76rem;
-	font-weight: 600;
-}
-
-.fx-cat li.fx-forum:hover .fx-pill {
-	background: var(--fx-surface);
-}
-
-.fx-pill b {
-	color: var(--fx-text);
-	font-weight: 800;
-}
-
-.fx-pill dfn {
-	display: inline;
-	font-style: normal;
-}
-
-/* ----- Right: username, date, go-to-last-post image ----- */
-.fx-last {
-	flex: 0 0 210px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: flex-end;
-	gap: 2px;
-	padding: 14px 20px 14px 16px;
-	border-left: 1px solid var(--fx-border);
-	color: var(--fx-muted);
-	font-family: var(--fx-font);
-	font-size: 0.76rem;
-	line-height: 1.6;
+	font-size: 0.74rem;
+	line-height: 1.55;
 	text-align: right;
 }
 
-.fx-last-by {
-	display: block;
-	max-width: 100%;
-}
-
 .fx-last-by a.gensmall {
-	font-size: 0.92rem;
+	font-size: 0.88rem;
 	font-weight: 800;
 	text-decoration: none;
 }
@@ -347,7 +379,7 @@ html[data-theme="dark"] {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	text-align: left;
+	font-size: 0.78rem;
 }
 
 .fx-last .AD_LastPA .lastpost-avatar img {
@@ -358,29 +390,33 @@ html[data-theme="dark"] {
 	object-fit: cover;
 }
 
-/* ---------- Mobile ---------- */
-@media (max-width: 760px) {
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
 	.fx-cat li.fx-forum {
+		flex-basis: 100%;
+	}
+}
+
+@media (max-width: 520px) {
+	.fx-cat ul.forums {
+		padding: 34px 10px 10px;
+	}
+
+	.fx-card-body {
 		flex-wrap: wrap;
-		min-height: 0;
-	}
-
-	.fx-spine {
-		flex: 0 0 76px;
-		min-height: 76px;
-	}
-
-	.fx-forum-main {
-		flex: 1 1 calc(100% - 77px);
-		padding: 12px 14px;
 	}
 
 	.fx-last {
+		flex-wrap: wrap;
+	}
+
+	.fx-last-mid {
+		flex: 1 1 calc(100% - 60px);
+	}
+
+	.fx-last-by {
 		flex: 1 1 100%;
-		align-items: flex-start;
-		padding: 10px 14px;
-		border-top: 1px solid var(--fx-border);
-		border-left: 0;
+		max-width: 100%;
 		text-align: left;
 	}
 }
