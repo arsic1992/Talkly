@@ -1,7 +1,12 @@
 /* =========================================================
-   INDEX BOX  (categories + forum cards)
+   TALKLY THEME  (single stylesheet)
    Flexbox layout. Light is the default, dark is opt-in via
    <html data-theme="dark">
+
+   Sections:
+   1. Tokens
+   2. Index box (categories + forum cards)
+   3. Navbar + theme switcher
    ========================================================= */
 
 /* ---------- Tokens ---------- */
@@ -18,6 +23,14 @@
 	--fx-accent: #3b6df0;
 	--fx-on-accent: #ffffff;
 	--fx-accent-soft: rgba(59, 109, 240, 0.10);
+
+	/* navbar */
+	--fx-nav-bg: #2f5be0;
+	--fx-nav-text: #ffffff;
+	--fx-nav-hover: rgba(255, 255, 255, 0.18);
+	--fx-nav-btn: rgba(255, 255, 255, 0.16);
+	--fx-nav-btn-hover: rgba(255, 255, 255, 0.30);
+	--fx-nav-border: transparent;
 }
 
 html[data-theme="dark"] {
@@ -31,7 +44,19 @@ html[data-theme="dark"] {
 	--fx-accent: #7c9cff;
 	--fx-on-accent: #0f131a;
 	--fx-accent-soft: rgba(124, 156, 255, 0.14);
+
+	/* navbar */
+	--fx-nav-bg: #141923;
+	--fx-nav-text: #d6dcea;
+	--fx-nav-hover: rgba(124, 156, 255, 0.16);
+	--fx-nav-btn: rgba(124, 156, 255, 0.14);
+	--fx-nav-btn-hover: rgba(124, 156, 255, 0.28);
+	--fx-nav-border: #272e3b;
 }
+
+/* =========================================================
+   2. INDEX BOX  (categories + forum cards)
+   ========================================================= */
 
 /* ---------- Quick links (top and bottom of the index) ---------- */
 .linklist.fx-links {
@@ -463,5 +488,209 @@ div.forabg.fx-cat {
 		flex: 1 1 100%;
 		max-width: 100%;
 		text-align: left;
+	}
+}
+
+/* =========================================================
+   3. NAVBAR + THEME SWITCHER  (overall_header: ul.linklist.navlinks)
+   ========================================================= */
+
+/* ---------- Bar ---------- */
+ul.linklist.navlinks {
+	position: relative;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 48px;
+	margin: 0;
+	padding: 0 16px;
+	overflow: visible;
+	list-style: none;
+	background: var(--fx-nav-bg);
+	border: 0;
+	border-bottom: 1px solid var(--fx-nav-border);
+	font-family: var(--fx-font);
+	font-weight: 700;
+	transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* empty left spacer: same flex weight as the switcher on the right,
+   so the links stay centered */
+ul.linklist.navlinks::before {
+	content: "";
+	flex: 1 1 0;
+}
+
+/* Forumotion puts a &nbsp; after every link; font-size 0 on the li removes it */
+ul.linklist.navlinks > li {
+	position: relative;
+	float: none;
+	display: block;
+	width: auto;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: 0;
+	line-height: 1;
+}
+
+/* ---------- Links ---------- */
+ul.linklist.navlinks a.mainmenu {
+	display: inline-flex;
+	align-items: center;
+	height: 34px;
+	padding: 0 14px;
+	border-radius: 9px;
+	color: var(--fx-nav-text);
+	font-size: 0.92rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+ul.linklist.navlinks a.mainmenu:hover,
+ul.linklist.navlinks a.mainmenu:focus-visible {
+	background: var(--fx-nav-hover);
+	color: var(--fx-nav-text);
+	text-decoration: none;
+}
+
+/* icons removed */
+ul.linklist.navlinks a.mainmenu img {
+	display: none !important;
+}
+
+/* ---------- Theme switcher (far right) ---------- */
+ul.linklist.navlinks > li.fx-theme-li {
+	flex: 1 1 0;
+	display: flex;
+	justify-content: flex-end;
+	font-size: 1rem;
+}
+
+.fx-theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 34px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 9px;
+	background: var(--fx-nav-btn);
+	color: var(--fx-nav-text);
+	cursor: pointer;
+	transition: background-color 0.18s ease;
+}
+
+.fx-theme-toggle:hover {
+	background: var(--fx-nav-btn-hover);
+}
+
+.fx-theme-toggle:focus-visible {
+	outline: 2px solid var(--fx-nav-text);
+	outline-offset: 2px;
+}
+
+.fx-theme-toggle svg {
+	display: block;
+	width: 18px;
+	height: 18px;
+}
+
+/* moon in light mode, sun in dark mode */
+.fx-theme-toggle .fx-ico-sun {
+	display: none;
+}
+
+html[data-theme="dark"] .fx-theme-toggle .fx-ico-sun {
+	display: block;
+}
+
+html[data-theme="dark"] .fx-theme-toggle .fx-ico-moon {
+	display: none;
+}
+
+/* ---------- Search dropdown (opens from the Search link) ---------- */
+ul.linklist.navlinks .overview.row3 {
+	top: calc(100% + 8px);
+	left: 0;
+	box-sizing: border-box;
+	padding: 14px 16px;
+	border: 1px solid var(--fx-border-strong) !important;
+	border-radius: 14px;
+	background: var(--fx-surface) !important;
+	box-shadow: 0 12px 32px rgba(16, 24, 40, 0.18);
+	color: var(--fx-text);
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.7;
+	text-align: left;
+}
+
+ul.linklist.navlinks .overview .title-overview {
+	margin: 0 0 8px;
+	padding: 0;
+	border: 0;
+	background: none !important;
+	color: var(--fx-text);
+	font-weight: 800;
+}
+
+ul.linklist.navlinks .overview .center-overview {
+	margin: 0 0 8px;
+	padding: 0;
+	text-align: left;
+}
+
+ul.linklist.navlinks .overview a {
+	color: var(--fx-accent);
+	text-decoration: none;
+}
+
+ul.linklist.navlinks .overview hr.dashed {
+	margin: 8px 0;
+	border: 0;
+	border-top: 1px dashed var(--fx-border-strong);
+}
+
+ul.linklist.navlinks .overview .inputbox {
+	padding: 5px 9px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 8px;
+	background: var(--fx-surface-2);
+	color: var(--fx-text);
+}
+
+ul.linklist.navlinks .overview .button1 {
+	margin-left: 6px;
+	padding: 5px 12px;
+	border: 0;
+	border-radius: 8px;
+	background: var(--fx-accent);
+	color: var(--fx-on-accent);
+	font-weight: 700;
+	cursor: pointer;
+}
+
+/* ---------- Small screens: links wrap into rows ---------- */
+@media (max-width: 900px) {
+	ul.linklist.navlinks {
+		flex-wrap: wrap;
+		padding: 6px 10px;
+	}
+
+	ul.linklist.navlinks::before {
+		display: none;
+	}
+
+	ul.linklist.navlinks > li.fx-theme-li {
+		flex: 0 0 auto;
+		margin-left: 6px;
 	}
 }
