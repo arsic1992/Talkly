@@ -518,7 +518,7 @@ ul.fx-nav {
 	box-sizing: border-box;
 	width: 100%;
 	min-height: 48px;
-	margin: 0;
+	margin: -30px 0 0; /* pulls the bar up into the gap left by the hidden Forumotion toolbar */
 	padding: 0 16px;
 	overflow: visible;
 	list-style: none;
@@ -574,7 +574,9 @@ ul.fx-nav a.mainmenu img {
 ul.fx-nav > li.fx-brand-li {
 	flex: 1 1 0;
 	display: flex;
+	align-items: center;
 	justify-content: flex-start;
+	gap: 10px;
 	font-size: 1rem;
 }
 
@@ -597,7 +599,7 @@ ul.fx-nav a.fx-brand:hover {
 	opacity: 1;
 }
 
-ul.fx-nav > li.fx-theme-li {
+ul.fx-nav > li.fx-right-li {
 	flex: 1 1 0;
 	display: flex;
 	align-items: center;
@@ -772,7 +774,7 @@ ul.fx-nav .overview .button1 {
 		flex: 0 0 auto;
 	}
 
-	ul.fx-nav > li.fx-theme-li {
+	ul.fx-nav > li.fx-right-li {
 		flex: 0 0 auto;
 		margin-left: auto;
 	}
