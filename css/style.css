@@ -423,7 +423,7 @@ div.forabg.fx-cat {
 	min-width: 0;
 }
 
-.fx-last-topic {
+a.fx-last-topic {
 	display: block;
 	overflow: hidden;
 	color: var(--fx-text);
@@ -434,7 +434,7 @@ div.forabg.fx-cat {
 	text-decoration: none;
 }
 
-.fx-last-topic:hover {
+a.fx-last-topic:hover {
 	color: var(--fx-accent);
 }
 
@@ -1209,7 +1209,7 @@ ul.fx-nav [hidden],
 	background: var(--fx-surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2H4.4z'/%3E%3Cpath d='M10 21.2a2.2 2.2 0 0 0 4 0'/%3E%3C/svg%3E") center / 22px no-repeat;
 }
 
-.fx-notif__all {
+a.fx-notif__all {
 	display: block;
 	padding: 13px 18px;
 	border-top: 1px solid var(--fx-border);
@@ -1222,7 +1222,7 @@ ul.fx-nav [hidden],
 	transition: background-color 0.15s ease;
 }
 
-.fx-notif__all:hover {
+a.fx-notif__all:hover {
 	background: var(--fx-accent-soft);
 }
 
@@ -1405,13 +1405,16 @@ body#phpbb {
 }
 
 /* Forumotion's wrappers paint their own white; let the page color through */
-body#phpbb :is(.conteneur_minwidth_IE, .conteneur_layout_IE, .conteneur_container_IE, #wrap, #page-body, #outer-wrapper, #wrapper, #container, #content, #main, #main-content) {
+body#phpbb :is(.conteneur_minwidth_IE, .conteneur_layout_IE, .conteneur_container_IE, #page-body, #outer-wrapper, #wrapper, #container, #content, #main, #main-content) {
 	background-color: transparent;
 	background-image: none;
 }
 
+/* the page card keeps its look: white in light mode, dark surface in dark mode */
 body#phpbb #wrap {
-	border: 0;
+	background-color: var(--fx-surface);
+	background-image: none;
+	border: 1px solid var(--fx-border);
 	box-shadow: none;
 }
 
@@ -1651,8 +1654,8 @@ body#phpbb #wrap {
 	line-height: 1.75;
 }
 
-.fx-info__card p strong,
-.fx-info__card div.page-bottom strong {
+.fx-info__card p > strong,
+.fx-info__card div.page-bottom > strong {
 	color: var(--fx-text);
 	font-weight: 800;
 }
