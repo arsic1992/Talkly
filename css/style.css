@@ -1,7 +1,7 @@
 /* =========================================================
    TALKLY THEME  (single stylesheet)
    Flexbox layout. Light is the default, dark is opt-in via
-   <html data-theme="dark">
+   <html data-fx-theme="dark">
 
    Sections:
    1. Tokens
@@ -33,7 +33,8 @@
 	--fx-nav-border: transparent;
 }
 
-html[data-theme="dark"] {
+html[data-fx-theme="dark"] {
+	color-scheme: dark;
 	--fx-bg: #0f131a;
 	--fx-surface: #171c25;
 	--fx-surface-2: #1e2430;
@@ -564,7 +565,7 @@ ul.linklist.navlinks a.mainmenu img {
 	display: none !important;
 }
 
-/* ---------- Theme switcher (far right) ---------- */
+/* ---------- Theme switcher (far right): sun / moon switch ---------- */
 ul.linklist.navlinks > li.fx-theme-li {
 	flex: 1 1 0;
 	display: flex;
@@ -573,19 +574,20 @@ ul.linklist.navlinks > li.fx-theme-li {
 }
 
 .fx-theme-toggle {
+	position: relative;
+	flex: 0 0 auto;
 	display: inline-flex;
 	align-items: center;
-	justify-content: center;
-	width: 36px;
-	height: 34px;
+	width: 58px;
+	height: 30px;
 	margin: 0;
 	padding: 0;
 	border: 0;
-	border-radius: 9px;
+	border-radius: 999px;
 	background: var(--fx-nav-btn);
 	color: var(--fx-nav-text);
 	cursor: pointer;
-	transition: background-color 0.18s ease;
+	transition: background-color 0.2s ease;
 }
 
 .fx-theme-toggle:hover {
@@ -597,23 +599,57 @@ ul.linklist.navlinks > li.fx-theme-li {
 	outline-offset: 2px;
 }
 
-.fx-theme-toggle svg {
-	display: block;
-	width: 18px;
-	height: 18px;
+.fx-theme-toggle__icon {
+	position: absolute;
+	top: 50%;
+	z-index: 2;
+	width: 16px;
+	height: 16px;
+	margin-top: -8px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	pointer-events: none;
 }
 
-/* moon in light mode, sun in dark mode */
-.fx-theme-toggle .fx-ico-sun {
-	display: none;
+.fx-theme-toggle__icon--sun {
+	left: 7px;
 }
 
-html[data-theme="dark"] .fx-theme-toggle .fx-ico-sun {
-	display: block;
+.fx-theme-toggle__icon--moon {
+	right: 7px;
 }
 
-html[data-theme="dark"] .fx-theme-toggle .fx-ico-moon {
-	display: none;
+.fx-theme-toggle__thumb {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	z-index: 1;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: var(--fx-nav-text);
+	transition: transform 0.22s ease;
+}
+
+/* dark: thumb slides over the moon */
+.fx-theme-toggle[aria-checked="true"] .fx-theme-toggle__thumb {
+	transform: translateX(28px);
+}
+
+/* the icon under the thumb takes the bar color so it reads on the thumb */
+.fx-theme-toggle[aria-checked="false"] .fx-theme-toggle__icon--sun,
+.fx-theme-toggle[aria-checked="true"] .fx-theme-toggle__icon--moon {
+	color: var(--fx-nav-bg);
+}
+
+/* while the switch is pressed, everything fades to the other theme instead of snapping */
+html.fx-theme-switching,
+html.fx-theme-switching * {
+	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+		fill 0.3s ease, stroke 0.3s ease, transform 0.22s ease !important;
 }
 
 /* ---------- Search dropdown (opens from the Search link) ---------- */
