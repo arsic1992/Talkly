@@ -8,6 +8,9 @@
    2. Index box (categories + forum cards)
    3. Navbar + theme switcher
    4. Account menus (profile, notifications, toasts)
+   5. Page base (background + text follow the theme)
+   6. Index body (time row, login, who is online, statistics, legend)
+   7. Footer
    ========================================================= */
 
 /* ---------- Tokens ---------- */
@@ -37,6 +40,11 @@
 	--fx-pop-shadow: 0 18px 48px rgba(16, 24, 40, 0.20), 0 2px 6px rgba(16, 24, 40, 0.08);
 	--fx-danger: #d92d20;
 	--fx-danger-soft: rgba(217, 45, 32, 0.10);
+
+	/* member / group chips */
+	--fx-chip-bg: #f1f3f6;
+	--fx-chip-text: #1c2330;
+	--fx-chip-border: #e4e7ec;
 }
 
 html[data-fx-theme="dark"] {
@@ -64,6 +72,11 @@ html[data-fx-theme="dark"] {
 	--fx-pop-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.40);
 	--fx-danger: #ff7a70;
 	--fx-danger-soft: rgba(255, 122, 112, 0.14);
+
+	/* member / group chips: light on purpose, group colors are picked for light backgrounds */
+	--fx-chip-bg: #e3e8f2;
+	--fx-chip-text: #1c2330;
+	--fx-chip-border: #e3e8f2;
 }
 
 /* =========================================================
@@ -1376,4 +1389,517 @@ ul.fx-nav [hidden],
 		left: 12px;
 		width: auto;
 	}
+}
+
+/* =========================================================
+   5. PAGE BASE  (page background and text follow the theme)
+   ========================================================= */
+html {
+	background: var(--fx-bg);
+}
+
+body#phpbb {
+	background: var(--fx-bg);
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+}
+
+/* Forumotion's wrappers paint their own white; let the page color through */
+body#phpbb :is(.conteneur_minwidth_IE, .conteneur_layout_IE, .conteneur_container_IE, #wrap, #page-body, #outer-wrapper, #wrapper, #container, #content, #main, #main-content) {
+	background-color: transparent;
+	background-image: none;
+}
+
+body#phpbb #wrap {
+	border: 0;
+	box-shadow: none;
+}
+
+/* =========================================================
+   6. INDEX BODY  (time row, login form, admin message,
+      who is online, statistics, legend)
+   ========================================================= */
+
+/* ---------- Time row ---------- */
+.fx-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 4px 16px;
+	margin: 0 0 14px;
+	color: var(--fx-muted);
+	font-family: var(--fx-font);
+	font-size: 0.8rem;
+	font-weight: 700;
+}
+
+.fx-meta p {
+	float: none;
+	margin: 0;
+	padding: 0;
+	color: inherit;
+}
+
+/* current time on the left, last visit on the right */
+.fx-meta p.right {
+	order: 2;
+	text-align: right;
+}
+
+/* ---------- Login form (top and bottom of the index) ---------- */
+.panel:has(.user_login_form) {
+	margin: 0 0 18px;
+	padding: 16px 20px !important;
+	border: 1px solid var(--fx-border-strong) !important;
+	border-radius: 16px;
+	background: var(--fx-surface) !important;
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+}
+
+.panel:has(.user_login_form) .inner {
+	padding: 0;
+	background: none;
+}
+
+.panel:has(.user_login_form) :is(.corners-top, .corners-bottom) {
+	display: none;
+}
+
+/* font-size 0 removes the &nbsp; between the fields; the fields set their own size */
+.user_login_form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 10px 18px;
+	font-size: 0;
+}
+
+.user_login_form label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--fx-muted);
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+
+.user_login_form input.post {
+	box-sizing: border-box;
+	width: 150px;
+	padding: 8px 12px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 10px;
+	background: var(--fx-surface-2);
+	color: var(--fx-text);
+	font-family: inherit;
+	font-size: 0.88rem;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.user_login_form input.post:focus {
+	border-color: var(--fx-accent);
+	box-shadow: 0 0 0 3px var(--fx-accent-soft);
+	outline: 0;
+}
+
+.user_login_form input.radio {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	accent-color: var(--fx-accent);
+}
+
+.user_login_form input.button1 {
+	padding: 8px 22px;
+	border: 0;
+	border-radius: 10px;
+	background: var(--fx-accent);
+	color: var(--fx-on-accent);
+	font-family: inherit;
+	font-size: 0.88rem;
+	font-weight: 800;
+	cursor: pointer;
+	transition: filter 0.15s ease;
+}
+
+.user_login_form input.button1:hover {
+	filter: brightness(1.08);
+}
+
+.user_login_form .social_btn {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* ---------- Admin message ---------- */
+.panel.introduction {
+	margin: 0 0 18px;
+	padding: 18px 22px !important;
+	border: 1px solid var(--fx-border-strong) !important;
+	border-radius: 16px;
+	background: var(--fx-surface) !important;
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+}
+
+.panel.introduction .inner {
+	padding: 0;
+	background: none;
+}
+
+.panel.introduction :is(.corners-top, .corners-bottom) {
+	display: none;
+}
+
+.panel.introduction .h3 {
+	margin: 0 0 8px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--fx-text);
+	font-size: 1.1rem;
+	font-weight: 800;
+}
+
+.panel.introduction .mes-txt {
+	color: var(--fx-muted);
+	font-size: 0.92rem;
+	font-weight: 600;
+	line-height: 1.65;
+}
+
+.panel.introduction a {
+	color: var(--fx-accent);
+}
+
+/* ---------- Who is online / statistics / chat: cards side by side ---------- */
+.fx-info {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin: 6px 0 18px;
+	font-family: var(--fx-font);
+}
+
+.fx-info__card {
+	flex: 1 1 300px;
+	box-sizing: border-box;
+	min-width: 0;
+	padding: 18px 20px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 16px;
+	background: var(--fx-surface);
+	color: var(--fx-text);
+}
+
+.fx-info__card--online {
+	flex: 2 1 420px;
+}
+
+.fx-info__card--chat {
+	flex: 1 1 100%;
+}
+
+.fx-info__card .h3 {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 12px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--fx-text);
+	font-size: 1rem;
+	font-weight: 800;
+	line-height: 1.3;
+}
+
+.fx-info__card .h3::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 4px;
+	height: 16px;
+	border-radius: 4px;
+	background: var(--fx-accent);
+}
+
+.fx-info__card .h3 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.fx-info__card .h3 a:hover {
+	color: var(--fx-accent);
+}
+
+.fx-info__card img.img-whois,
+.fx-info__card .clear {
+	display: none;
+}
+
+.fx-info__card p,
+.fx-info__card div.page-bottom {
+	margin: 0;
+	padding: 0;
+	color: var(--fx-muted);
+	font-size: 0.88rem;
+	font-weight: 600;
+	line-height: 1.75;
+}
+
+.fx-info__card p strong,
+.fx-info__card div.page-bottom strong {
+	color: var(--fx-text);
+	font-weight: 800;
+}
+
+.fx-info__card a {
+	color: var(--fx-accent);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.fx-info__card a:hover {
+	text-decoration: underline;
+}
+
+/* member names and group names as chips. The chip is light in dark mode on purpose:
+   group colors are picked for light backgrounds, so every color stays readable */
+.fx-info__card a.usr_grp_clr,
+.fx-info__card a:has(> .usr_grp_clr) {
+	display: inline-flex;
+	align-items: center;
+	padding: 1px 10px;
+	border: 1px solid var(--fx-chip-border);
+	border-radius: 999px;
+	background: var(--fx-chip-bg);
+	color: var(--fx-chip-text);
+	font-size: 0.8rem;
+	font-weight: 800;
+	line-height: 1.5;
+	text-decoration: none;
+}
+
+.fx-info__card a.usr_grp_clr:hover,
+.fx-info__card a:has(> .usr_grp_clr):hover {
+	filter: brightness(0.95);
+	text-decoration: none;
+}
+
+/* group legend: label, then one chip per group (font-size 0 hides the [ ] around them) */
+.fx-info__card em.fx-legend {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px dashed var(--fx-border-strong);
+	font-size: 0;
+	font-style: normal;
+}
+
+.fx-legend__label {
+	margin-right: 6px;
+	color: var(--fx-muted);
+	font-size: 0.78rem;
+	font-weight: 800;
+}
+
+.fx-info__card em.fx-legend b {
+	font-size: 0.8rem;
+	font-weight: 800;
+}
+
+/* statistics: one row per fact, the number as a small pill */
+.fx-info__card--stats p.page-bottom {
+	padding: 10px 0;
+	border-bottom: 1px solid var(--fx-border);
+}
+
+.fx-info__card--stats p.page-bottom:first-of-type {
+	padding-top: 0;
+}
+
+.fx-info__card--stats p.page-bottom:last-of-type {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.fx-info__card--stats p.page-bottom strong {
+	display: inline-block;
+	padding: 1px 10px;
+	border-radius: 999px;
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+	font-weight: 800;
+}
+
+.fx-info__card--stats p.page-bottom strong:has(a) {
+	padding: 0;
+	background: none;
+}
+
+/* ---------- Picture legend (new / no new / locked) ---------- */
+#picture_legend {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px 10px;
+	margin: 6px 0 0;
+	padding: 0;
+	list-style: none;
+	font-family: var(--fx-font);
+}
+
+#picture_legend li {
+	float: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	padding: 5px 14px 5px 8px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 999px;
+	background: var(--fx-surface);
+	color: var(--fx-muted);
+	font-size: 0.78rem;
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+#picture_legend li img {
+	display: block;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	object-fit: contain;
+}
+
+/* =========================================================
+   7. FOOTER  (overall_footer_begin + overall_footer_end)
+   ========================================================= */
+#page-footer {
+	clear: both;
+	margin: 28px 0 8px;
+	font-family: var(--fx-font);
+}
+
+#page-footer .navbar {
+	margin: 0;
+	padding: 0 !important;
+	border: 0 !important;
+	background: none !important;
+}
+
+#page-footer .navbar .inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px 20px;
+	padding: 12px 16px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 16px;
+	background: var(--fx-surface);
+}
+
+#page-footer .navbar :is(.corners-top, .corners-bottom) {
+	display: none;
+}
+
+#page-footer ul.linklist {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#page-footer ul.linklist li {
+	float: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: inherit;
+	line-height: 1.4;
+}
+
+/* Home */
+#page-footer a.icon-home {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 14px !important;
+	border-radius: 999px;
+	background: var(--fx-accent-soft) !important;
+	color: var(--fx-accent);
+	font-size: 0.85rem;
+	font-weight: 800;
+	text-decoration: none;
+	transition: filter 0.15s ease;
+}
+
+#page-footer a.icon-home:hover {
+	filter: brightness(0.95);
+}
+
+#page-footer a.icon-home::before {
+	content: "";
+	width: 15px;
+	height: 15px;
+	background-color: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11.5 12 4l9 7.5'/%3E%3Cpath d='M5.5 10v9.5h13V10'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11.5 12 4l9 7.5'/%3E%3Cpath d='M5.5 10v9.5h13V10'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Footer links. The head style forces li.rightside to inline, so these need !important.
+   font-size 0 hides the "|" separators between the links. */
+#page-footer ul.linklist li.rightside {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 2px 4px;
+	font-size: 0;
+}
+
+#page-footer ul.linklist li.rightside a.copyright {
+	display: inline-flex !important;
+	padding: 5px 10px;
+	border-radius: 8px;
+	color: var(--fx-muted);
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#page-footer ul.linklist li.rightside a.copyright:hover {
+	background: var(--fx-surface-2);
+	color: var(--fx-accent);
+}
+
+/* Administration panel link */
+#page-footer p.copyright {
+	margin: 12px 0 0;
+	color: var(--fx-muted);
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-align: center;
+}
+
+#page-footer p.copyright a {
+	color: var(--fx-muted);
+	text-decoration: none;
+}
+
+#page-footer p.copyright a:hover {
+	color: var(--fx-accent);
 }
