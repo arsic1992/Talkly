@@ -7,6 +7,7 @@
    1. Tokens
    2. Index box (categories + forum cards)
    3. Navbar + theme switcher
+   4. Account menus (profile, notifications, toasts)
    ========================================================= */
 
 /* ---------- Tokens ---------- */
@@ -31,6 +32,11 @@
 	--fx-nav-btn: rgba(255, 255, 255, 0.16);
 	--fx-nav-btn-hover: rgba(255, 255, 255, 0.30);
 	--fx-nav-border: transparent;
+
+	/* popups */
+	--fx-pop-shadow: 0 18px 48px rgba(16, 24, 40, 0.20), 0 2px 6px rgba(16, 24, 40, 0.08);
+	--fx-danger: #d92d20;
+	--fx-danger-soft: rgba(217, 45, 32, 0.10);
 }
 
 html[data-fx-theme="dark"] {
@@ -53,6 +59,11 @@ html[data-fx-theme="dark"] {
 	--fx-nav-btn: rgba(124, 156, 255, 0.14);
 	--fx-nav-btn-hover: rgba(124, 156, 255, 0.28);
 	--fx-nav-border: #272e3b;
+
+	/* popups */
+	--fx-pop-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.40);
+	--fx-danger: #ff7a70;
+	--fx-danger-soft: rgba(255, 122, 112, 0.14);
 }
 
 /* =========================================================
@@ -493,11 +504,11 @@ div.forabg.fx-cat {
 }
 
 /* =========================================================
-   3. NAVBAR + THEME SWITCHER  (overall_header: ul.linklist.navlinks)
+   3. NAVBAR + THEME SWITCHER  (overall_header: ul.fx-nav)
    ========================================================= */
 
 /* ---------- Bar ---------- */
-ul.linklist.navlinks {
+ul.fx-nav {
 	position: relative;
 	z-index: 1000;
 	display: flex;
@@ -519,15 +530,8 @@ ul.linklist.navlinks {
 	transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
-/* empty left spacer: same flex weight as the switcher on the right,
-   so the links stay centered */
-ul.linklist.navlinks::before {
-	content: "";
-	flex: 1 1 0;
-}
-
 /* Forumotion puts a &nbsp; after every link; font-size 0 on the li removes it */
-ul.linklist.navlinks > li {
+ul.fx-nav > li {
 	position: relative;
 	float: none;
 	display: block;
@@ -540,7 +544,7 @@ ul.linklist.navlinks > li {
 }
 
 /* ---------- Links ---------- */
-ul.linklist.navlinks a.mainmenu {
+ul.fx-nav a.mainmenu {
 	display: inline-flex;
 	align-items: center;
 	height: 34px;
@@ -553,23 +557,52 @@ ul.linklist.navlinks a.mainmenu {
 	transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-ul.linklist.navlinks a.mainmenu:hover,
-ul.linklist.navlinks a.mainmenu:focus-visible {
+ul.fx-nav a.mainmenu:hover,
+ul.fx-nav a.mainmenu:focus-visible {
 	background: var(--fx-nav-hover);
 	color: var(--fx-nav-text);
 	text-decoration: none;
 }
 
 /* icons removed */
-ul.linklist.navlinks a.mainmenu img {
+ul.fx-nav a.mainmenu img {
 	display: none !important;
 }
 
 /* ---------- Theme switcher (far right): sun / moon switch ---------- */
-ul.linklist.navlinks > li.fx-theme-li {
+/* left and right groups have the same flex weight, so the links stay centered */
+ul.fx-nav > li.fx-brand-li {
 	flex: 1 1 0;
 	display: flex;
+	justify-content: flex-start;
+	font-size: 1rem;
+}
+
+ul.fx-nav a.fx-brand {
+	display: inline-flex;
+	align-items: center;
+	height: 34px;
+	padding: 0 10px;
+	border-radius: 9px;
+	color: var(--fx-nav-text);
+	font-size: 0.85rem;
+	font-weight: 800;
+	opacity: 0.8;
+	text-decoration: none;
+	transition: background-color 0.18s ease, opacity 0.18s ease;
+}
+
+ul.fx-nav a.fx-brand:hover {
+	background: var(--fx-nav-hover);
+	opacity: 1;
+}
+
+ul.fx-nav > li.fx-theme-li {
+	flex: 1 1 0;
+	display: flex;
+	align-items: center;
 	justify-content: flex-end;
+	gap: 8px;
 	font-size: 1rem;
 }
 
@@ -653,7 +686,7 @@ html.fx-theme-switching * {
 }
 
 /* ---------- Search dropdown (opens from the Search link) ---------- */
-ul.linklist.navlinks .overview.row3 {
+ul.fx-nav .overview.row3 {
 	top: calc(100% + 8px);
 	left: 0;
 	box-sizing: border-box;
@@ -669,7 +702,7 @@ ul.linklist.navlinks .overview.row3 {
 	text-align: left;
 }
 
-ul.linklist.navlinks .overview .title-overview {
+ul.fx-nav .overview .title-overview {
 	margin: 0 0 8px;
 	padding: 0;
 	border: 0;
@@ -678,24 +711,24 @@ ul.linklist.navlinks .overview .title-overview {
 	font-weight: 800;
 }
 
-ul.linklist.navlinks .overview .center-overview {
+ul.fx-nav .overview .center-overview {
 	margin: 0 0 8px;
 	padding: 0;
 	text-align: left;
 }
 
-ul.linklist.navlinks .overview a {
+ul.fx-nav .overview a {
 	color: var(--fx-accent);
 	text-decoration: none;
 }
 
-ul.linklist.navlinks .overview hr.dashed {
+ul.fx-nav .overview hr.dashed {
 	margin: 8px 0;
 	border: 0;
 	border-top: 1px dashed var(--fx-border-strong);
 }
 
-ul.linklist.navlinks .overview .inputbox {
+ul.fx-nav .overview .inputbox {
 	padding: 5px 9px;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 8px;
@@ -703,7 +736,7 @@ ul.linklist.navlinks .overview .inputbox {
 	color: var(--fx-text);
 }
 
-ul.linklist.navlinks .overview .button1 {
+ul.fx-nav .overview .button1 {
 	margin-left: 6px;
 	padding: 5px 12px;
 	border: 0;
@@ -716,17 +749,610 @@ ul.linklist.navlinks .overview .button1 {
 
 /* ---------- Small screens: links wrap into rows ---------- */
 @media (max-width: 900px) {
-	ul.linklist.navlinks {
+	ul.fx-nav {
 		flex-wrap: wrap;
 		padding: 6px 10px;
 	}
 
-	ul.linklist.navlinks::before {
-		display: none;
+	ul.fx-nav > li.fx-brand-li {
+		flex: 0 0 auto;
 	}
 
-	ul.linklist.navlinks > li.fx-theme-li {
+	ul.fx-nav > li.fx-theme-li {
 		flex: 0 0 auto;
-		margin-left: 6px;
+		margin-left: auto;
+	}
+}
+
+/* =========================================================
+   4. ACCOUNT MENUS  (profile, notifications, toasts)
+   Markup and script live in overall_header. They copy the data
+   out of Forumotion's own toolbar (#fa_toolbar), which stays in
+   the page but is never shown.
+   ========================================================= */
+
+/* ---------- Forumotion toolbar: kept in the page, never visible ---------- */
+#fa_toolbar {
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+#fa_left,
+#fa_search,
+#fa_share {
+	display: none !important;
+}
+
+/* the panels use the hidden attribute; keep it stronger than the display rules below */
+ul.fx-nav [hidden],
+.fx-toasts [hidden] {
+	display: none !important;
+}
+
+/* ---------- Buttons in the bar ---------- */
+.fx-nav__acts {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.fx-act {
+	position: relative;
+}
+
+.fx-act__btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 34px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 9px;
+	background: var(--fx-nav-btn);
+	color: var(--fx-nav-text);
+	cursor: pointer;
+	transition: background-color 0.18s ease;
+}
+
+.fx-act__btn:hover,
+.fx-act__btn[aria-expanded="true"] {
+	background: var(--fx-nav-btn-hover);
+}
+
+.fx-act__btn:focus-visible {
+	outline: 2px solid var(--fx-nav-text);
+	outline-offset: 2px;
+}
+
+.fx-act__icon {
+	width: 18px;
+	height: 18px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.9;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* with an avatar, the person icon steps aside */
+.fx-act__btn.has-avatar .fx-act__icon {
+	display: none;
+}
+
+.fx-act__avatar {
+	display: block;
+	width: 26px;
+	height: 26px;
+	border-radius: 7px;
+	object-fit: cover;
+}
+
+.fx-act__badge {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+	box-sizing: border-box;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	border: 2px solid var(--fx-nav-bg);
+	border-radius: 999px;
+	background: #e5484d;
+	color: #ffffff;
+	font-size: 0.66rem;
+	font-weight: 800;
+	line-height: 14px;
+	text-align: center;
+}
+
+/* ---------- Panels ---------- */
+.fx-act__panel {
+	position: absolute;
+	top: calc(100% + 10px);
+	right: 0;
+	z-index: 1100;
+	box-sizing: border-box;
+	width: 320px;
+	max-width: calc(100vw - 24px);
+	overflow: hidden;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 18px;
+	background: var(--fx-surface);
+	box-shadow: var(--fx-pop-shadow);
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1.45;
+	text-align: left;
+	transform-origin: top right;
+	animation: fx-pop 0.16s ease-out;
+}
+
+.fx-act__panel--notif {
+	width: 350px;
+}
+
+@keyframes fx-pop {
+	from {
+		opacity: 0;
+		transform: translateY(-6px) scale(0.98);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* ---------- Profile panel ---------- */
+.fx-prof {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px 18px 16px;
+	border-bottom: 1px solid var(--fx-border);
+	background: linear-gradient(135deg, var(--fx-accent-soft), transparent 75%);
+}
+
+.fx-prof__img {
+	flex: 0 0 auto;
+	display: block;
+	width: 68px;
+	height: 68px;
+	border: 2px solid var(--fx-surface);
+	border-radius: 16px;
+	box-shadow: 0 0 0 1px var(--fx-border-strong);
+	object-fit: cover;
+}
+
+.fx-prof__info {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	min-width: 0;
+}
+
+.fx-prof__name {
+	max-width: 100%;
+	overflow: hidden;
+	color: var(--fx-text);
+	font-size: 1.08rem;
+	font-weight: 800;
+	line-height: 1.25;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.fx-prof__rank {
+	padding: 2px 10px;
+	border-radius: 999px;
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+	font-size: 0.72rem;
+	font-weight: 800;
+}
+
+.fx-prof__rank:empty {
+	display: none;
+}
+
+.fx-prof__stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px 12px;
+	margin-top: 2px;
+}
+
+.fx-prof__stat {
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+	font-weight: 700;
+}
+
+.fx-prof__stat b {
+	color: var(--fx-text);
+	font-weight: 800;
+}
+
+.fx-act__panel ul.fx-links {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin: 0;
+	padding: 8px;
+	list-style: none;
+}
+
+.fx-act__panel ul.fx-links li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.fx-act__panel ul.fx-links li.is-sep {
+	height: 1px;
+	margin: 6px 8px;
+	background: var(--fx-border);
+}
+
+.fx-act__panel ul.fx-links a {
+	display: flex;
+	align-items: center;
+	padding: 9px 12px;
+	border-radius: 10px;
+	color: var(--fx-text);
+	font-size: 0.9rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.fx-act__panel ul.fx-links a:hover {
+	background: var(--fx-surface-2);
+	color: var(--fx-accent);
+}
+
+.fx-act__panel ul.fx-links a.is-out {
+	color: var(--fx-danger);
+}
+
+.fx-act__panel ul.fx-links a.is-out:hover {
+	background: var(--fx-danger-soft);
+	color: var(--fx-danger);
+}
+
+/* ---------- Notifications panel ---------- */
+.fx-notif__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 14px 18px;
+	border-bottom: 1px solid var(--fx-border);
+}
+
+.fx-notif__head strong {
+	color: var(--fx-text);
+	font-size: 1rem;
+	font-weight: 800;
+}
+
+.fx-notif__count {
+	padding: 1px 10px;
+	border-radius: 999px;
+	background: var(--fx-accent);
+	color: var(--fx-on-accent);
+	font-size: 0.72rem;
+	font-weight: 800;
+}
+
+.fx-notif__list {
+	max-height: 340px;
+	margin: 0;
+	padding: 8px;
+	overflow-y: auto;
+	list-style: none;
+}
+
+.fx-notif__list:empty {
+	display: none;
+}
+
+.fx-notif__item {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	margin: 0;
+	padding: 11px 38px 11px 28px;
+	border-radius: 12px;
+	color: var(--fx-text);
+	font-size: 0.84rem;
+	line-height: 1.5;
+	transition: background-color 0.15s ease;
+}
+
+/* unread-style dot */
+.fx-notif__item::before {
+	content: "";
+	position: absolute;
+	top: 17px;
+	left: 12px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--fx-accent);
+}
+
+.fx-notif__item:hover {
+	background: var(--fx-surface-2);
+}
+
+.fx-notif__text a {
+	color: var(--fx-accent);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.fx-notif__text a:hover {
+	text-decoration: underline;
+}
+
+.fx-notif__time {
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+	font-weight: 600;
+}
+
+/* delete: an empty link, the cross is drawn here */
+.fx-notif__del {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 24px;
+	height: 24px;
+	border-radius: 8px;
+	color: var(--fx-muted);
+	opacity: 0;
+	transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.fx-notif__del::before,
+.fx-notif__del::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 11px;
+	height: 2px;
+	margin: -1px 0 0 -5.5px;
+	border-radius: 2px;
+	background: currentColor;
+	transform: rotate(45deg);
+}
+
+.fx-notif__del::after {
+	transform: rotate(-45deg);
+}
+
+.fx-notif__item:hover .fx-notif__del,
+.fx-notif__del:focus-visible {
+	opacity: 1;
+}
+
+.fx-notif__del:hover {
+	background: var(--fx-danger-soft);
+	color: var(--fx-danger);
+}
+
+@media (hover: none) {
+	.fx-notif__del {
+		opacity: 1;
+	}
+}
+
+.fx-notif__empty {
+	margin: 0;
+	padding: 30px 18px 34px;
+	color: var(--fx-muted);
+	font-size: 0.88rem;
+	font-weight: 600;
+	text-align: center;
+}
+
+.fx-notif__empty::before {
+	content: "";
+	display: block;
+	width: 46px;
+	height: 46px;
+	margin: 0 auto 12px;
+	border-radius: 50%;
+	background: var(--fx-surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2H4.4z'/%3E%3Cpath d='M10 21.2a2.2 2.2 0 0 0 4 0'/%3E%3C/svg%3E") center / 22px no-repeat;
+}
+
+.fx-notif__all {
+	display: block;
+	padding: 13px 18px;
+	border-top: 1px solid var(--fx-border);
+	background: var(--fx-surface-2);
+	color: var(--fx-accent);
+	font-size: 0.85rem;
+	font-weight: 800;
+	text-align: center;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.fx-notif__all:hover {
+	background: var(--fx-accent-soft);
+}
+
+/* ---------- Live toasts (new notification arrives) ---------- */
+.fx-toasts {
+	position: fixed;
+	top: 64px;
+	right: 16px;
+	z-index: 1200;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: min(340px, calc(100vw - 32px));
+	font-family: var(--fx-font);
+	pointer-events: none;
+}
+
+.fx-toast {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 14px 40px 17px 14px;
+	overflow: hidden;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 16px;
+	background: var(--fx-surface);
+	box-shadow: var(--fx-pop-shadow);
+	color: var(--fx-text);
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.5;
+	pointer-events: auto;
+	animation: fx-toast-in 0.28s ease-out;
+}
+
+.fx-toast.is-leaving {
+	animation: fx-toast-out 0.3s ease forwards;
+}
+
+.fx-toast__icon {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 10px;
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+}
+
+.fx-toast__icon svg {
+	width: 17px;
+	height: 17px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.9;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.fx-toast__text {
+	min-width: 0;
+	padding-top: 5px;
+}
+
+.fx-toast__text a {
+	color: var(--fx-accent);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.fx-toast__text a:hover {
+	text-decoration: underline;
+}
+
+/* close: the button holds the word "Close", hidden here; the cross is drawn */
+.fx-toast__close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 24px;
+	height: 24px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 8px;
+	background: none;
+	color: var(--fx-muted);
+	font-size: 0;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.fx-toast__close::before,
+.fx-toast__close::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 11px;
+	height: 2px;
+	margin: -1px 0 0 -5.5px;
+	border-radius: 2px;
+	background: currentColor;
+	transform: rotate(45deg);
+}
+
+.fx-toast__close::after {
+	transform: rotate(-45deg);
+}
+
+.fx-toast__close:hover {
+	background: var(--fx-surface-2);
+	color: var(--fx-text);
+}
+
+/* countdown bar, pauses while the pointer is over the toast */
+.fx-toast__bar {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 3px;
+	background: var(--fx-accent);
+	transform-origin: left;
+	animation: fx-toast-bar 7s linear forwards;
+}
+
+.fx-toast:hover .fx-toast__bar {
+	animation-play-state: paused;
+}
+
+@keyframes fx-toast-in {
+	from {
+		opacity: 0;
+		transform: translateX(24px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes fx-toast-out {
+	to {
+		opacity: 0;
+		transform: translateX(24px);
+	}
+}
+
+@keyframes fx-toast-bar {
+	to {
+		transform: scaleX(0);
+	}
+}
+
+@media (max-width: 600px) {
+	.fx-toasts {
+		top: 58px;
+		right: 12px;
+		left: 12px;
+		width: auto;
 	}
 }
