@@ -747,6 +747,20 @@ ul.fx-nav .overview .button1 {
 	cursor: pointer;
 }
 
+/* ---------- Sticky: the bar follows you while you scroll ---------- */
+@media (min-width: 901px) {
+	ul.fx-nav {
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0;
+	}
+
+	/* anchored links (#post) stop below the bar instead of under it */
+	html {
+		scroll-padding-top: 64px;
+	}
+}
+
 /* ---------- Small screens: links wrap into rows ---------- */
 @media (max-width: 900px) {
 	ul.fx-nav {
@@ -989,9 +1003,13 @@ ul.fx-nav [hidden],
 }
 
 .fx-act__panel ul.fx-links li {
+	float: none;
+	width: auto;
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	font-size: inherit;
+	line-height: 1.4;
 }
 
 .fx-act__panel ul.fx-links li.is-sep {
@@ -1004,6 +1022,7 @@ ul.fx-nav [hidden],
 	display: flex;
 	align-items: center;
 	padding: 9px 12px;
+	line-height: 1.4;
 	border-radius: 10px;
 	color: var(--fx-text);
 	font-size: 0.9rem;
