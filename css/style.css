@@ -45,6 +45,12 @@
 	--fx-chip-bg: #f1f3f6;
 	--fx-chip-text: #1c2330;
 	--fx-chip-border: #e4e7ec;
+
+	/* category header band + card depth */
+	--fx-cat-a: #2f5be0;
+	--fx-cat-b: #4a86f7;
+	--fx-cat-text: #ffffff;
+	--fx-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 2px 10px rgba(16, 24, 40, 0.05);
 }
 
 html[data-fx-theme="dark"] {
@@ -77,6 +83,12 @@ html[data-fx-theme="dark"] {
 	--fx-chip-bg: #e3e8f2;
 	--fx-chip-text: #1c2330;
 	--fx-chip-border: #e3e8f2;
+
+	/* category header band + card depth */
+	--fx-cat-a: #2a3a80;
+	--fx-cat-b: #3d52a8;
+	--fx-cat-text: #ffffff;
+	--fx-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 /* =========================================================
@@ -138,12 +150,17 @@ div.forabg.fx-cat {
 	font-family: var(--fx-font);
 }
 
+/* The category is one bordered unit: a header band on top, the forum cards below on a tinted panel */
 .fx-cat .inner {
 	display: flex;
 	flex-direction: column;
 	margin: 0;
 	padding: 0;
-	background: none;
+	overflow: hidden;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 18px;
+	background: var(--fx-surface-2);
+	box-shadow: var(--fx-card-shadow);
 }
 
 .fx-cat ul.topiclist {
@@ -154,13 +171,7 @@ div.forabg.fx-cat {
 	list-style: none;
 }
 
-/* ---------- Category header: a centered chip sitting on the panel's top edge ---------- */
-.fx-cat .inner > ul.topiclist:first-child {
-	position: relative;
-	z-index: 2;
-	margin-bottom: -19px;
-}
-
+/* ---------- Category header: a full-width band ---------- */
 .fx-cat li.header {
 	float: none;
 	width: 100%;
@@ -172,22 +183,34 @@ div.forabg.fx-cat {
 
 .fx-cat-head {
 	display: flex;
-	justify-content: center;
-	width: 100%;
+	align-items: center;
+	gap: 12px;
+	padding: 15px 22px;
+	background: linear-gradient(100deg, var(--fx-cat-a), var(--fx-cat-b));
+	color: var(--fx-cat-text);
+}
+
+/* small light mark in front of the name */
+.fx-cat-head::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 5px;
+	height: 22px;
+	border-radius: 5px;
+	background: currentColor;
+	opacity: 0.55;
 }
 
 .fx-cat-head .table-title {
-	display: inline-flex;
-	align-items: center;
+	display: block;
 	margin: 0;
-	padding: 7px 26px;
-	border-radius: 999px;
-	background: var(--fx-accent);
-	color: var(--fx-on-accent);
-	font-size: 1rem;
+	padding: 0;
+	background: none;
+	color: inherit;
+	font-size: 1.2rem;
 	font-weight: 800;
 	line-height: 1.3;
-	letter-spacing: 0.01em;
+	letter-spacing: 0.005em;
 }
 
 .fx-cat-head .table-title h2 {
@@ -197,24 +220,25 @@ div.forabg.fx-cat {
 	background: none;
 	color: inherit;
 	font: inherit;
+	text-transform: none;
 }
 
 /* ---------- Panel that holds the forum cards ---------- */
 .fx-cat ul.forums {
 	flex-flow: row wrap;
-	gap: 12px;
-	padding: 36px 14px 14px;
-	border: 1px solid var(--fx-border);
-	border-radius: 20px;
-	background: var(--fx-surface-2);
+	gap: 14px;
+	padding: 16px;
+	border: 0;
+	border-radius: 0;
+	background: none;
 }
 
 .fx-cat .container-imgs-list {
 	overflow: auto;
-	padding: 36px 14px 14px;
-	border: 1px solid var(--fx-border);
-	border-radius: 20px;
-	background: var(--fx-surface-2);
+	padding: 16px;
+	border: 0;
+	border-radius: 0;
+	background: none;
 }
 
 /* =========================================================
@@ -222,7 +246,8 @@ div.forabg.fx-cat {
    ========================================================= */
 .fx-cat li.fx-forum {
 	float: none;
-	flex: 1 1 calc(50% - 6px);
+	flex: 1 1 100%;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	width: auto;
@@ -231,8 +256,10 @@ div.forabg.fx-cat {
 	padding: 0;
 	overflow: hidden;
 	border: 1px solid var(--fx-border-strong) !important;
+	border-left: 4px solid var(--fx-accent) !important;
 	border-radius: 14px;
 	background: var(--fx-surface) !important;
+	box-shadow: var(--fx-card-shadow);
 	font-size: 1rem;
 	transition: border-color 0.15s;
 }
@@ -262,12 +289,14 @@ div.forabg.fx-cat {
 .fx-forum-main .hierarchy {
 	margin: 0;
 	padding: 0;
-	font-size: 1.05rem;
+	font-family: var(--fx-font);
+	font-size: 1.18rem;
 	font-weight: 800;
 	line-height: 1.3;
 }
 
 .fx-forum-main a.forumtitle {
+	font-family: var(--fx-font);
 	color: var(--fx-text);
 	text-decoration: none;
 }
@@ -486,15 +515,9 @@ a.fx-last-topic:hover {
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 860px) {
-	.fx-cat li.fx-forum {
-		flex-basis: 100%;
-	}
-}
-
 @media (max-width: 520px) {
 	.fx-cat ul.forums {
-		padding: 34px 10px 10px;
+		padding: 10px;
 	}
 
 	.fx-card-body {
@@ -1596,6 +1619,7 @@ body#phpbb #wrap {
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 16px;
 	background: var(--fx-surface);
+	box-shadow: var(--fx-card-shadow);
 	color: var(--fx-text);
 }
 
@@ -1611,14 +1635,18 @@ body#phpbb #wrap {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	margin: 0 0 12px;
-	padding: 0;
+	margin: -18px -20px 16px;
+	padding: 14px 20px;
 	border: 0;
-	background: none;
+	border-bottom: 1px solid var(--fx-border);
+	border-radius: 15px 15px 0 0;
+	background: var(--fx-accent-soft);
 	color: var(--fx-text);
+	font-family: var(--fx-font);
 	font-size: 1rem;
 	font-weight: 800;
 	line-height: 1.3;
+	text-transform: none;
 }
 
 .fx-info__card .h3::before {
@@ -1748,7 +1776,7 @@ body#phpbb #wrap {
 }
 
 /* ---------- Picture legend (new / no new / locked) ---------- */
-#picture_legend {
+ul#picture_legend {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -1760,13 +1788,15 @@ body#phpbb #wrap {
 	font-family: var(--fx-font);
 }
 
-#picture_legend li {
+ul#picture_legend li {
 	float: none;
-	display: inline-flex;
+	display: inline-flex !important;
+	flex-direction: row !important;
 	align-items: center;
 	gap: 8px;
 	margin: 0;
 	padding: 5px 14px 5px 8px;
+	text-align: left;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 999px;
 	background: var(--fx-surface);
@@ -1776,7 +1806,7 @@ body#phpbb #wrap {
 	line-height: 1.4;
 }
 
-#picture_legend li img {
+ul#picture_legend li img {
 	display: block;
 	width: 20px;
 	height: 20px;
