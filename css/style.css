@@ -11,6 +11,7 @@
    5. Page base (background + text follow the theme)
    6. Index body (time row, login, who is online, statistics, legend)
    7. Footer
+   8. Topic list (topics_list_box)
    ========================================================= */
 
 /* ---------- Tokens ---------- */
@@ -19,6 +20,16 @@
 	--fx-ico-read: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3C/svg%3E");
 	--fx-ico-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3C/svg%3E");
 	--fx-ico-locked: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='9.5' rx='2.5'/%3E%3Cpath d='M8.5 11V8a3.5 3.5 0 0 1 7 0v3'/%3E%3C/svg%3E");
+
+	/* topic state icons (masks) */
+	--fx-ico-topic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3Cpath d='M8.5 8h7M8.5 11.5h4'/%3E%3C/svg%3E");
+	--fx-ico-topic-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='none' stroke-width='0' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z M8.5 7.2h7v1.6h-7z M8.5 10.7h4v1.6h-4z'/%3E%3C/svg%3E");
+	--fx-ico-announce: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 11 18-5v12L3 14v-3z'/%3E%3Cpath d='M11.6 16.8a3 3 0 1 1-5.8-1.6'/%3E%3C/svg%3E");
+	--fx-ico-announce-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 11 18-5v12L3 14v-3z'/%3E%3Cpath d='M11.6 16.8a3 3 0 1 1-5.8-1.6'/%3E%3C/svg%3E");
+	--fx-ico-sticky: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17v5'/%3E%3Cpath d='M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z'/%3E%3C/svg%3E");
+	--fx-ico-sticky-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17v5'/%3E%3Cpath d='M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z'/%3E%3C/svg%3E");
+	--fx-ico-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E");
+	--fx-ico-hot-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E");
 
 	--fx-font: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
@@ -56,6 +67,11 @@
 	--fx-cat-b: #4a86f7;
 	--fx-cat-text: #ffffff;
 	--fx-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 2px 10px rgba(16, 24, 40, 0.05);
+
+	/* hot topics */
+	--fx-hot: #ee5a24;
+	--fx-hot-soft: rgba(238, 90, 36, 0.13);
+	--fx-hot-ring: rgba(238, 90, 36, 0.45);
 }
 
 html[data-fx-theme="dark"] {
@@ -94,6 +110,11 @@ html[data-fx-theme="dark"] {
 	--fx-cat-b: #3d52a8;
 	--fx-cat-text: #ffffff;
 	--fx-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.25);
+
+	/* hot topics */
+	--fx-hot: #ff8a55;
+	--fx-hot-soft: rgba(255, 138, 85, 0.16);
+	--fx-hot-ring: rgba(255, 138, 85, 0.5);
 }
 
 /* =========================================================
@@ -2015,4 +2036,543 @@ ul#picture_legend li:nth-child(3)::before {
 
 #page-footer p.copyright a:hover {
 	color: var(--fx-accent);
+}
+
+/* =========================================================
+   8. TOPIC LIST  (topics_list_box)
+   Two lists use it: announcements + sticky, and regular topics.
+   The state picture (topic_read.gif, topic_unread_hot.gif, sticky_unread.gif ...) is read from the
+   inline background-image of each row, hidden, and replaced by an icon. Hot topics pulse.
+   ========================================================= */
+
+/* ---------- Box: resets Forumotion's default .forumbg ---------- */
+div.forumbg.fx-topics {
+	clear: both;
+	margin: 0 0 24px !important;
+	padding: 0 !important;
+	border: 0 !important;
+	background: none !important;
+	background-image: none !important;
+	font-family: var(--fx-font);
+}
+
+.fx-topics .inner {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 18px;
+	background: var(--fx-surface);
+	box-shadow: var(--fx-card-shadow);
+}
+
+.fx-topics :is(.corners-top, .corners-bottom) {
+	display: none;
+}
+
+.fx-topics ul.topiclist {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* the <dfn> labels are hidden by Forumotion; the template adds visible .fx-label spans instead */
+.fx-topics dfn {
+	display: none !important;
+}
+
+/* ---------- Header: full-width band with the list name ---------- */
+.fx-topics li.header {
+	float: none;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background: none !important;
+	border: 0 !important;
+}
+
+.fx-topics li.header > dl.icon {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 0;
+	padding: 15px 22px;
+	min-height: 0;
+	background: linear-gradient(100deg, var(--fx-cat-a), var(--fx-cat-b)) !important;
+	color: var(--fx-cat-text);
+}
+
+.fx-topics li.header > dl.icon::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 5px;
+	height: 22px;
+	border-radius: 5px;
+	background: currentColor;
+	opacity: 0.55;
+}
+
+.fx-topics li.header dl.icon > :is(dt, dd.dterm) {
+	float: none;
+	width: auto;
+	margin: 0;
+	padding: 0 !important;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-size: 1.2rem;
+	font-weight: 800;
+	line-height: 1.3;
+	text-transform: none;
+}
+
+/* column names are not needed: every row labels its own numbers */
+.fx-topics li.header dl.icon > dd:not(.dterm) {
+	display: none;
+}
+
+/* ---------- Rows ---------- */
+.fx-topics li.row {
+	float: none;
+	width: auto;
+	margin: 0 !important;
+	padding: 0;
+	background: none !important;
+	border: 0 !important;
+	border-bottom: 1px solid var(--fx-border) !important;
+	color: var(--fx-text);
+	transition: background-color 0.15s ease;
+}
+
+.fx-topics li.row:last-child {
+	border-bottom: 0 !important;
+}
+
+.fx-topics li.row:hover {
+	background: var(--fx-surface-2) !important;
+}
+
+/* rows with new posts get an accent edge */
+.fx-topics li.row:has(> dl.icon[style*="unread"]),
+.fx-topics li.row:has(> dl.icon[style*="state=new"]) {
+	box-shadow: inset 3px 0 0 var(--fx-accent);
+}
+
+.fx-topics li.row > dl.icon {
+	--fx-tico: var(--fx-ico-topic);
+	--fx-tico-u: var(--fx-ico-topic-unread);
+	--fx-tcolor: var(--fx-muted);
+	--fx-ttile: var(--fx-surface-2);
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin: 0;
+	padding: 14px 18px;
+	min-height: 0;
+	background: none !important;
+}
+
+/* ---------- State icon: ::before is the tile, ::after is the glyph ---------- */
+.fx-topics li.row > dl.icon::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	background: var(--fx-ttile);
+}
+
+.fx-topics li.row > dl.icon::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 29px;
+	width: 22px;
+	height: 22px;
+	margin-top: -11px;
+	background-color: var(--fx-tcolor);
+	-webkit-mask: var(--fx-tico) center / contain no-repeat;
+	mask: var(--fx-tico) center / contain no-repeat;
+	pointer-events: none;
+}
+
+/* kind: announcement (also "global announcement"), sticky, hot */
+.fx-topics li.row > dl.icon[style*="announce"] {
+	--fx-tico: var(--fx-ico-announce);
+	--fx-tico-u: var(--fx-ico-announce-unread);
+}
+
+.fx-topics li.row > dl.icon[style*="sticky"] {
+	--fx-tico: var(--fx-ico-sticky);
+	--fx-tico-u: var(--fx-ico-sticky-unread);
+}
+
+.fx-topics li.row > dl.icon[style*="_hot"] {
+	--fx-tico: var(--fx-ico-hot);
+	--fx-tico-u: var(--fx-ico-hot-unread);
+}
+
+/* new posts: filled icon, accent color, small dot on the tile corner */
+.fx-topics li.row > dl.icon[style*="unread"],
+.fx-topics li.row > dl.icon[style*="state=new"] {
+	--fx-tico: var(--fx-tico-u);
+	--fx-tcolor: var(--fx-accent);
+	--fx-ttile: radial-gradient(circle at calc(100% - 7px) 7px, var(--fx-accent) 4.5px, transparent 5px), var(--fx-accent-soft);
+}
+
+/* hot (read or unread): flame in the hot color */
+.fx-topics li.row > dl.icon[style*="_hot"] {
+	--fx-tcolor: var(--fx-hot);
+	--fx-ttile: var(--fx-hot-soft);
+}
+
+.fx-topics li.row > dl.icon[style*="_hot"][style*="unread"] {
+	--fx-ttile: radial-gradient(circle at calc(100% - 7px) 7px, var(--fx-accent) 4.5px, transparent 5px), var(--fx-hot-soft);
+}
+
+/* locked (last, so it wins): padlock; keeps the accent color when it also has new posts */
+.fx-topics li.row > dl.icon[style*="locked"] {
+	--fx-tico: var(--fx-ico-locked);
+}
+
+/* ---------- Hot topics pulse, read or unread ---------- */
+.fx-topics li.row > dl.icon[style*="_hot"]::before {
+	animation: fx-hot-pulse 1.8s ease-out infinite;
+}
+
+.fx-topics li.row > dl.icon[style*="_hot"]::after {
+	animation: fx-hot-flame 1.8s ease-in-out infinite;
+}
+
+@keyframes fx-hot-pulse {
+	0% {
+		box-shadow: 0 0 0 0 var(--fx-hot-ring);
+	}
+
+	70%,
+	100% {
+		box-shadow: 0 0 0 12px transparent;
+	}
+}
+
+@keyframes fx-hot-flame {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.16);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fx-topics li.row > dl.icon[style*="_hot"]::before,
+	.fx-topics li.row > dl.icon[style*="_hot"]::after {
+		animation: none;
+	}
+}
+
+/* ---------- Cells ---------- */
+.fx-topics li.row dl.icon > dd {
+	float: none;
+	width: auto;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	border: 0 !important;
+	background: none;
+}
+
+/* title cell */
+.fx-topics li.row dl.icon > dd.dterm {
+	flex: 1 1 auto;
+	min-width: 0;
+	color: var(--fx-muted);
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+.fx-topics dd.dterm .topic-title-container {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+.fx-topics dd.dterm h2.topic-title {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-family: var(--fx-font);
+	font-size: 1.05rem;
+	font-weight: 800;
+	line-height: 1.4;
+	text-transform: none;
+}
+
+.fx-topics dd.dterm a.topictitle {
+	color: var(--fx-text);
+	text-decoration: none;
+}
+
+.fx-topics dd.dterm a.topictitle:hover {
+	color: var(--fx-accent);
+}
+
+/* unread topics: title in the accent color */
+.fx-topics dl.icon[style*="unread"] dd.dterm a.topictitle,
+.fx-topics dl.icon[style*="state=new"] dd.dterm a.topictitle {
+	color: var(--fx-accent);
+}
+
+/* "Sticky:", "Global announcement:" ... as a small chip */
+.fx-topics dd.dterm > strong {
+	display: inline-block;
+	margin-right: 6px;
+	padding: 1px 9px;
+	border-radius: 999px;
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+	font-size: 0.7rem;
+	font-weight: 800;
+	line-height: 1.5;
+	vertical-align: middle;
+}
+
+/* "you posted here": the little gif becomes an accent dot */
+.fx-topics dd.dterm > img[src*="icon_participate"] {
+	width: 8px;
+	height: 8px;
+	margin: 0 6px 2px 0;
+	border-radius: 50%;
+	background: var(--fx-accent);
+	object-fit: none;
+	object-position: -200px 0;
+	vertical-align: middle;
+}
+
+/* meta line: author on the left, page numbers on the right */
+.fx-topic-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 12px;
+	margin-top: 4px;
+}
+
+.fx-topic-meta .span-tab {
+	float: none;
+	margin: 0;
+	padding: 0;
+	color: var(--fx-muted);
+	font-size: 0.8rem;
+	font-weight: 600;
+}
+
+.fx-topic-meta .span-tab strong {
+	font-weight: 800;
+}
+
+.fx-topic-meta .span-tab a {
+	text-decoration: none;
+}
+
+.fx-topic-meta .pagination {
+	order: 2;
+	display: inline-flex;
+	margin-left: auto;
+	font-size: 0;
+}
+
+.fx-topic-meta .pagination > span {
+	display: inline-flex;
+	gap: 4px;
+}
+
+.fx-topic-meta .page-sep {
+	display: none;
+}
+
+.fx-topic-meta .pagination a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-width: 24px;
+	height: 24px;
+	padding: 0 7px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 8px;
+	background: var(--fx-surface);
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+	font-weight: 800;
+	text-decoration: none;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.fx-topic-meta .pagination a:hover {
+	border-color: var(--fx-accent);
+	color: var(--fx-accent);
+}
+
+/* replies / views: number with its label underneath */
+.fx-topics li.row dl.icon > dd.posts,
+.fx-topics li.row dl.icon > dd.views {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-width: 64px;
+	padding: 7px 10px;
+	border-radius: 10px;
+	background: var(--fx-surface-2);
+	color: var(--fx-text);
+	font-size: 1.05rem;
+	font-weight: 800;
+	line-height: 1.25;
+	text-align: center;
+}
+
+.fx-topics li.row:hover dl.icon > dd.posts,
+.fx-topics li.row:hover dl.icon > dd.views {
+	background: var(--fx-surface);
+}
+
+.fx-topics dd .fx-label {
+	display: block;
+	color: var(--fx-muted);
+	font-size: 0.7rem;
+	font-weight: 700;
+}
+
+/* last post: square avatar, then name + date */
+.fx-topics li.row dl.icon > dd.lastpost {
+	flex: 0 0 232px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+	padding: 8px 12px;
+	border-radius: 12px;
+	background: var(--fx-surface-2);
+	color: var(--fx-muted);
+	font-size: 0.78rem;
+	font-weight: 600;
+	line-height: 1.55;
+	text-align: left;
+}
+
+.fx-topics li.row:hover dl.icon > dd.lastpost {
+	background: var(--fx-surface);
+}
+
+.fx-topics dd.lastpost .lastpost-avatar {
+	flex: 0 0 auto;
+	display: flex;
+	float: none;
+}
+
+.fx-topics dd.lastpost .lastpost-avatar img {
+	display: block;
+	width: 40px !important;
+	height: 40px !important;
+	max-width: none !important;
+	max-height: none !important;
+	border-radius: 9px;
+	object-fit: cover;
+}
+
+.fx-topics dd.lastpost > div {
+	float: none !important;
+	min-width: 0;
+}
+
+.fx-topics dd.lastpost > span,
+.fx-topics dd.lastpost > div > span {
+	display: block;
+}
+
+.fx-topics dd.lastpost a.gensmall {
+	font-size: 0.85rem;
+	font-weight: 800;
+	text-decoration: none;
+}
+
+/* the "latest post" arrow as a small button */
+.fx-topics dd.lastpost a:has(> img.sprite-icon_topic_latest) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	margin-left: 4px;
+	border-radius: 8px;
+	background: var(--fx-accent-soft);
+	vertical-align: middle;
+}
+
+/* checkboxes of the multi-select lists */
+.fx-topics dl.icon > input[type="checkbox"],
+.fx-topics dd.dterm > input[type="radio"] {
+	accent-color: var(--fx-accent);
+}
+
+/* dark mode: member names sit on a light chip so every group color stays readable */
+html[data-fx-theme="dark"] .fx-topics a:has(> .usr_grp_clr),
+html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
+	display: inline-flex;
+	align-items: center;
+	padding: 0 9px;
+	border-radius: 999px;
+	background: var(--fx-chip-bg);
+	color: var(--fx-chip-text);
+}
+
+/* no topics */
+.fx-topics li.row > dl:not(.icon) {
+	margin: 0;
+	padding: 26px 18px;
+	text-align: center;
+}
+
+.fx-topics li.row > dl:not(.icon) dt {
+	float: none;
+	width: auto;
+	margin: 0;
+	padding: 0;
+	color: var(--fx-muted);
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 860px) {
+	.fx-topics li.row > dl.icon {
+		flex-wrap: wrap;
+		row-gap: 10px;
+	}
+
+	.fx-topics li.row > dl.icon::before {
+		align-self: flex-start;
+	}
+
+	.fx-topics li.row > dl.icon::after {
+		top: 25px;
+		margin-top: 0;
+	}
+
+	.fx-topics li.row dl.icon > dd.dterm {
+		flex: 1 1 calc(100% - 60px);
+	}
+
+	.fx-topics li.row dl.icon > dd.lastpost {
+		flex: 1 1 100%;
+	}
 }
