@@ -15,6 +15,11 @@
 
 /* ---------- Tokens ---------- */
 :root {
+	/* forum state icons (masks): read, unread, locked. Category images map to the same three. */
+	--fx-ico-read: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3C/svg%3E");
+	--fx-ico-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3C/svg%3E");
+	--fx-ico-locked: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='9.5' rx='2.5'/%3E%3Cpath d='M8.5 11V8a3.5 3.5 0 0 1 7 0v3'/%3E%3C/svg%3E");
+
 	--fx-font: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
 	--fx-bg: #f6f7f9;
@@ -286,7 +291,7 @@ div.forabg.fx-cat {
 	min-width: 0;
 }
 
-/* name row: folder image (new / no new / locked) in a soft tile, then the forum name */
+/* name row: state icon in a soft tile, then the forum name */
 .fx-forum-head {
 	display: flex;
 	align-items: center;
@@ -294,15 +299,53 @@ div.forabg.fx-cat {
 	min-width: 0;
 }
 
+/* The template still prints the forum_*.gif as an inline background-image. The state is read from its file name
+   (read / unread / locked, with or without "_category"), the picture itself is hidden and an icon is drawn instead. */
 .fx-forum-state {
+	--fx-ico: var(--fx-ico-read);
+	position: relative;
 	flex: 0 0 auto;
-	width: 32px;
-	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
 	border-radius: 10px;
-	background-color: var(--fx-accent-soft);
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: 22px;
+	background: var(--fx-surface-2) none !important;
+	color: var(--fx-muted);
+}
+
+.fx-forum-state::before {
+	content: "";
+	width: 19px;
+	height: 19px;
+	background-color: currentColor;
+	-webkit-mask: var(--fx-ico) center / contain no-repeat;
+	mask: var(--fx-ico) center / contain no-repeat;
+}
+
+/* new posts: filled bubble in the accent color, with a small dot on the corner */
+.fx-forum-state[style*="unread"] {
+	--fx-ico: var(--fx-ico-unread);
+	background: var(--fx-accent-soft) none !important;
+	color: var(--fx-accent);
+}
+
+.fx-forum-state[style*="unread"]::after {
+	content: "";
+	position: absolute;
+	top: -3px;
+	right: -3px;
+	width: 10px;
+	height: 10px;
+	border: 2px solid var(--fx-surface);
+	border-radius: 50%;
+	background: var(--fx-accent);
+}
+
+/* locked (must come last so it wins) */
+.fx-forum-state[style*="locked"] {
+	--fx-ico: var(--fx-ico-locked);
 }
 
 .fx-forum-main .hierarchy {
@@ -1825,12 +1868,30 @@ ul#picture_legend li {
 	line-height: 1.4;
 }
 
+/* the three gifs are hidden; the same icons as on the forum cards are drawn (order: new, no new, locked) */
 ul#picture_legend li img {
-	display: block;
-	width: 20px;
-	height: 20px;
-	margin: 0;
-	object-fit: contain;
+	display: none !important;
+}
+
+ul#picture_legend li::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 17px;
+	height: 17px;
+	background-color: var(--fx-muted);
+	-webkit-mask: var(--fx-ico-read) center / contain no-repeat;
+	mask: var(--fx-ico-read) center / contain no-repeat;
+}
+
+ul#picture_legend li:nth-child(1)::before {
+	background-color: var(--fx-accent);
+	-webkit-mask-image: var(--fx-ico-unread);
+	mask-image: var(--fx-ico-unread);
+}
+
+ul#picture_legend li:nth-child(3)::before {
+	-webkit-mask-image: var(--fx-ico-locked);
+	mask-image: var(--fx-ico-locked);
 }
 
 /* =========================================================
