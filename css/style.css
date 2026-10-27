@@ -286,6 +286,25 @@ div.forabg.fx-cat {
 	min-width: 0;
 }
 
+/* name row: folder image (new / no new / locked) in a soft tile, then the forum name */
+.fx-forum-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+}
+
+.fx-forum-state {
+	flex: 0 0 auto;
+	width: 32px;
+	height: 32px;
+	border-radius: 10px;
+	background-color: var(--fx-accent-soft);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 22px;
+}
+
 .fx-forum-main .hierarchy {
 	margin: 0;
 	padding: 0;
