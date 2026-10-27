@@ -2187,6 +2187,10 @@ div.forumbg.fx-topics {
 
 .fx-topics li.row > dl.icon::after {
 	content: "";
+	display: block !important;
+	visibility: visible !important;
+	float: none;
+	clear: none;
 	position: absolute;
 	top: 50%;
 	left: 29px;
@@ -2454,7 +2458,8 @@ div.forumbg.fx-topics {
 
 /* last post: square avatar, then name + date */
 .fx-topics li.row dl.icon > dd.lastpost {
-	flex: 0 0 232px;
+	flex: 0 0 240px;
+	box-sizing: border-box;
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -2497,6 +2502,16 @@ div.forumbg.fx-topics {
 .fx-topics dd.lastpost > span,
 .fx-topics dd.lastpost > div > span {
 	display: block;
+	white-space: nowrap;
+}
+
+/* the name is inline text, whatever Forumotion's default rules say about strong / links / spans */
+.fx-topics dd.lastpost a.gensmall,
+.fx-topics dd.lastpost a.gensmall span,
+.fx-topics dd.lastpost a.gensmall strong,
+.fx-topics dd.lastpost > span > strong,
+.fx-topics dd.lastpost > div > span > strong {
+	display: inline !important;
 }
 
 .fx-topics dd.lastpost a.gensmall {
