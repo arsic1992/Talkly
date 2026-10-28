@@ -2042,7 +2042,8 @@ ul#picture_legend li:nth-child(3)::before {
    8. TOPIC LIST  (topics_list_box)
    Two lists use it: announcements + sticky, and regular topics.
    The state picture (topic_read.gif, topic_unread_hot.gif, sticky_unread.gif ...) is read from the
-   inline background-image of each row, hidden, and replaced by an icon. Hot topics pulse.
+   inline background-image of each row, hidden, and replaced by an icon in a thin ring. Hot topics pulse.
+   Row layout (CSS grid, no boxes): [icon] [title + author] [last post] [replies / views]
    ========================================================= */
 
 /* ---------- Box: resets Forumotion's default .forumbg ---------- */
@@ -2164,27 +2165,35 @@ div.forumbg.fx-topics {
 	--fx-tico: var(--fx-ico-topic);
 	--fx-tico-u: var(--fx-ico-topic-unread);
 	--fx-tcolor: var(--fx-muted);
-	--fx-ttile: var(--fx-surface-2);
+	--fx-tring: var(--fx-border-strong);
+	--fx-tringw: 1.5px;
 	position: relative;
-	display: flex;
+	display: grid;
+	grid-template-columns: 42px minmax(0, 1fr) 224px 124px;
+	grid-template-rows: auto auto;
+	column-gap: 18px;
+	row-gap: 0;
 	align-items: center;
-	gap: 16px;
 	margin: 0;
-	padding: 14px 18px;
+	padding: 16px 20px;
 	min-height: 0;
 	background: none !important;
 }
 
-/* ---------- State icon: ::before is the tile, ::after is the glyph ---------- */
+/* ---------- State icon: ::before is a thin ring, ::after is the glyph ---------- */
 .fx-topics li.row > dl.icon::before {
 	content: "";
-	flex: 0 0 auto;
-	width: 44px;
-	height: 44px;
-	border-radius: 12px;
-	background: var(--fx-ttile);
+	grid-column: 1;
+	grid-row: 1 / span 2;
+	align-self: center;
+	box-sizing: border-box;
+	width: 42px;
+	height: 42px;
+	border: var(--fx-tringw) solid var(--fx-tring);
+	border-radius: 50%;
 }
 
+/* Forumotion's old clearfix hides dl:after (visibility: hidden, height: 0), so this must be forced */
 .fx-topics li.row > dl.icon::after {
 	content: "";
 	display: block !important;
@@ -2193,7 +2202,7 @@ div.forumbg.fx-topics {
 	clear: none;
 	position: absolute;
 	top: 50%;
-	left: 29px;
+	left: 30px;
 	width: 22px;
 	height: 22px;
 	margin-top: -11px;
@@ -2219,25 +2228,22 @@ div.forumbg.fx-topics {
 	--fx-tico-u: var(--fx-ico-hot-unread);
 }
 
-/* new posts: filled icon, accent color, small dot on the tile corner */
+/* new posts: filled icon and a thicker accent ring */
 .fx-topics li.row > dl.icon[style*="unread"],
 .fx-topics li.row > dl.icon[style*="state=new"] {
 	--fx-tico: var(--fx-tico-u);
 	--fx-tcolor: var(--fx-accent);
-	--fx-ttile: radial-gradient(circle at calc(100% - 7px) 7px, var(--fx-accent) 4.5px, transparent 5px), var(--fx-accent-soft);
+	--fx-tring: var(--fx-accent);
+	--fx-tringw: 2.5px;
 }
 
-/* hot (read or unread): flame in the hot color */
+/* hot (read or unread): flame and ring in the hot color */
 .fx-topics li.row > dl.icon[style*="_hot"] {
 	--fx-tcolor: var(--fx-hot);
-	--fx-ttile: var(--fx-hot-soft);
+	--fx-tring: var(--fx-hot);
 }
 
-.fx-topics li.row > dl.icon[style*="_hot"][style*="unread"] {
-	--fx-ttile: radial-gradient(circle at calc(100% - 7px) 7px, var(--fx-accent) 4.5px, transparent 5px), var(--fx-hot-soft);
-}
-
-/* locked (last, so it wins): padlock; keeps the accent color when it also has new posts */
+/* locked (last, so it wins): padlock */
 .fx-topics li.row > dl.icon[style*="locked"] {
 	--fx-tico: var(--fx-ico-locked);
 }
@@ -2287,13 +2293,14 @@ div.forumbg.fx-topics {
 	min-height: 0;
 	margin: 0;
 	padding: 0;
-	border: 0 !important;
+	border: 0;
 	background: none;
 }
 
 /* title cell */
 .fx-topics li.row dl.icon > dd.dterm {
-	flex: 1 1 auto;
+	grid-column: 2;
+	grid-row: 1 / span 2;
 	min-width: 0;
 	color: var(--fx-muted);
 	font-size: 0.85rem;
@@ -2335,17 +2342,17 @@ div.forumbg.fx-topics {
 	color: var(--fx-accent);
 }
 
-/* "Sticky:", "Global announcement:" ... as a small chip */
+/* "Sticky:", "Global announcement:" ... as a small outlined label */
 .fx-topics dd.dterm > strong {
 	display: inline-block;
 	margin-right: 6px;
-	padding: 1px 9px;
+	padding: 0 8px;
+	border: 1px solid var(--fx-accent);
 	border-radius: 999px;
-	background: var(--fx-accent-soft);
 	color: var(--fx-accent);
-	font-size: 0.7rem;
+	font-size: 0.68rem;
 	font-weight: 800;
-	line-height: 1.5;
+	line-height: 1.6;
 	vertical-align: middle;
 }
 
@@ -2413,7 +2420,6 @@ div.forumbg.fx-topics {
 	padding: 0 7px;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 8px;
-	background: var(--fx-surface);
 	color: var(--fx-muted);
 	font-size: 0.74rem;
 	font-weight: 800;
@@ -2426,56 +2432,19 @@ div.forumbg.fx-topics {
 	color: var(--fx-accent);
 }
 
-/* replies / views: number with its label underneath */
-.fx-topics li.row dl.icon > dd.posts,
-.fx-topics li.row dl.icon > dd.views {
-	flex: 0 0 auto;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	min-width: 64px;
-	padding: 7px 10px;
-	border-radius: 10px;
-	background: var(--fx-surface-2);
-	color: var(--fx-text);
-	font-size: 1.05rem;
-	font-weight: 800;
-	line-height: 1.25;
-	text-align: center;
-}
-
-.fx-topics li.row:hover dl.icon > dd.posts,
-.fx-topics li.row:hover dl.icon > dd.views {
-	background: var(--fx-surface);
-}
-
-.fx-topics dd .fx-label {
-	display: block;
-	color: var(--fx-muted);
-	font-size: 0.7rem;
-	font-weight: 700;
-}
-
-/* last post: square avatar, then name + date */
+/* last post: square avatar, then name and date (plain, no box) */
 .fx-topics li.row dl.icon > dd.lastpost {
-	flex: 0 0 240px;
-	box-sizing: border-box;
+	grid-column: 3;
+	grid-row: 1 / span 2;
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	min-width: 0;
-	padding: 8px 12px;
-	border-radius: 12px;
-	background: var(--fx-surface-2);
 	color: var(--fx-muted);
 	font-size: 0.78rem;
 	font-weight: 600;
 	line-height: 1.55;
 	text-align: left;
-}
-
-.fx-topics li.row:hover dl.icon > dd.lastpost {
-	background: var(--fx-surface);
 }
 
 .fx-topics dd.lastpost .lastpost-avatar {
@@ -2520,23 +2489,71 @@ div.forumbg.fx-topics {
 	text-decoration: none;
 }
 
-/* the "latest post" arrow as a small button */
+/* the "latest post" arrow: outlined button */
 .fx-topics dd.lastpost a:has(> img.sprite-icon_topic_latest) {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	box-sizing: border-box;
 	width: 24px;
 	height: 24px;
 	margin-left: 4px;
+	border: 1px solid var(--fx-border-strong);
 	border-radius: 8px;
-	background: var(--fx-accent-soft);
 	vertical-align: middle;
+	transition: border-color 0.15s ease;
+}
+
+.fx-topics dd.lastpost a:has(> img.sprite-icon_topic_latest):hover {
+	border-color: var(--fx-accent);
+}
+
+/* replies / views: stacked in the last column behind a thin line; the number is bold, the label light */
+.fx-topics li.row dl.icon > dd.posts,
+.fx-topics li.row dl.icon > dd.views {
+	grid-column: 4;
+	padding-left: 18px;
+	border-left: 1px solid var(--fx-border);
+	color: var(--fx-text);
+	font-size: 0.98rem;
+	font-weight: 800;
+	line-height: 1.7;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.fx-topics li.row dl.icon > dd.posts {
+	grid-row: 1;
+	align-self: end;
+	color: var(--fx-accent);
+}
+
+.fx-topics li.row dl.icon > dd.views {
+	grid-row: 2;
+	align-self: start;
+}
+
+.fx-topics dd .fx-label {
+	display: inline;
+	margin-left: 5px;
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+	font-weight: 700;
 }
 
 /* checkboxes of the multi-select lists */
 .fx-topics dl.icon > input[type="checkbox"],
 .fx-topics dd.dterm > input[type="radio"] {
 	accent-color: var(--fx-accent);
+}
+
+.fx-topics dl.icon > input[type="checkbox"] {
+	grid-column: 5;
+	grid-row: 1 / span 2;
+}
+
+.fx-topics li.row > dl.icon:has(> input[type="checkbox"]) {
+	grid-template-columns: 42px minmax(0, 1fr) 224px 124px auto;
 }
 
 /* dark mode: member names sit on a light chip so every group color stays readable */
@@ -2567,27 +2584,39 @@ html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
 	font-weight: 700;
 }
 
-/* ---------- Small screens ---------- */
+/* ---------- Small screens: icon + title, then last post, then the numbers ---------- */
 @media (max-width: 860px) {
 	.fx-topics li.row > dl.icon {
+		display: flex;
 		flex-wrap: wrap;
-		row-gap: 10px;
+		align-items: center;
+		gap: 10px 16px;
+		padding: 14px 16px;
 	}
 
 	.fx-topics li.row > dl.icon::before {
+		flex: 0 0 42px;
 		align-self: flex-start;
 	}
 
 	.fx-topics li.row > dl.icon::after {
-		top: 25px;
+		top: 24px;
+		left: 26px;
 		margin-top: 0;
 	}
 
 	.fx-topics li.row dl.icon > dd.dterm {
-		flex: 1 1 calc(100% - 60px);
+		flex: 1 1 calc(100% - 58px);
 	}
 
 	.fx-topics li.row dl.icon > dd.lastpost {
 		flex: 1 1 100%;
+	}
+
+	.fx-topics li.row dl.icon > dd.posts,
+	.fx-topics li.row dl.icon > dd.views {
+		flex: 0 0 auto;
+		padding-left: 0;
+		border-left: 0;
 	}
 }
