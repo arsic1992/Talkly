@@ -12,6 +12,7 @@
    6. Index body (time row, login, who is online, statistics, legend)
    7. Footer
    8. Topic list (topics_list_box)
+   9. Posts (viewtopic_body)
    ========================================================= */
 
 /* ---------- Tokens ---------- */
@@ -2618,5 +2619,1005 @@ html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
 		flex: 0 0 auto;
 		padding-left: 0;
 		border-left: 0;
+	}
+}
+
+/* =========================================================
+   9. POSTS  (viewtopic_body: one card per post)
+   Author header on top: diamond avatar, name, rank, awards and
+   stats, with the post actions in a pill on the right. Then the
+   message, then a footer tray (likes left, contact / vote / jump right).
+   Light and dark both follow the --fx tokens; only the avatar
+   ring gradient and its glow get their own dark values.
+   ========================================================= */
+
+.fx-post {
+	--p-g1: var(--fx-accent);
+	--p-g2: #8a63f6;
+	--p-glow: rgba(59, 109, 240, 0.32);
+	--p-tint: rgba(59, 109, 240, 0.07);
+	--p-line: rgba(59, 109, 240, 0.11);
+	--p-diamond: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+	--p-radius: 20px;
+
+	/* icons (masks) */
+	--p-ico-quote: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z%22/%3E%3Cpath d=%22M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z%22/%3E%3C/svg%3E");
+	--p-ico-mq: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%229%22 y=%229%22 width=%2213%22 height=%2213%22 rx=%222%22/%3E%3Cpath d=%22M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1%22/%3E%3C/svg%3E");
+	--p-ico-edit: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z%22/%3E%3Cpath d=%22m15 5 4 4%22/%3E%3C/svg%3E");
+	--p-ico-delete: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 6h18%22/%3E%3Cpath d=%22M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6%22/%3E%3Cpath d=%22M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2%22/%3E%3Cpath d=%22M10 11v6M14 11v6%22/%3E%3C/svg%3E");
+	--p-ico-ip: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M2 12h20%22/%3E%3Cpath d=%22M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z%22/%3E%3C/svg%3E");
+	--p-ico-report: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z%22/%3E%3Cpath d=%22M4 22v-7%22/%3E%3C/svg%3E");
+	--p-ico-thanks: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z%22/%3E%3C/svg%3E");
+	--p-ico-profile: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2%22/%3E%3Ccircle cx=%2212%22 cy=%227%22 r=%224%22/%3E%3C/svg%3E");
+	--p-ico-pm: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z%22/%3E%3C/svg%3E");
+	--p-ico-mail: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%224%22 width=%2220%22 height=%2216%22 rx=%222%22/%3E%3Cpath d=%22m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7%22/%3E%3C/svg%3E");
+	--p-ico-clock: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M12 6v6l4 2%22/%3E%3C/svg%3E");
+	--p-ico-noavatar: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%238b95a5%22%3E%3Ccircle cx=%2212%22 cy=%228.5%22 r=%224%22/%3E%3Cpath d=%22M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z%22/%3E%3C/svg%3E");
+}
+
+html[data-fx-theme="dark"] .fx-post {
+	--p-g2: #b59bff;
+	--p-glow: rgba(124, 156, 255, 0.30);
+	--p-tint: rgba(124, 156, 255, 0.09);
+	--p-line: rgba(124, 156, 255, 0.10);
+}
+
+/* ---------- The card ---------- */
+div.post.fx-post {
+	position: relative;
+	clear: both;
+	margin: 48px 0 0;               /* room for the avatar tip that floats above the card */
+	padding: 0;
+	border: 1px solid var(--fx-border);
+	border-radius: var(--p-radius);
+	background-color: var(--fx-surface);
+	background-image: none;
+	box-shadow: var(--fx-card-shadow);
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+div.post.fx-post:hover {
+	border-color: var(--fx-border-strong);
+}
+
+/* a post opened from a link (#123) gets an accent ring */
+div.post.fx-post:has(.fx-p-anchor:target) {
+	border-color: var(--fx-accent);
+	box-shadow: 0 0 0 3px var(--fx-accent-soft), var(--fx-card-shadow);
+}
+
+div.post.fx-post > .inner {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+/* the old rounded-corner spans are not needed */
+div.post.fx-post .corners-top,
+div.post.fx-post .corners-bottom {
+	display: none;
+}
+
+hr#first-post-br {
+	height: 0;
+	margin: 0;
+	border: 0;
+}
+
+/* ---------- Author header ---------- */
+.fx-post__head {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 14px 20px;
+	padding: 16px 18px 16px 26px;
+	border-bottom: 1px solid var(--fx-border);
+	border-radius: var(--p-radius) var(--p-radius) 0 0;
+	background: linear-gradient(115deg, var(--p-tint), transparent 62%);
+}
+
+/* a faint diamond lattice that fades in toward the right edge */
+.fx-post__head::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	background:
+		repeating-linear-gradient(45deg, var(--p-line) 0 1px, transparent 1px 26px),
+		repeating-linear-gradient(-45deg, var(--p-line) 0 1px, transparent 1px 26px);
+	-webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 100%);
+	mask-image: linear-gradient(90deg, transparent 38%, #000 100%);
+}
+
+.fx-post .postprofile {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	gap: 22px;
+	flex: 1 1 auto;
+	min-width: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	float: none !important;
+	width: auto !important;
+}
+
+/* ---------- Diamond avatar ---------- */
+.fx-p-avatar {
+	position: relative;
+	flex: 0 0 auto;
+	align-self: flex-start;
+	width: 112px;
+	height: 112px;
+	margin: -36px 0 -8px;
+	filter: drop-shadow(0 10px 14px var(--p-glow));
+	transition: transform 0.25s ease;
+}
+
+.fx-post:hover .fx-p-avatar {
+	transform: translateY(-2px);
+}
+
+.fx-p-avatar__shape {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(135deg, var(--p-g1), var(--p-g2));
+	clip-path: var(--p-diamond);
+}
+
+.fx-p-avatar__shape > a {
+	position: absolute;
+	inset: 5px;
+	display: block;
+	background: var(--fx-surface-2);
+	clip-path: var(--p-diamond);
+}
+
+.fx-p-avatar__shape img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none !important;
+	max-height: none !important;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	object-fit: cover;
+}
+
+/* no avatar: the gradient diamond holds a neutral face */
+.fx-p-avatar__shape:empty::after {
+	content: "";
+	position: absolute;
+	inset: 5px;
+	background: var(--fx-surface-2) var(--p-ico-noavatar) center 62% / 56% no-repeat;
+	clip-path: var(--p-diamond);
+}
+
+/* ---------- Name, rank, awards, stats ---------- */
+.fx-post .postprofile dl {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.fx-post .postprofile dt,
+.fx-post .postprofile dd {
+	margin: 0;
+	padding: 0;
+	line-height: 1.3;
+}
+
+.fx-post .postprofile dt {
+	flex: 0 0 100%;
+}
+
+.fx-p-name {
+	font-size: 1.28rem;
+	font-weight: 800;
+	letter-spacing: -0.012em;
+	line-height: 1.25;
+}
+
+.fx-p-name a {
+	text-decoration: none;
+}
+
+.fx-p-name a:hover {
+	text-decoration: underline;
+}
+
+.fx-p-name .group-icon {
+	font-size: 1em;
+	vertical-align: -2px;
+}
+
+/* dark mode: names sit on a light chip so every group color stays readable */
+html[data-fx-theme="dark"] .fx-p-name a {
+	display: inline-flex;
+	align-items: center;
+	padding: 1px 12px;
+	border-radius: 999px;
+	background: var(--fx-chip-bg);
+	color: var(--fx-chip-text);
+	text-decoration: none;
+}
+
+.fx-p-rank {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	color: var(--fx-accent);
+	font-size: 0.68rem;
+	font-weight: 800;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.fx-p-rank::before {
+	content: "";
+	width: 8px;
+	height: 8px;
+	background: linear-gradient(135deg, var(--p-g1), var(--p-g2));
+	clip-path: var(--p-diamond);
+}
+
+.fx-p-rank br {
+	display: none;
+}
+
+.fx-p-rank:empty {
+	display: none;
+}
+
+/* awards: tiles with a hover tooltip */
+.fx-post .postprofile dd.dd_award {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	width: auto !important;
+	height: auto !important;
+	padding: 0;
+	border: 0 !important;
+	background: none !important;
+	box-shadow: none;
+}
+
+.fx-post .award {
+	position: relative;
+	display: block;
+	float: none;
+	width: 32px;
+	height: 32px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+	cursor: help;
+}
+
+.fx-post .award::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 9px;
+	background: var(--award-image) center / contain no-repeat;
+	transition: transform 0.18s ease;
+}
+
+.fx-post .award:hover::before {
+	transform: translateY(-2px) rotate(-5deg) scale(1.1);
+}
+
+.fx-post .award_tooltiptext {
+	position: absolute;
+	bottom: calc(100% + 10px);
+	left: 50%;
+	z-index: 20;
+	display: block;
+	width: max-content;
+	max-width: 220px;
+	padding: 8px 12px;
+	border-radius: 10px;
+	background: var(--fx-text);
+	color: var(--fx-bg);
+	font-size: 0.74rem;
+	font-weight: 600;
+	line-height: 1.4;
+	text-align: left;
+	visibility: hidden;
+	opacity: 0;
+	transform: translate(-50%, 4px);
+	transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+	pointer-events: none;
+	box-shadow: var(--fx-pop-shadow);
+}
+
+.fx-post .award:hover .award_tooltiptext {
+	visibility: visible;
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+.fx-post .award_tooltiptext_title {
+	margin: 0 0 2px;
+	font-size: 0.78rem;
+	font-weight: 800;
+}
+
+.fx-post .award_more:empty {
+	display: none;
+}
+
+.fx-post .award_more:not(:empty) {
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+	font-weight: 800;
+}
+
+/* stats: one chip per profile field */
+.fx-p-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	flex: 0 0 100%;
+}
+
+.fx-p-stats:empty {
+	display: none;
+}
+
+.fx-p-stat {
+	display: inline-flex;
+	align-items: center;
+	padding: 2px 11px;
+	border: 1px solid var(--fx-border);
+	border-radius: 999px;
+	background: var(--fx-surface);
+	color: var(--fx-text);
+	font-size: 0.74rem;
+	font-weight: 800;
+	line-height: 1.5;
+	gap: 5px;
+	max-width: 100%;
+}
+
+/* the label carries an inline color from the admin panel; keep it on the theme */
+.fx-p-stat .label,
+.fx-p-stat .label span {
+	color: var(--fx-muted) !important;
+	font-weight: 700;
+}
+
+.fx-p-stat br {
+	display: none;
+}
+
+/* ---------- Action icons (shared by the top pill and the contact buttons) ----------
+   The real <img>/<a> from Forumotion stays in place, invisible, as the click target and the
+   accessible name. The picture is drawn with a mask, so it follows the theme color. */
+.fx-p-act {
+	position: relative;
+	flex: 0 0 auto;
+	width: 34px;
+	height: 34px;
+	border-radius: 10px;
+	color: var(--fx-muted);
+	transition: color 0.15s, background-color 0.15s;
+}
+
+.fx-p-act:empty {
+	display: none;
+}
+
+.fx-p-act::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	width: 18px;
+	height: 18px;
+	margin: auto;
+	background: currentColor;
+	-webkit-mask: var(--p-i) center / contain no-repeat;
+	mask: var(--p-i) center / contain no-repeat;
+	pointer-events: none;
+}
+
+.fx-p-act > a,
+.fx-p-act > img {
+	position: absolute;
+	inset: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.fx-p-act > a img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.fx-p-act:hover {
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+}
+
+.fx-p-act--thanks { --p-i: var(--p-ico-thanks); }
+.fx-p-act--mq { --p-i: var(--p-ico-mq); }
+.fx-p-act--quote { --p-i: var(--p-ico-quote); }
+.fx-p-act--edit { --p-i: var(--p-ico-edit); }
+.fx-p-act--delete { --p-i: var(--p-ico-delete); }
+.fx-p-act--ip { --p-i: var(--p-ico-ip); }
+.fx-p-act--report { --p-i: var(--p-ico-report); }
+.fx-p-act--profile { --p-i: var(--p-ico-profile); }
+.fx-p-act--pm { --p-i: var(--p-ico-pm); }
+.fx-p-act--mail { --p-i: var(--p-ico-mail); }
+
+.fx-p-act--delete:hover,
+.fx-p-act--report:hover {
+	background: var(--fx-danger-soft);
+	color: var(--fx-danger);
+}
+
+/* multi-quote: Forumotion swaps the image to the "_on_" file when it is selected */
+.fx-p-act--mq:has(> img[src*="_on_"]) {
+	background: var(--fx-accent);
+	color: var(--fx-on-accent);
+}
+
+/* extra contact fields from the admin panel keep their own picture */
+.fx-p-act--extra {
+	width: auto;
+	min-width: 34px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.fx-p-act--extra::before {
+	display: none;
+}
+
+.fx-p-act--extra > a,
+.fx-p-act--extra > img {
+	position: static;
+	width: auto;
+	height: auto;
+	opacity: 1;
+}
+
+/* the top pill */
+.fx-post ul.fx-p-acts {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: 2px;
+	float: none;
+	margin: 0;
+	padding: 4px;
+	border: 1px solid var(--fx-border);
+	border-radius: 14px;
+	background: var(--fx-surface);
+	list-style: none;
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.fx-post ul.fx-p-acts > li {
+	float: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* the contact group in the footer */
+.fx-p-contact {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	padding: 3px;
+	border: 1px solid var(--fx-border);
+	border-radius: 13px;
+	background: var(--fx-surface);
+}
+
+.fx-p-contact .fx-p-act {
+	width: 30px;
+	height: 30px;
+}
+
+.fx-p-contact .fx-p-act::before {
+	width: 16px;
+	height: 16px;
+}
+
+.fx-p-contact:not(:has(.fx-p-act:not(:empty))) {
+	display: none;
+}
+
+/* ---------- Message ---------- */
+.fx-post .postbody {
+	float: none !important;
+	width: auto !important;
+	margin: 0;
+	padding: 22px 26px 0;
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+}
+
+.fx-post__meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 4px 16px;
+}
+
+.fx-post .topic-title {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--fx-text);
+	font: 800 1.04rem/1.35 var(--fx-font);
+	letter-spacing: -0.005em;
+}
+
+.fx-post .topic-title::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 10px;
+	height: 10px;
+	background: linear-gradient(135deg, var(--p-g1), var(--p-g2));
+	clip-path: var(--p-diamond);
+}
+
+.fx-post .topic-title > img[src$="empty.gif"] {
+	display: none;
+}
+
+.fx-post .topic-title a {
+	color: var(--fx-text);
+	text-decoration: none;
+}
+
+.fx-post .topic-title a:hover {
+	color: var(--fx-accent);
+}
+
+.fx-post .postbody .author {
+	margin: 0;
+	padding: 0;
+	line-height: 1.2;
+}
+
+.fx-p-date {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--fx-muted);
+	font-size: 0.76rem;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.fx-p-date::before {
+	content: "";
+	width: 13px;
+	height: 13px;
+	background: currentColor;
+	-webkit-mask: var(--p-ico-clock) center / contain no-repeat;
+	mask: var(--p-ico-clock) center / contain no-repeat;
+}
+
+.fx-p-date:hover {
+	color: var(--fx-accent);
+}
+
+.fx-post .postbody .content {
+	min-height: 0;
+	margin: 14px 0 0;
+	padding: 0;
+	color: var(--fx-text);
+	font: 400 0.97rem/1.72 var(--fx-font);
+	overflow-wrap: anywhere;
+}
+
+.fx-post .postbody .content a.postlink {
+	color: var(--fx-accent);
+	font-weight: 700;
+}
+
+.fx-post .postbody .content img {
+	max-width: 100%;
+}
+
+.fx-post .postbody .content hr {
+	height: 1px;
+	margin: 16px 0;
+	border: 0;
+	background: var(--fx-border);
+}
+
+/* quotes and code */
+.fx-post .postbody .content blockquote {
+	margin: 14px 0;
+	padding: 12px 16px;
+	border: 1px solid var(--fx-border);
+	border-left: 4px solid var(--fx-accent);
+	border-radius: 12px;
+	background: var(--fx-surface-2);
+	color: var(--fx-text);
+	font-size: 0.92rem;
+}
+
+.fx-post .postbody .content blockquote cite {
+	display: block;
+	margin: 0 0 6px;
+	color: var(--fx-accent);
+	font-size: 0.78rem;
+	font-style: normal;
+	font-weight: 800;
+}
+
+.fx-post .postbody .content .codebox {
+	margin: 14px 0;
+	border: 1px solid var(--fx-border);
+	border-radius: 12px;
+	background: var(--fx-surface-2);
+	overflow: hidden;
+}
+
+.fx-post .postbody .content .codebox pre,
+.fx-post .postbody .content .codebox code {
+	color: var(--fx-text);
+	background: none;
+}
+
+/* attachments */
+.fx-post dl.attachbox {
+	margin: 16px 0 0;
+	padding: 12px 16px;
+	border: 1px solid var(--fx-border);
+	border-radius: 12px;
+	background: var(--fx-surface-2);
+	color: var(--fx-text);
+	font-size: 0.85rem;
+}
+
+.fx-post dl.attachbox dt {
+	margin: 0 0 6px;
+	color: var(--fx-muted);
+	font-weight: 800;
+}
+
+/* edited line + signature */
+.fx-post__edited {
+	margin: 12px 0 0;
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+}
+
+.fx-post__edited:empty {
+	display: none;
+}
+
+.fx-post .signature_div {
+	margin: 18px 0 0;
+	padding: 12px 0 0;
+	border-top: 1px dashed var(--fx-border-strong);
+	color: var(--fx-muted);
+	font-size: 0.8rem;
+	line-height: 1.5;
+	overflow: hidden;
+}
+
+/* ---------- Footer tray ---------- */
+.fx-post__foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px 14px;
+	margin: 20px 0 0;
+	padding: 12px 18px 12px 26px;
+	border-top: 1px solid var(--fx-border);
+	border-radius: 0 0 var(--p-radius) var(--p-radius);
+	background: var(--fx-surface-2);
+}
+
+.fx-post__tools {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin-left: auto;
+}
+
+/* like / dislike pills */
+.fx-post .fa_like_div {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	float: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+.fx-post .fa_like_list {
+	flex: 0 0 100%;
+	margin: 0;
+	color: var(--fx-muted);
+	font-size: 0.76rem;
+	font-weight: 600;
+}
+
+.fx-post .rep-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	width: auto;
+	height: auto;
+	min-width: 0;
+	margin: 0;
+	padding: 6px 14px;
+	border: 1px solid var(--fx-border);
+	border-radius: 999px;
+	background-color: var(--fx-surface);
+	background-image: none !important;
+	box-shadow: none;
+	color: var(--fx-muted);
+	font: 800 0.78rem/1.2 var(--fx-font);
+	letter-spacing: 0;
+	text-indent: 0;
+	text-shadow: none;
+	text-transform: none;
+	cursor: pointer;
+	transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+
+.fx-post .rep-button svg {
+	flex: 0 0 auto;
+	width: 15px;
+	height: 15px;
+}
+
+.fx-post .rep-button svg path {
+	fill: currentColor;
+}
+
+.fx-post .rep-button:hover {
+	border-color: var(--fx-accent);
+	background-color: var(--fx-accent-soft);
+	color: var(--fx-accent);
+}
+
+.fx-post .rep-button.fa_dislike:hover {
+	border-color: var(--fx-danger);
+	background-color: var(--fx-danger-soft);
+	color: var(--fx-danger);
+}
+
+/* when the member has already voted */
+.fx-post .rep-button[class*="active"],
+.fx-post .rep-button[class*="voted"],
+.fx-post .rep-button[class*="selected"] {
+	border-color: var(--fx-accent);
+	background-color: var(--fx-accent-soft);
+	color: var(--fx-accent);
+}
+
+.fx-post .rep-nb {
+	min-width: 18px;
+	padding: 0 6px;
+	border-radius: 999px;
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+	font-size: 0.7rem;
+	line-height: 18px;
+	text-align: center;
+}
+
+/* +/- vote pill */
+.fx-post .vote {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	float: none;
+	width: auto;
+	height: auto;
+	margin: 0;
+	padding: 3px;
+	border: 1px solid var(--fx-border);
+	border-radius: 999px;
+	background: var(--fx-surface);
+	color: var(--fx-muted);
+}
+
+.fx-post .vote-button {
+	float: none;
+	margin: 0;
+	padding: 0;
+}
+
+.fx-post .vote-button a {
+	display: grid;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	color: var(--fx-muted);
+	font-size: 0.95rem;
+	font-weight: 800;
+	line-height: 1;
+	text-decoration: none;
+}
+
+.fx-post .vote-button a:hover {
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+}
+
+.fx-post .vote-no-bar {
+	width: auto;
+	margin: 0 4px;
+	font-size: 0;
+}
+
+.fx-post .vote-no-bar::before {
+	content: "";
+	display: block;
+	width: 14px;
+	height: 2px;
+	border-radius: 2px;
+	background: var(--fx-border-strong);
+}
+
+.fx-post .vote-bar {
+	display: flex;
+	flex-direction: column-reverse;
+	width: 6px;
+	height: 24px;
+	margin: 0 4px;
+	overflow: hidden;
+	border-radius: 3px;
+	background: var(--fx-border);
+}
+
+.fx-post .vote-bar-plus {
+	width: 100%;
+	background: var(--fx-accent);
+}
+
+.fx-post .vote-bar-minus {
+	width: 100%;
+	background: var(--fx-danger);
+}
+
+/* back to top / down */
+.fx-p-jump {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.fx-p-jump a {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 9px;
+	color: var(--fx-muted);
+	transition: color 0.15s, background-color 0.15s;
+}
+
+.fx-p-jump a:hover {
+	background: var(--fx-accent-soft);
+	color: var(--fx-accent);
+}
+
+/* ---------- Hidden message ("show hidden message") ---------- */
+div.post.fx-post--hidden {
+	margin-top: 14px;
+}
+
+.fx-post__hidden {
+	margin: 0;
+	padding: 16px 20px;
+	color: var(--fx-muted);
+	font-size: 0.88rem;
+	font-weight: 700;
+	text-align: center;
+}
+
+.fx-post__hidden a {
+	color: var(--fx-accent);
+}
+
+/* ---------- Small screens: the header stacks, the actions drop under the name ---------- */
+@media (max-width: 720px) {
+	div.post.fx-post {
+		margin-top: 44px;
+		--p-radius: 16px;
+	}
+
+	.fx-post__head {
+		flex-wrap: wrap;
+		padding: 14px 14px 14px 16px;
+	}
+
+	.fx-post .postprofile {
+		flex: 1 1 100%;
+		gap: 16px;
+	}
+
+	.fx-p-avatar {
+		width: 92px;
+		height: 92px;
+		margin: -32px 0 -6px;
+	}
+
+	.fx-p-name {
+		font-size: 1.12rem;
+	}
+
+	.fx-post ul.fx-p-acts {
+		margin-left: auto;
+	}
+
+	.fx-post .postbody {
+		padding: 18px 18px 0;
+	}
+
+	.fx-post__foot {
+		padding: 12px 14px;
+	}
+
+	.fx-post__tools {
+		justify-content: space-between;
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fx-p-avatar,
+	.fx-post .award::before,
+	.fx-post .award_tooltiptext {
+		transition: none;
+	}
+
+	.fx-post:hover .fx-p-avatar {
+		transform: none;
 	}
 }
