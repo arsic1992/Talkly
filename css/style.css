@@ -1,2634 +1,21 @@
 /* =========================================================
-   TALKLY THEME  (single stylesheet)
-   Flexbox layout. Light is the default, dark is opt-in via
-   <html data-fx-theme="dark">
-
-   Sections:
-   1. Tokens
-   2. Index box (categories + forum cards)
-   3. Navbar + theme switcher
-   4. Account menus (profile, notifications, toasts)
-   5. Page base (background + text follow the theme)
-   6. Index body (time row, login, who is online, statistics, legend)
-   7. Footer
-   8. Topic list (topics_list_box)
-   9. Posts (viewtopic_body)
-   ========================================================= */
-
-/* ---------- Tokens ---------- */
-:root {
-	/* forum state icons (masks): read, unread, locked. Category images map to the same three. */
-	--fx-ico-read: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3C/svg%3E");
-	--fx-ico-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3C/svg%3E");
-	--fx-ico-locked: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='9.5' rx='2.5'/%3E%3Cpath d='M8.5 11V8a3.5 3.5 0 0 1 7 0v3'/%3E%3C/svg%3E");
-
-	/* topic state icons (masks) */
-	--fx-ico-topic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z'/%3E%3Cpath d='M8.5 8h7M8.5 11.5h4'/%3E%3C/svg%3E");
-	--fx-ico-topic-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='none' stroke-width='0' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-4.5 4v-4H7a3 3 0 0 1-3-3z M8.5 7.2h7v1.6h-7z M8.5 10.7h4v1.6h-4z'/%3E%3C/svg%3E");
-	--fx-ico-announce: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 11 18-5v12L3 14v-3z'/%3E%3Cpath d='M11.6 16.8a3 3 0 1 1-5.8-1.6'/%3E%3C/svg%3E");
-	--fx-ico-announce-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 11 18-5v12L3 14v-3z'/%3E%3Cpath d='M11.6 16.8a3 3 0 1 1-5.8-1.6'/%3E%3C/svg%3E");
-	--fx-ico-sticky: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17v5'/%3E%3Cpath d='M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z'/%3E%3C/svg%3E");
-	--fx-ico-sticky-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17v5'/%3E%3Cpath d='M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z'/%3E%3C/svg%3E");
-	--fx-ico-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E");
-	--fx-ico-hot-unread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000' fill-rule='evenodd' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E");
-
-	--fx-font: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-
-	--fx-bg: #f6f7f9;
-	--fx-surface: #ffffff;
-	--fx-surface-2: #f1f3f6;
-	--fx-border: #e4e7ec;
-	--fx-border-strong: #cdd3dd;
-	--fx-text: #1c2330;
-	--fx-muted: #6b7686;
-	--fx-accent: #3b6df0;
-	--fx-on-accent: #ffffff;
-	--fx-accent-soft: rgba(59, 109, 240, 0.10);
-
-	/* navbar */
-	--fx-nav-bg: #2f5be0;
-	--fx-nav-text: #ffffff;
-	--fx-nav-hover: rgba(255, 255, 255, 0.18);
-	--fx-nav-btn: rgba(255, 255, 255, 0.16);
-	--fx-nav-btn-hover: rgba(255, 255, 255, 0.30);
-	--fx-nav-border: transparent;
-
-	/* popups */
-	--fx-pop-shadow: 0 18px 48px rgba(16, 24, 40, 0.20), 0 2px 6px rgba(16, 24, 40, 0.08);
-	--fx-danger: #d92d20;
-	--fx-danger-soft: rgba(217, 45, 32, 0.10);
-
-	/* member / group chips */
-	--fx-chip-bg: #f1f3f6;
-	--fx-chip-text: #1c2330;
-	--fx-chip-border: #e4e7ec;
-
-	/* category header band + card depth */
-	--fx-cat-a: #2f5be0;
-	--fx-cat-b: #4a86f7;
-	--fx-cat-text: #ffffff;
-	--fx-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 2px 10px rgba(16, 24, 40, 0.05);
-
-	/* hot topics */
-	--fx-hot: #ee5a24;
-	--fx-hot-soft: rgba(238, 90, 36, 0.13);
-	--fx-hot-ring: rgba(238, 90, 36, 0.45);
-}
-
-html[data-fx-theme="dark"] {
-	color-scheme: dark;
-	--fx-bg: #0f131a;
-	--fx-surface: #171c25;
-	--fx-surface-2: #1e2430;
-	--fx-border: #272e3b;
-	--fx-border-strong: #3a4457;
-	--fx-text: #e6e9ef;
-	--fx-muted: #8b95a5;
-	--fx-accent: #7c9cff;
-	--fx-on-accent: #0f131a;
-	--fx-accent-soft: rgba(124, 156, 255, 0.14);
-
-	/* navbar */
-	--fx-nav-bg: #141923;
-	--fx-nav-text: #d6dcea;
-	--fx-nav-hover: rgba(124, 156, 255, 0.16);
-	--fx-nav-btn: rgba(124, 156, 255, 0.14);
-	--fx-nav-btn-hover: rgba(124, 156, 255, 0.28);
-	--fx-nav-border: #272e3b;
-
-	/* popups */
-	--fx-pop-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.40);
-	--fx-danger: #ff7a70;
-	--fx-danger-soft: rgba(255, 122, 112, 0.14);
-
-	/* member / group chips: light on purpose, group colors are picked for light backgrounds */
-	--fx-chip-bg: #e3e8f2;
-	--fx-chip-text: #1c2330;
-	--fx-chip-border: #e3e8f2;
-
-	/* category header band + card depth */
-	--fx-cat-a: #2a3a80;
-	--fx-cat-b: #3d52a8;
-	--fx-cat-text: #ffffff;
-	--fx-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.25);
-
-	/* hot topics */
-	--fx-hot: #ff8a55;
-	--fx-hot-soft: rgba(255, 138, 85, 0.16);
-	--fx-hot-ring: rgba(255, 138, 85, 0.5);
-}
-
-/* =========================================================
-   2. INDEX BOX  (categories + forum cards)
-   ========================================================= */
-
-/* ---------- Quick links (top and bottom of the index) ---------- */
-.linklist.fx-links {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin: 0 0 20px;
-	padding: 0;
-	list-style: none;
-	font-family: var(--fx-font);
-}
-
-.linklist.fx-links li {
-	float: none;
-	margin: 0;
-	padding: 0;
-}
-
-.linklist.fx-links li.rightside {
-	margin-left: auto;
-}
-
-.linklist.fx-links a {
-	display: inline-block;
-	padding: 6px 14px;
-	border: 1px solid var(--fx-border);
-	border-radius: 999px;
-	background: var(--fx-surface);
-	color: var(--fx-muted);
-	font-size: 0.82rem;
-	font-weight: 700;
-	text-decoration: none;
-	transition: color 0.15s, border-color 0.15s;
-}
-
-.linklist.fx-links a:hover {
-	color: var(--fx-accent);
-	border-color: var(--fx-accent);
-}
-
-/* =========================================================
-   CATEGORY WRAPPER
-   Resets Forumotion's default .forabg (blue bg image, white
-   border, padding). Extra specificity + !important so the
-   default theme can't win.
-   ========================================================= */
-div.forabg.fx-cat {
-	clear: both;
-	margin: 0 0 34px !important;
-	padding: 0 !important;
-	border: 0 !important;
-	background: none !important;
-	background-image: none !important;
-	font-family: var(--fx-font);
-}
-
-/* The category is one bordered unit: a header band on top, the forum cards below on a tinted panel */
-.fx-cat .inner {
-	display: flex;
-	flex-direction: column;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 18px;
-	background: var(--fx-surface-2);
-	box-shadow: var(--fx-card-shadow);
-}
-
-.fx-cat ul.topiclist {
-	display: flex;
-	flex-direction: column;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-/* ---------- Category header: a full-width band ---------- */
-.fx-cat li.header {
-	float: none;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	background: none !important;
-	border: 0 !important;
-}
-
-.fx-cat-head {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding: 15px 22px;
-	background: linear-gradient(100deg, var(--fx-cat-a), var(--fx-cat-b));
-	color: var(--fx-cat-text);
-}
-
-/* small light mark in front of the name */
-.fx-cat-head::before {
-	content: "";
-	flex: 0 0 auto;
-	width: 5px;
-	height: 22px;
-	border-radius: 5px;
-	background: currentColor;
-	opacity: 0.55;
-}
-
-.fx-cat-head .table-title {
-	display: block;
-	margin: 0;
-	padding: 0;
-	background: none;
-	color: inherit;
-	font-size: 1.2rem;
-	font-weight: 800;
-	line-height: 1.3;
-	letter-spacing: 0.005em;
-}
-
-.fx-cat-head .table-title h2 {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	color: inherit;
-	font: inherit;
-	text-transform: none;
-}
-
-/* ---------- Panel that holds the forum cards ---------- */
-.fx-cat ul.forums {
-	flex-flow: row wrap;
-	gap: 14px;
-	padding: 16px;
-	border: 0;
-	border-radius: 0;
-	background: none;
-}
-
-.fx-cat .container-imgs-list {
-	overflow: auto;
-	padding: 16px;
-	border: 0;
-	border-radius: 0;
-	background: none;
-}
-
-/* =========================================================
-   FORUM CARD: [ info + counters ] over [ last post strip ]
-   ========================================================= */
-.fx-cat li.fx-forum {
-	float: none;
-	flex: 1 1 100%;
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: column;
-	width: auto;
-	min-width: 0;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 1px solid var(--fx-border-strong) !important;
-	border-left: 4px solid var(--fx-accent) !important;
-	border-radius: 14px;
-	background: var(--fx-surface) !important;
-	box-shadow: var(--fx-card-shadow);
-	font-size: 1rem;
-	transition: border-color 0.15s;
-}
-
-.fx-cat li.fx-forum:hover {
-	border-color: var(--fx-accent) !important;
-}
-
-/* ----- Top: info on the left, counters on the right ----- */
-.fx-card-body {
-	flex: 1 1 auto;
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: 16px;
-	padding: 16px 18px;
-}
-
-.fx-forum-main {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	gap: 3px;
-	min-width: 0;
-}
-
-/* name row: state icon in a soft tile, then the forum name */
-.fx-forum-head {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	min-width: 0;
-}
-
-/* The template still prints the forum_*.gif as an inline background-image. The state is read from its file name
-   (read / unread / locked, with or without "_category"), the picture itself is hidden and an icon is drawn instead. */
-.fx-forum-state {
-	--fx-ico: var(--fx-ico-read);
-	position: relative;
-	flex: 0 0 auto;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 34px;
-	height: 34px;
-	border-radius: 10px;
-	background: var(--fx-surface-2) none !important;
-	color: var(--fx-muted);
-}
-
-.fx-forum-state::before {
-	content: "";
-	width: 19px;
-	height: 19px;
-	background-color: currentColor;
-	-webkit-mask: var(--fx-ico) center / contain no-repeat;
-	mask: var(--fx-ico) center / contain no-repeat;
-}
-
-/* new posts: filled bubble in the accent color, with a small dot on the corner */
-.fx-forum-state[style*="unread"] {
-	--fx-ico: var(--fx-ico-unread);
-	background: var(--fx-accent-soft) none !important;
-	color: var(--fx-accent);
-}
-
-.fx-forum-state[style*="unread"]::after {
-	content: "";
-	position: absolute;
-	top: -3px;
-	right: -3px;
-	width: 10px;
-	height: 10px;
-	border: 2px solid var(--fx-surface);
-	border-radius: 50%;
-	background: var(--fx-accent);
-}
-
-/* locked (must come last so it wins) */
-.fx-forum-state[style*="locked"] {
-	--fx-ico: var(--fx-ico-locked);
-}
-
-.fx-forum-main .hierarchy {
-	margin: 0;
-	padding: 0;
-	font-family: var(--fx-font);
-	font-size: 1.18rem;
-	font-weight: 800;
-	line-height: 1.3;
-}
-
-.fx-forum-main a.forumtitle {
-	font-family: var(--fx-font);
-	color: var(--fx-text);
-	text-decoration: none;
-}
-
-.fx-forum-main a.forumtitle:hover,
-.fx-cat li.fx-forum:hover a.forumtitle {
-	color: var(--fx-accent);
-}
-
-.fx-forum-desc {
-	color: var(--fx-muted);
-	font-size: 0.88rem;
-	line-height: 1.45;
-}
-
-.fx-forum-meta {
-	margin-top: 4px;
-	color: var(--fx-muted);
-	font-size: 0.8rem;
-}
-
-.fx-forum-meta:not(:has(a)) {
-	display: none;
-}
-
-.fx-forum-meta a {
-	color: var(--fx-accent);
-	text-decoration: none;
-}
-
-.fx-forum-meta a:hover {
-	text-decoration: underline;
-}
-
-/* Subforums as chips. font-size 0 hides the commas between the links;
-   the label and the links set their own size. */
-.fx-forum-subs {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 3px;
-	margin-top: 6px;
-	font-size: 0;
-}
-
-.fx-forum-subs:not(:has(a)) {
-	display: none;
-}
-
-.fx-forum-subs strong {
-	margin-right: 4px;
-	color: var(--fx-muted);
-	font-size: 0.72rem;
-	font-weight: 700;
-}
-
-.fx-forum-subs strong:empty {
-	display: none;
-}
-
-.fx-forum-subs a {
-	padding: 2px 10px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 999px;
-	background: var(--fx-surface-2);
-	color: var(--fx-muted);
-	font-size: 0.76rem;
-	font-weight: 700;
-	text-decoration: none;
-	transition: color 0.15s, border-color 0.15s;
-}
-
-.fx-forum-subs a:hover {
-	border-color: var(--fx-accent);
-	color: var(--fx-accent);
-}
-
-/* Counters: number with its label underneath */
-.fx-stats {
-	flex: 0 0 auto;
-	display: flex;
-	gap: 6px;
-}
-
-.fx-stat {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	min-width: 58px;
-	padding: 7px 10px;
-	border-radius: 10px;
-	background: var(--fx-surface-2);
-	line-height: 1.25;
-}
-
-.fx-stat b {
-	color: var(--fx-text);
-	font-size: 1.05rem;
-	font-weight: 800;
-}
-
-.fx-stat .fx-label {
-	display: block !important;
-	color: var(--fx-muted);
-	font-size: 0.7rem;
-	font-weight: 700;
-}
-
-/* ----- Bottom: last post strip ----- */
-.fx-last {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding: 10px 14px;
-	border-top: 1px solid var(--fx-border);
-	background: var(--fx-surface-2);
-	font-family: var(--fx-font);
-}
-
-/* square avatar, far left */
-.fx-av {
-	position: relative;
-	flex: 0 0 44px;
-	height: 44px;
-	overflow: hidden;
-	border-radius: 8px;
-	background: var(--fx-border);
-}
-
-.fx-av:not(:has(img)) {
-	display: none;
-}
-
-.fx-av .lastpost-avatar {
-	position: absolute;
-	inset: 0;
-	display: block;
-}
-
-.fx-av .lastpost-avatar img {
-	display: block;
-	width: 100% !important;
-	height: 100% !important;
-	max-width: none !important;
-	max-height: none !important;
-	object-fit: cover;
-	border-radius: 0;
-}
-
-/* latest topic, fills the middle */
-.fx-last-mid {
-	flex: 1 1 auto;
-	min-width: 0;
-}
-
-a.fx-last-topic {
-	display: block;
-	overflow: hidden;
-	color: var(--fx-text);
-	font-size: 0.86rem;
-	font-weight: 700;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	text-decoration: none;
-}
-
-a.fx-last-topic:hover {
-	color: var(--fx-accent);
-}
-
-/* date, username and go-to-last-post image, far right */
-.fx-last-by {
-	flex: 0 0 auto;
-	max-width: 50%;
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-	line-height: 1.55;
-	text-align: right;
-}
-
-.fx-last-by a.gensmall {
-	font-size: 0.88rem;
-	font-weight: 800;
-	text-decoration: none;
-}
-
-.fx-last-by a:not(.last-post-icon) {
-	color: var(--fx-text);
-}
-
-.fx-last .last-post-icon {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 24px;
-	height: 24px;
-	border-radius: 8px;
-	background: var(--fx-accent-soft);
-	vertical-align: middle;
-}
-
-/* classified ads block, if it renders instead of a last post */
-.fx-last .AD_LastPA {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	font-size: 0.78rem;
-}
-
-.fx-last .AD_LastPA .lastpost-avatar img {
-	display: block;
-	width: 34px;
-	height: 34px;
-	border-radius: 8px;
-	object-fit: cover;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 520px) {
-	.fx-cat ul.forums {
-		padding: 10px;
-	}
-
-	.fx-card-body {
-		flex-wrap: wrap;
-	}
-
-	.fx-last {
-		flex-wrap: wrap;
-	}
-
-	.fx-last-mid {
-		flex: 1 1 calc(100% - 60px);
-	}
-
-	.fx-last-by {
-		flex: 1 1 100%;
-		max-width: 100%;
-		text-align: left;
-	}
-}
-
-/* =========================================================
-   3. NAVBAR + THEME SWITCHER  (overall_header: ul.fx-nav)
-   ========================================================= */
-
-/* ---------- Bar ---------- */
-ul.fx-nav {
-	position: relative;
-	z-index: 1000;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 4px;
-	box-sizing: border-box;
-	width: 100%;
-	min-height: 48px;
-	margin: -30px 0 0; /* pulls the bar up into the gap left by the hidden Forumotion toolbar */
-	padding: 0 16px;
-	overflow: visible;
-	list-style: none;
-	background: var(--fx-nav-bg);
-	border: 0;
-	border-bottom: 1px solid var(--fx-nav-border);
-	font-family: var(--fx-font);
-	font-weight: 700;
-	transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-
-/* Forumotion puts a &nbsp; after every link; font-size 0 on the li removes it */
-ul.fx-nav > li {
-	position: relative;
-	float: none;
-	display: block;
-	width: auto;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	font-size: 0;
-	line-height: 1;
-}
-
-/* ---------- Links ---------- */
-ul.fx-nav a.mainmenu {
-	display: inline-flex;
-	align-items: center;
-	height: 34px;
-	padding: 0 14px;
-	border-radius: 9px;
-	color: var(--fx-nav-text);
-	font-size: 0.92rem;
-	font-weight: 700;
-	text-decoration: none;
-	transition: background-color 0.18s ease, color 0.18s ease;
-}
-
-ul.fx-nav a.mainmenu:hover,
-ul.fx-nav a.mainmenu:focus-visible {
-	background: var(--fx-nav-hover);
-	color: var(--fx-nav-text);
-	text-decoration: none;
-}
-
-/* icons removed */
-ul.fx-nav a.mainmenu img {
-	display: none !important;
-}
-
-/* ---------- Theme switcher (far right): sun / moon switch ---------- */
-/* left and right groups have the same flex weight, so the links stay centered */
-ul.fx-nav > li.fx-brand-li {
-	flex: 1 1 0;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	gap: 10px;
-	font-size: 1rem;
-}
-
-ul.fx-nav a.fx-brand {
-	display: inline-flex;
-	align-items: center;
-	height: 34px;
-	padding: 0 10px;
-	border-radius: 9px;
-	color: var(--fx-nav-text);
-	font-size: 0.85rem;
-	font-weight: 800;
-	opacity: 0.8;
-	text-decoration: none;
-	transition: background-color 0.18s ease, opacity 0.18s ease;
-}
-
-ul.fx-nav a.fx-brand:hover {
-	background: var(--fx-nav-hover);
-	opacity: 1;
-}
-
-ul.fx-nav > li.fx-right-li {
-	flex: 1 1 0;
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 8px;
-	font-size: 1rem;
-}
-
-.fx-theme-toggle {
-	position: relative;
-	flex: 0 0 auto;
-	display: inline-flex;
-	align-items: center;
-	width: 58px;
-	height: 30px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	border-radius: 999px;
-	background: var(--fx-nav-btn);
-	color: var(--fx-nav-text);
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-.fx-theme-toggle:hover {
-	background: var(--fx-nav-btn-hover);
-}
-
-.fx-theme-toggle:focus-visible {
-	outline: 2px solid var(--fx-nav-text);
-	outline-offset: 2px;
-}
-
-.fx-theme-toggle__icon {
-	position: absolute;
-	top: 50%;
-	z-index: 2;
-	width: 16px;
-	height: 16px;
-	margin-top: -8px;
-	fill: none;
-	stroke: currentColor;
-	stroke-width: 2;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	pointer-events: none;
-}
-
-.fx-theme-toggle__icon--sun {
-	left: 7px;
-}
-
-.fx-theme-toggle__icon--moon {
-	right: 7px;
-}
-
-.fx-theme-toggle__thumb {
-	position: absolute;
-	top: 3px;
-	left: 3px;
-	z-index: 1;
-	width: 24px;
-	height: 24px;
-	border-radius: 50%;
-	background: var(--fx-nav-text);
-	transition: transform 0.22s ease;
-}
-
-/* dark: thumb slides over the moon */
-.fx-theme-toggle[aria-checked="true"] .fx-theme-toggle__thumb {
-	transform: translateX(28px);
-}
-
-/* the icon under the thumb takes the bar color so it reads on the thumb */
-.fx-theme-toggle[aria-checked="false"] .fx-theme-toggle__icon--sun,
-.fx-theme-toggle[aria-checked="true"] .fx-theme-toggle__icon--moon {
-	color: var(--fx-nav-bg);
-}
-
-/* while the switch is pressed, everything fades to the other theme instead of snapping */
-html.fx-theme-switching,
-html.fx-theme-switching * {
-	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
-		fill 0.3s ease, stroke 0.3s ease, transform 0.22s ease !important;
-}
-
-/* ---------- Search dropdown (opens from the Search link) ---------- */
-ul.fx-nav .overview.row3 {
-	top: calc(100% + 8px);
-	left: 0;
-	box-sizing: border-box;
-	padding: 14px 16px;
-	border: 1px solid var(--fx-border-strong) !important;
-	border-radius: 14px;
-	background: var(--fx-surface) !important;
-	box-shadow: 0 12px 32px rgba(16, 24, 40, 0.18);
-	color: var(--fx-text);
-	font-size: 0.85rem;
-	font-weight: 600;
-	line-height: 1.7;
-	text-align: left;
-}
-
-ul.fx-nav .overview .title-overview {
-	margin: 0 0 8px;
-	padding: 0;
-	border: 0;
-	background: none !important;
-	color: var(--fx-text);
-	font-weight: 800;
-}
-
-ul.fx-nav .overview .center-overview {
-	margin: 0 0 8px;
-	padding: 0;
-	text-align: left;
-}
-
-ul.fx-nav .overview a {
-	color: var(--fx-accent);
-	text-decoration: none;
-}
-
-ul.fx-nav .overview hr.dashed {
-	margin: 8px 0;
-	border: 0;
-	border-top: 1px dashed var(--fx-border-strong);
-}
-
-ul.fx-nav .overview .inputbox {
-	padding: 5px 9px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 8px;
-	background: var(--fx-surface-2);
-	color: var(--fx-text);
-}
-
-ul.fx-nav .overview .button1 {
-	margin-left: 6px;
-	padding: 5px 12px;
-	border: 0;
-	border-radius: 8px;
-	background: var(--fx-accent);
-	color: var(--fx-on-accent);
-	font-weight: 700;
-	cursor: pointer;
-}
-
-/* ---------- Sticky: the bar follows you while you scroll ---------- */
-@media (min-width: 901px) {
-	ul.fx-nav {
-		position: -webkit-sticky;
-		position: sticky;
-		top: 0;
-	}
-
-	/* anchored links (#post) stop below the bar instead of under it */
-	html {
-		scroll-padding-top: 64px;
-	}
-}
-
-/* ---------- Small screens: links wrap into rows ---------- */
-@media (max-width: 900px) {
-	ul.fx-nav {
-		flex-wrap: wrap;
-		padding: 6px 10px;
-	}
-
-	ul.fx-nav > li.fx-brand-li {
-		flex: 0 0 auto;
-	}
-
-	ul.fx-nav > li.fx-right-li {
-		flex: 0 0 auto;
-		margin-left: auto;
-	}
-}
-
-/* =========================================================
-   4. ACCOUNT MENUS  (profile, notifications, toasts)
-   Markup and script live in overall_header. They copy the data
-   out of Forumotion's own toolbar (#fa_toolbar), which stays in
-   the page but is never shown.
-   ========================================================= */
-
-/* ---------- Forumotion toolbar: kept in the page, never visible ---------- */
-#fa_toolbar {
-	visibility: hidden !important;
-	pointer-events: none !important;
-}
-
-#fa_left,
-#fa_search,
-#fa_share {
-	display: none !important;
-}
-
-/* the panels use the hidden attribute; keep it stronger than the display rules below */
-ul.fx-nav [hidden],
-.fx-toasts [hidden] {
-	display: none !important;
-}
-
-/* ---------- Buttons in the bar ---------- */
-.fx-nav__acts {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.fx-act {
-	position: relative;
-}
-
-.fx-act__btn {
-	position: relative;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 36px;
-	height: 34px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	border-radius: 9px;
-	background: var(--fx-nav-btn);
-	color: var(--fx-nav-text);
-	cursor: pointer;
-	transition: background-color 0.18s ease;
-}
-
-.fx-act__btn:hover,
-.fx-act__btn[aria-expanded="true"] {
-	background: var(--fx-nav-btn-hover);
-}
-
-.fx-act__btn:focus-visible {
-	outline: 2px solid var(--fx-nav-text);
-	outline-offset: 2px;
-}
-
-.fx-act__icon {
-	width: 18px;
-	height: 18px;
-	fill: none;
-	stroke: currentColor;
-	stroke-width: 1.9;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-}
-
-/* with an avatar, the person icon steps aside */
-.fx-act__btn.has-avatar .fx-act__icon {
-	display: none;
-}
-
-.fx-act__avatar {
-	display: block;
-	width: 26px;
-	height: 26px;
-	border-radius: 7px;
-	object-fit: cover;
-}
-
-.fx-act__badge {
-	position: absolute;
-	top: -5px;
-	right: -5px;
-	box-sizing: border-box;
-	min-width: 18px;
-	height: 18px;
-	padding: 0 5px;
-	border: 2px solid var(--fx-nav-bg);
-	border-radius: 999px;
-	background: #e5484d;
-	color: #ffffff;
-	font-size: 0.66rem;
-	font-weight: 800;
-	line-height: 14px;
-	text-align: center;
-}
-
-/* ---------- Panels ---------- */
-.fx-act__panel {
-	position: absolute;
-	top: calc(100% + 10px);
-	right: 0;
-	z-index: 1100;
-	box-sizing: border-box;
-	width: 320px;
-	max-width: calc(100vw - 24px);
-	overflow: hidden;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 18px;
-	background: var(--fx-surface);
-	box-shadow: var(--fx-pop-shadow);
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-	font-size: 0.9rem;
-	font-weight: 600;
-	line-height: 1.45;
-	text-align: left;
-	transform-origin: top right;
-	animation: fx-pop 0.16s ease-out;
-}
-
-.fx-act__panel--notif {
-	width: 350px;
-}
-
-@keyframes fx-pop {
-	from {
-		opacity: 0;
-		transform: translateY(-6px) scale(0.98);
-	}
-
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-/* ---------- Profile panel ---------- */
-.fx-prof {
-	display: flex;
-	align-items: center;
-	gap: 14px;
-	padding: 18px 18px 16px;
-	border-bottom: 1px solid var(--fx-border);
-	background: linear-gradient(135deg, var(--fx-accent-soft), transparent 75%);
-}
-
-.fx-prof__img {
-	flex: 0 0 auto;
-	display: block;
-	width: 68px;
-	height: 68px;
-	border: 2px solid var(--fx-surface);
-	border-radius: 16px;
-	box-shadow: 0 0 0 1px var(--fx-border-strong);
-	object-fit: cover;
-}
-
-.fx-prof__info {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 4px;
-	min-width: 0;
-}
-
-.fx-prof__name {
-	max-width: 100%;
-	overflow: hidden;
-	color: var(--fx-text);
-	font-size: 1.08rem;
-	font-weight: 800;
-	line-height: 1.25;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.fx-prof__rank {
-	padding: 2px 10px;
-	border-radius: 999px;
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-	font-size: 0.72rem;
-	font-weight: 800;
-}
-
-.fx-prof__rank:empty {
-	display: none;
-}
-
-.fx-prof__stats {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 2px 12px;
-	margin-top: 2px;
-}
-
-.fx-prof__stat {
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-	font-weight: 700;
-}
-
-.fx-prof__stat b {
-	color: var(--fx-text);
-	font-weight: 800;
-}
-
-.fx-act__panel ul.fx-links {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-	margin: 0;
-	padding: 8px;
-	list-style: none;
-}
-
-.fx-act__panel ul.fx-links li {
-	float: none;
-	width: auto;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	font-size: inherit;
-	line-height: 1.4;
-}
-
-.fx-act__panel ul.fx-links li.is-sep {
-	height: 1px;
-	margin: 6px 8px;
-	background: var(--fx-border);
-}
-
-.fx-act__panel ul.fx-links a {
-	display: flex;
-	align-items: center;
-	padding: 9px 12px;
-	line-height: 1.4;
-	border-radius: 10px;
-	color: var(--fx-text);
-	font-size: 0.9rem;
-	font-weight: 700;
-	text-decoration: none;
-	transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.fx-act__panel ul.fx-links a:hover {
-	background: var(--fx-surface-2);
-	color: var(--fx-accent);
-}
-
-.fx-act__panel ul.fx-links a.is-out {
-	color: var(--fx-danger);
-}
-
-.fx-act__panel ul.fx-links a.is-out:hover {
-	background: var(--fx-danger-soft);
-	color: var(--fx-danger);
-}
-
-/* ---------- Notifications panel ---------- */
-.fx-notif__head {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 10px;
-	padding: 14px 18px;
-	border-bottom: 1px solid var(--fx-border);
-}
-
-.fx-notif__head strong {
-	color: var(--fx-text);
-	font-size: 1rem;
-	font-weight: 800;
-}
-
-.fx-notif__count {
-	padding: 1px 10px;
-	border-radius: 999px;
-	background: var(--fx-accent);
-	color: var(--fx-on-accent);
-	font-size: 0.72rem;
-	font-weight: 800;
-}
-
-.fx-notif__list {
-	max-height: 340px;
-	margin: 0;
-	padding: 8px;
-	overflow-y: auto;
-	list-style: none;
-}
-
-.fx-notif__list:empty {
-	display: none;
-}
-
-.fx-notif__item {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	gap: 3px;
-	margin: 0;
-	padding: 11px 38px 11px 28px;
-	border-radius: 12px;
-	color: var(--fx-text);
-	font-size: 0.84rem;
-	line-height: 1.5;
-	transition: background-color 0.15s ease;
-}
-
-/* unread-style dot */
-.fx-notif__item::before {
-	content: "";
-	position: absolute;
-	top: 17px;
-	left: 12px;
-	width: 7px;
-	height: 7px;
-	border-radius: 50%;
-	background: var(--fx-accent);
-}
-
-.fx-notif__item:hover {
-	background: var(--fx-surface-2);
-}
-
-.fx-notif__text a {
-	color: var(--fx-accent);
-	font-weight: 700;
-	text-decoration: none;
-}
-
-.fx-notif__text a:hover {
-	text-decoration: underline;
-}
-
-.fx-notif__time {
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-	font-weight: 600;
-}
-
-/* delete: an empty link, the cross is drawn here */
-.fx-notif__del {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	width: 24px;
-	height: 24px;
-	border-radius: 8px;
-	color: var(--fx-muted);
-	opacity: 0;
-	transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.fx-notif__del::before,
-.fx-notif__del::after {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 11px;
-	height: 2px;
-	margin: -1px 0 0 -5.5px;
-	border-radius: 2px;
-	background: currentColor;
-	transform: rotate(45deg);
-}
-
-.fx-notif__del::after {
-	transform: rotate(-45deg);
-}
-
-.fx-notif__item:hover .fx-notif__del,
-.fx-notif__del:focus-visible {
-	opacity: 1;
-}
-
-.fx-notif__del:hover {
-	background: var(--fx-danger-soft);
-	color: var(--fx-danger);
-}
-
-@media (hover: none) {
-	.fx-notif__del {
-		opacity: 1;
-	}
-}
-
-.fx-notif__empty {
-	margin: 0;
-	padding: 30px 18px 34px;
-	color: var(--fx-muted);
-	font-size: 0.88rem;
-	font-weight: 600;
-	text-align: center;
-}
-
-.fx-notif__empty::before {
-	content: "";
-	display: block;
-	width: 46px;
-	height: 46px;
-	margin: 0 auto 12px;
-	border-radius: 50%;
-	background: var(--fx-surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2H4.4z'/%3E%3Cpath d='M10 21.2a2.2 2.2 0 0 0 4 0'/%3E%3C/svg%3E") center / 22px no-repeat;
-}
-
-a.fx-notif__all {
-	display: block;
-	padding: 13px 18px;
-	border-top: 1px solid var(--fx-border);
-	background: var(--fx-surface-2);
-	color: var(--fx-accent);
-	font-size: 0.85rem;
-	font-weight: 800;
-	text-align: center;
-	text-decoration: none;
-	transition: background-color 0.15s ease;
-}
-
-a.fx-notif__all:hover {
-	background: var(--fx-accent-soft);
-}
-
-/* ---------- Live toasts (new notification arrives) ---------- */
-.fx-toasts {
-	position: fixed;
-	top: 64px;
-	right: 16px;
-	z-index: 1200;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	width: min(340px, calc(100vw - 32px));
-	font-family: var(--fx-font);
-	pointer-events: none;
-}
-
-.fx-toast {
-	position: relative;
-	display: flex;
-	align-items: flex-start;
-	gap: 12px;
-	padding: 14px 40px 17px 14px;
-	overflow: hidden;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 16px;
-	background: var(--fx-surface);
-	box-shadow: var(--fx-pop-shadow);
-	color: var(--fx-text);
-	font-size: 0.85rem;
-	font-weight: 600;
-	line-height: 1.5;
-	pointer-events: auto;
-	animation: fx-toast-in 0.28s ease-out;
-}
-
-.fx-toast.is-leaving {
-	animation: fx-toast-out 0.3s ease forwards;
-}
-
-.fx-toast__icon {
-	flex: 0 0 auto;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 32px;
-	height: 32px;
-	border-radius: 10px;
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-}
-
-.fx-toast__icon svg {
-	width: 17px;
-	height: 17px;
-	fill: none;
-	stroke: currentColor;
-	stroke-width: 1.9;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-}
-
-.fx-toast__text {
-	min-width: 0;
-	padding-top: 5px;
-}
-
-.fx-toast__text a {
-	color: var(--fx-accent);
-	font-weight: 700;
-	text-decoration: none;
-}
-
-.fx-toast__text a:hover {
-	text-decoration: underline;
-}
-
-/* close: the button holds the word "Close", hidden here; the cross is drawn */
-.fx-toast__close {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	width: 24px;
-	height: 24px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	border-radius: 8px;
-	background: none;
-	color: var(--fx-muted);
-	font-size: 0;
-	cursor: pointer;
-	transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.fx-toast__close::before,
-.fx-toast__close::after {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 11px;
-	height: 2px;
-	margin: -1px 0 0 -5.5px;
-	border-radius: 2px;
-	background: currentColor;
-	transform: rotate(45deg);
-}
-
-.fx-toast__close::after {
-	transform: rotate(-45deg);
-}
-
-.fx-toast__close:hover {
-	background: var(--fx-surface-2);
-	color: var(--fx-text);
-}
-
-/* countdown bar, pauses while the pointer is over the toast */
-.fx-toast__bar {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	height: 3px;
-	background: var(--fx-accent);
-	transform-origin: left;
-	animation: fx-toast-bar 7s linear forwards;
-}
-
-.fx-toast:hover .fx-toast__bar {
-	animation-play-state: paused;
-}
-
-@keyframes fx-toast-in {
-	from {
-		opacity: 0;
-		transform: translateX(24px);
-	}
-
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@keyframes fx-toast-out {
-	to {
-		opacity: 0;
-		transform: translateX(24px);
-	}
-}
-
-@keyframes fx-toast-bar {
-	to {
-		transform: scaleX(0);
-	}
-}
-
-@media (max-width: 600px) {
-	.fx-toasts {
-		top: 58px;
-		right: 12px;
-		left: 12px;
-		width: auto;
-	}
-}
-
-/* =========================================================
-   5. PAGE BASE  (page background and text follow the theme)
-   ========================================================= */
-html {
-	background: var(--fx-bg);
-}
-
-body#phpbb {
-	background: var(--fx-bg);
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-}
-
-/* Forumotion's wrappers paint their own white; let the page color through */
-body#phpbb :is(.conteneur_minwidth_IE, .conteneur_layout_IE, .conteneur_container_IE, #page-body, #outer-wrapper, #wrapper, #container, #content, #main, #main-content) {
-	background-color: transparent;
-	background-image: none;
-}
-
-/* the page card keeps its look: white in light mode, dark surface in dark mode */
-body#phpbb #wrap {
-	background-color: var(--fx-surface);
-	background-image: none;
-	border: 1px solid var(--fx-border);
-	box-shadow: none;
-}
-
-/* =========================================================
-   6. INDEX BODY  (time row, login form, admin message,
-      who is online, statistics, legend)
-   ========================================================= */
-
-/* ---------- Time row ---------- */
-.fx-meta {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: 4px 16px;
-	margin: 0 0 14px;
-	color: var(--fx-muted);
-	font-family: var(--fx-font);
-	font-size: 0.8rem;
-	font-weight: 700;
-}
-
-.fx-meta p {
-	float: none;
-	margin: 0;
-	padding: 0;
-	color: inherit;
-}
-
-/* current time on the left, last visit on the right */
-.fx-meta p.right {
-	order: 2;
-	text-align: right;
-}
-
-/* ---------- Login form (top and bottom of the index) ---------- */
-.panel:has(.user_login_form) {
-	margin: 0 0 18px;
-	padding: 16px 20px !important;
-	border: 1px solid var(--fx-border-strong) !important;
-	border-radius: 16px;
-	background: var(--fx-surface) !important;
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-}
-
-.panel:has(.user_login_form) .inner {
-	padding: 0;
-	background: none;
-}
-
-.panel:has(.user_login_form) :is(.corners-top, .corners-bottom) {
-	display: none;
-}
-
-/* font-size 0 removes the &nbsp; between the fields; the fields set their own size */
-.user_login_form {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: center;
-	gap: 10px 18px;
-	font-size: 0;
-}
-
-.user_login_form label {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	color: var(--fx-muted);
-	font-size: 0.85rem;
-	font-weight: 700;
-}
-
-.user_login_form input.post {
-	box-sizing: border-box;
-	width: 150px;
-	padding: 8px 12px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 10px;
-	background: var(--fx-surface-2);
-	color: var(--fx-text);
-	font-family: inherit;
-	font-size: 0.88rem;
-	transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.user_login_form input.post:focus {
-	border-color: var(--fx-accent);
-	box-shadow: 0 0 0 3px var(--fx-accent-soft);
-	outline: 0;
-}
-
-.user_login_form input.radio {
-	width: 16px;
-	height: 16px;
-	margin: 0;
-	accent-color: var(--fx-accent);
-}
-
-.user_login_form input.button1 {
-	padding: 8px 22px;
-	border: 0;
-	border-radius: 10px;
-	background: var(--fx-accent);
-	color: var(--fx-on-accent);
-	font-family: inherit;
-	font-size: 0.88rem;
-	font-weight: 800;
-	cursor: pointer;
-	transition: filter 0.15s ease;
-}
-
-.user_login_form input.button1:hover {
-	filter: brightness(1.08);
-}
-
-.user_login_form .social_btn {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-/* ---------- Admin message ---------- */
-.panel.introduction {
-	margin: 0 0 18px;
-	padding: 18px 22px !important;
-	border: 1px solid var(--fx-border-strong) !important;
-	border-radius: 16px;
-	background: var(--fx-surface) !important;
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-}
-
-.panel.introduction .inner {
-	padding: 0;
-	background: none;
-}
-
-.panel.introduction :is(.corners-top, .corners-bottom) {
-	display: none;
-}
-
-.panel.introduction .h3 {
-	margin: 0 0 8px;
-	padding: 0;
-	border: 0;
-	background: none;
-	color: var(--fx-text);
-	font-size: 1.1rem;
-	font-weight: 800;
-}
-
-.panel.introduction .mes-txt {
-	color: var(--fx-muted);
-	font-size: 0.92rem;
-	font-weight: 600;
-	line-height: 1.65;
-}
-
-.panel.introduction a {
-	color: var(--fx-accent);
-}
-
-/* ---------- Who is online / statistics / chat: cards side by side ---------- */
-.fx-info {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 14px;
-	margin: 6px 0 18px;
-	font-family: var(--fx-font);
-}
-
-.fx-info__card {
-	flex: 1 1 300px;
-	box-sizing: border-box;
-	min-width: 0;
-	padding: 18px 20px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 16px;
-	background: var(--fx-surface);
-	box-shadow: var(--fx-card-shadow);
-	color: var(--fx-text);
-}
-
-.fx-info__card--online {
-	flex: 2 1 420px;
-}
-
-.fx-info__card--chat {
-	flex: 1 1 100%;
-}
-
-.fx-info__card .h3 {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin: -18px -20px 16px;
-	padding: 14px 20px;
-	border: 0;
-	border-bottom: 1px solid var(--fx-border);
-	border-radius: 15px 15px 0 0;
-	background: var(--fx-accent-soft);
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-	font-size: 1rem;
-	font-weight: 800;
-	line-height: 1.3;
-	text-transform: none;
-}
-
-.fx-info__card .h3::before {
-	content: "";
-	flex: 0 0 auto;
-	width: 4px;
-	height: 16px;
-	border-radius: 4px;
-	background: var(--fx-accent);
-}
-
-.fx-info__card .h3 a {
-	color: inherit;
-	text-decoration: none;
-}
-
-.fx-info__card .h3 a:hover {
-	color: var(--fx-accent);
-}
-
-.fx-info__card img.img-whois,
-.fx-info__card .clear {
-	display: none;
-}
-
-.fx-info__card p,
-.fx-info__card div.page-bottom {
-	margin: 0;
-	padding: 0;
-	color: var(--fx-muted);
-	font-size: 0.88rem;
-	font-weight: 600;
-	line-height: 1.75;
-}
-
-.fx-info__card p > strong,
-.fx-info__card div.page-bottom > strong {
-	color: var(--fx-text);
-	font-weight: 800;
-}
-
-.fx-info__card a {
-	color: var(--fx-accent);
-	font-weight: 700;
-	text-decoration: none;
-}
-
-.fx-info__card a:hover {
-	text-decoration: underline;
-}
-
-/* member names and group names as chips. The chip is light in dark mode on purpose:
-   group colors are picked for light backgrounds, so every color stays readable */
-.fx-info__card a.usr_grp_clr,
-.fx-info__card a:has(> .usr_grp_clr) {
-	display: inline-flex;
-	align-items: center;
-	padding: 1px 10px;
-	border: 1px solid var(--fx-chip-border);
-	border-radius: 999px;
-	background: var(--fx-chip-bg);
-	color: var(--fx-chip-text);
-	font-size: 0.8rem;
-	font-weight: 800;
-	line-height: 1.5;
-	text-decoration: none;
-}
-
-.fx-info__card a.usr_grp_clr:hover,
-.fx-info__card a:has(> .usr_grp_clr):hover {
-	filter: brightness(0.95);
-	text-decoration: none;
-}
-
-/* group legend: label, then one chip per group (font-size 0 hides the [ ] around them) */
-.fx-info__card em.fx-legend {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 4px;
-	margin-top: 12px;
-	padding-top: 12px;
-	border-top: 1px dashed var(--fx-border-strong);
-	font-size: 0;
-	font-style: normal;
-}
-
-.fx-legend__label {
-	margin-right: 6px;
-	color: var(--fx-muted);
-	font-size: 0.78rem;
-	font-weight: 800;
-}
-
-.fx-info__card em.fx-legend b {
-	font-size: 0.8rem;
-	font-weight: 800;
-}
-
-/* statistics: one row per fact, the number as a small pill */
-.fx-info__card--stats p.page-bottom {
-	padding: 10px 0;
-	border-bottom: 1px solid var(--fx-border);
-}
-
-.fx-info__card--stats p.page-bottom:first-of-type {
-	padding-top: 0;
-}
-
-.fx-info__card--stats p.page-bottom:last-of-type {
-	padding-bottom: 0;
-	border-bottom: 0;
-}
-
-.fx-info__card--stats p.page-bottom strong {
-	display: inline-block;
-	padding: 1px 10px;
-	border-radius: 999px;
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-	font-weight: 800;
-}
-
-.fx-info__card--stats p.page-bottom strong:has(a) {
-	padding: 0;
-	background: none;
-}
-
-/* ---------- Picture legend (new / no new / locked) ---------- */
-ul#picture_legend {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: center;
-	gap: 8px 10px;
-	margin: 6px 0 0;
-	padding: 0;
-	list-style: none;
-	font-family: var(--fx-font);
-}
-
-ul#picture_legend li {
-	float: none;
-	display: inline-flex !important;
-	flex-direction: row !important;
-	align-items: center;
-	gap: 8px;
-	margin: 0;
-	padding: 5px 14px 5px 8px;
-	text-align: left;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 999px;
-	background: var(--fx-surface);
-	color: var(--fx-muted);
-	font-size: 0.78rem;
-	font-weight: 700;
-	line-height: 1.4;
-}
-
-/* the three gifs are hidden; the same icons as on the forum cards are drawn (order: new, no new, locked) */
-ul#picture_legend li img {
-	display: none !important;
-}
-
-ul#picture_legend li::before {
-	content: "";
-	flex: 0 0 auto;
-	width: 17px;
-	height: 17px;
-	background-color: var(--fx-muted);
-	-webkit-mask: var(--fx-ico-read) center / contain no-repeat;
-	mask: var(--fx-ico-read) center / contain no-repeat;
-}
-
-ul#picture_legend li:nth-child(1)::before {
-	background-color: var(--fx-accent);
-	-webkit-mask-image: var(--fx-ico-unread);
-	mask-image: var(--fx-ico-unread);
-}
-
-ul#picture_legend li:nth-child(3)::before {
-	-webkit-mask-image: var(--fx-ico-locked);
-	mask-image: var(--fx-ico-locked);
-}
-
-/* =========================================================
-   7. FOOTER  (overall_footer_begin + overall_footer_end)
-   ========================================================= */
-#page-footer {
-	clear: both;
-	margin: 28px 0 8px;
-	font-family: var(--fx-font);
-}
-
-#page-footer .navbar {
-	margin: 0;
-	padding: 0 !important;
-	border: 0 !important;
-	background: none !important;
-}
-
-#page-footer .navbar .inner {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: 10px 20px;
-	padding: 12px 16px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 16px;
-	background: var(--fx-surface);
-}
-
-#page-footer .navbar :is(.corners-top, .corners-bottom) {
-	display: none;
-}
-
-#page-footer ul.linklist {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 6px 12px;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-#page-footer ul.linklist li {
-	float: none;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	font-size: inherit;
-	line-height: 1.4;
-}
-
-/* Home */
-#page-footer a.icon-home {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	padding: 6px 14px !important;
-	border-radius: 999px;
-	background: var(--fx-accent-soft) !important;
-	color: var(--fx-accent);
-	font-size: 0.85rem;
-	font-weight: 800;
-	text-decoration: none;
-	transition: filter 0.15s ease;
-}
-
-#page-footer a.icon-home:hover {
-	filter: brightness(0.95);
-}
-
-#page-footer a.icon-home::before {
-	content: "";
-	width: 15px;
-	height: 15px;
-	background-color: currentColor;
-	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11.5 12 4l9 7.5'/%3E%3Cpath d='M5.5 10v9.5h13V10'/%3E%3C/svg%3E") center / contain no-repeat;
-	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11.5 12 4l9 7.5'/%3E%3Cpath d='M5.5 10v9.5h13V10'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-
-/* Footer links. The head style forces li.rightside to inline, so these need !important.
-   font-size 0 hides the "|" separators between the links. */
-#page-footer ul.linklist li.rightside {
-	display: flex !important;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 2px 4px;
-	font-size: 0;
-}
-
-#page-footer ul.linklist li.rightside a.copyright {
-	display: inline-flex !important;
-	padding: 5px 10px;
-	border-radius: 8px;
-	color: var(--fx-muted);
-	font-size: 0.8rem;
-	font-weight: 700;
-	text-decoration: none;
-	transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-#page-footer ul.linklist li.rightside a.copyright:hover {
-	background: var(--fx-surface-2);
-	color: var(--fx-accent);
-}
-
-/* Administration panel link */
-#page-footer p.copyright {
-	margin: 12px 0 0;
-	color: var(--fx-muted);
-	font-size: 0.8rem;
-	font-weight: 700;
-	text-align: center;
-}
-
-#page-footer p.copyright a {
-	color: var(--fx-muted);
-	text-decoration: none;
-}
-
-#page-footer p.copyright a:hover {
-	color: var(--fx-accent);
-}
-
-/* =========================================================
-   8. TOPIC LIST  (topics_list_box)
-   Two lists use it: announcements + sticky, and regular topics.
-   The state picture (topic_read.gif, topic_unread_hot.gif, sticky_unread.gif ...) is read from the
-   inline background-image of each row, hidden, and replaced by an icon in a thin ring. Hot topics pulse.
-   Row layout (CSS grid, no boxes): [icon] [title + author] [last post] [replies / views]
-   ========================================================= */
-
-/* ---------- Box: resets Forumotion's default .forumbg ---------- */
-div.forumbg.fx-topics {
-	clear: both;
-	margin: 0 0 24px !important;
-	padding: 0 !important;
-	border: 0 !important;
-	background: none !important;
-	background-image: none !important;
-	font-family: var(--fx-font);
-}
-
-.fx-topics .inner {
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 18px;
-	background: var(--fx-surface);
-	box-shadow: var(--fx-card-shadow);
-}
-
-.fx-topics :is(.corners-top, .corners-bottom) {
-	display: none;
-}
-
-.fx-topics ul.topiclist {
-	display: flex;
-	flex-direction: column;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-/* the <dfn> labels are hidden by Forumotion; the template adds visible .fx-label spans instead */
-.fx-topics dfn {
-	display: none !important;
-}
-
-/* ---------- Header: full-width band with the list name ---------- */
-.fx-topics li.header {
-	float: none;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	background: none !important;
-	border: 0 !important;
-}
-
-.fx-topics li.header > dl.icon {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	margin: 0;
-	padding: 15px 22px;
-	min-height: 0;
-	background: linear-gradient(100deg, var(--fx-cat-a), var(--fx-cat-b)) !important;
-	color: var(--fx-cat-text);
-}
-
-.fx-topics li.header > dl.icon::before {
-	content: "";
-	flex: 0 0 auto;
-	width: 5px;
-	height: 22px;
-	border-radius: 5px;
-	background: currentColor;
-	opacity: 0.55;
-}
-
-.fx-topics li.header dl.icon > :is(dt, dd.dterm) {
-	float: none;
-	width: auto;
-	margin: 0;
-	padding: 0 !important;
-	border: 0;
-	background: none;
-	color: inherit;
-	font-size: 1.2rem;
-	font-weight: 800;
-	line-height: 1.3;
-	text-transform: none;
-}
-
-/* column names are not needed: every row labels its own numbers */
-.fx-topics li.header dl.icon > dd:not(.dterm) {
-	display: none;
-}
-
-/* ---------- Rows ---------- */
-.fx-topics li.row {
-	float: none;
-	width: auto;
-	margin: 0 !important;
-	padding: 0;
-	background: none !important;
-	border: 0 !important;
-	border-bottom: 1px solid var(--fx-border) !important;
-	color: var(--fx-text);
-	transition: background-color 0.15s ease;
-}
-
-.fx-topics li.row:last-child {
-	border-bottom: 0 !important;
-}
-
-.fx-topics li.row:hover {
-	background: var(--fx-surface-2) !important;
-}
-
-/* rows with new posts get an accent edge */
-.fx-topics li.row:has(> dl.icon[style*="unread"]),
-.fx-topics li.row:has(> dl.icon[style*="state=new"]) {
-	box-shadow: inset 3px 0 0 var(--fx-accent);
-}
-
-.fx-topics li.row > dl.icon {
-	--fx-tico: var(--fx-ico-topic);
-	--fx-tico-u: var(--fx-ico-topic-unread);
-	--fx-tcolor: var(--fx-muted);
-	--fx-tring: var(--fx-border-strong);
-	--fx-tringw: 1.5px;
-	position: relative;
-	display: grid;
-	grid-template-columns: 42px minmax(0, 1fr) 224px 124px;
-	grid-template-rows: auto auto;
-	column-gap: 18px;
-	row-gap: 0;
-	align-items: center;
-	margin: 0;
-	padding: 16px 20px;
-	min-height: 0;
-	background: none !important;
-}
-
-/* ---------- State icon: ::before is a thin ring, ::after is the glyph ---------- */
-.fx-topics li.row > dl.icon::before {
-	content: "";
-	grid-column: 1;
-	grid-row: 1 / span 2;
-	align-self: center;
-	box-sizing: border-box;
-	width: 42px;
-	height: 42px;
-	border: var(--fx-tringw) solid var(--fx-tring);
-	border-radius: 50%;
-}
-
-/* Forumotion's old clearfix hides dl:after (visibility: hidden, height: 0), so this must be forced */
-.fx-topics li.row > dl.icon::after {
-	content: "";
-	display: block !important;
-	visibility: visible !important;
-	float: none;
-	clear: none;
-	position: absolute;
-	top: 50%;
-	left: 30px;
-	width: 22px;
-	height: 22px;
-	margin-top: -11px;
-	background-color: var(--fx-tcolor);
-	-webkit-mask: var(--fx-tico) center / contain no-repeat;
-	mask: var(--fx-tico) center / contain no-repeat;
-	pointer-events: none;
-}
-
-/* kind: announcement (also "global announcement"), sticky, hot */
-.fx-topics li.row > dl.icon[style*="announce"] {
-	--fx-tico: var(--fx-ico-announce);
-	--fx-tico-u: var(--fx-ico-announce-unread);
-}
-
-.fx-topics li.row > dl.icon[style*="sticky"] {
-	--fx-tico: var(--fx-ico-sticky);
-	--fx-tico-u: var(--fx-ico-sticky-unread);
-}
-
-.fx-topics li.row > dl.icon[style*="_hot"] {
-	--fx-tico: var(--fx-ico-hot);
-	--fx-tico-u: var(--fx-ico-hot-unread);
-}
-
-/* new posts: filled icon and a thicker accent ring */
-.fx-topics li.row > dl.icon[style*="unread"],
-.fx-topics li.row > dl.icon[style*="state=new"] {
-	--fx-tico: var(--fx-tico-u);
-	--fx-tcolor: var(--fx-accent);
-	--fx-tring: var(--fx-accent);
-	--fx-tringw: 2.5px;
-}
-
-/* hot (read or unread): flame and ring in the hot color */
-.fx-topics li.row > dl.icon[style*="_hot"] {
-	--fx-tcolor: var(--fx-hot);
-	--fx-tring: var(--fx-hot);
-}
-
-/* locked (last, so it wins): padlock */
-.fx-topics li.row > dl.icon[style*="locked"] {
-	--fx-tico: var(--fx-ico-locked);
-}
-
-/* ---------- Hot topics pulse, read or unread ---------- */
-.fx-topics li.row > dl.icon[style*="_hot"]::before {
-	animation: fx-hot-pulse 1.8s ease-out infinite;
-}
-
-.fx-topics li.row > dl.icon[style*="_hot"]::after {
-	animation: fx-hot-flame 1.8s ease-in-out infinite;
-}
-
-@keyframes fx-hot-pulse {
-	0% {
-		box-shadow: 0 0 0 0 var(--fx-hot-ring);
-	}
-
-	70%,
-	100% {
-		box-shadow: 0 0 0 12px transparent;
-	}
-}
-
-@keyframes fx-hot-flame {
-	0%,
-	100% {
-		transform: scale(1);
-	}
-
-	50% {
-		transform: scale(1.16);
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.fx-topics li.row > dl.icon[style*="_hot"]::before,
-	.fx-topics li.row > dl.icon[style*="_hot"]::after {
-		animation: none;
-	}
-}
-
-/* ---------- Cells ---------- */
-.fx-topics li.row dl.icon > dd {
-	float: none;
-	width: auto;
-	min-height: 0;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-}
-
-/* title cell */
-.fx-topics li.row dl.icon > dd.dterm {
-	grid-column: 2;
-	grid-row: 1 / span 2;
-	min-width: 0;
-	color: var(--fx-muted);
-	font-size: 0.85rem;
-	font-weight: 600;
-	line-height: 1.6;
-}
-
-.fx-topics dd.dterm .topic-title-container {
-	display: inline;
-	margin: 0;
-	padding: 0;
-}
-
-.fx-topics dd.dterm h2.topic-title {
-	display: inline;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	font-family: var(--fx-font);
-	font-size: 1.05rem;
-	font-weight: 800;
-	line-height: 1.4;
-	text-transform: none;
-}
-
-.fx-topics dd.dterm a.topictitle {
-	color: var(--fx-text);
-	text-decoration: none;
-}
-
-.fx-topics dd.dterm a.topictitle:hover {
-	color: var(--fx-accent);
-}
-
-/* unread topics: title in the accent color */
-.fx-topics dl.icon[style*="unread"] dd.dterm a.topictitle,
-.fx-topics dl.icon[style*="state=new"] dd.dterm a.topictitle {
-	color: var(--fx-accent);
-}
-
-/* "Sticky:", "Global announcement:" ... as a small outlined label */
-.fx-topics dd.dterm > strong {
-	display: inline-block;
-	margin-right: 6px;
-	padding: 0 8px;
-	border: 1px solid var(--fx-accent);
-	border-radius: 999px;
-	color: var(--fx-accent);
-	font-size: 0.68rem;
-	font-weight: 800;
-	line-height: 1.6;
-	vertical-align: middle;
-}
-
-/* "you posted here": the little gif becomes an accent dot */
-.fx-topics dd.dterm > img[src*="icon_participate"] {
-	width: 8px;
-	height: 8px;
-	margin: 0 6px 2px 0;
-	border-radius: 50%;
-	background: var(--fx-accent);
-	object-fit: none;
-	object-position: -200px 0;
-	vertical-align: middle;
-}
-
-/* meta line: author on the left, page numbers on the right */
-.fx-topic-meta {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 4px 12px;
-	margin-top: 4px;
-}
-
-.fx-topic-meta .span-tab {
-	float: none;
-	margin: 0;
-	padding: 0;
-	color: var(--fx-muted);
-	font-size: 0.8rem;
-	font-weight: 600;
-}
-
-.fx-topic-meta .span-tab strong {
-	font-weight: 800;
-}
-
-.fx-topic-meta .span-tab a {
-	text-decoration: none;
-}
-
-.fx-topic-meta .pagination {
-	order: 2;
-	display: inline-flex;
-	margin-left: auto;
-	font-size: 0;
-}
-
-.fx-topic-meta .pagination > span {
-	display: inline-flex;
-	gap: 4px;
-}
-
-.fx-topic-meta .page-sep {
-	display: none;
-}
-
-.fx-topic-meta .pagination a {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	box-sizing: border-box;
-	min-width: 24px;
-	height: 24px;
-	padding: 0 7px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 8px;
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-	font-weight: 800;
-	text-decoration: none;
-	transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.fx-topic-meta .pagination a:hover {
-	border-color: var(--fx-accent);
-	color: var(--fx-accent);
-}
-
-/* last post: square avatar, then name and date (plain, no box) */
-.fx-topics li.row dl.icon > dd.lastpost {
-	grid-column: 3;
-	grid-row: 1 / span 2;
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	min-width: 0;
-	color: var(--fx-muted);
-	font-size: 0.78rem;
-	font-weight: 600;
-	line-height: 1.55;
-	text-align: left;
-}
-
-.fx-topics dd.lastpost .lastpost-avatar {
-	flex: 0 0 auto;
-	display: flex;
-	float: none;
-}
-
-.fx-topics dd.lastpost .lastpost-avatar img {
-	display: block;
-	width: 40px !important;
-	height: 40px !important;
-	max-width: none !important;
-	max-height: none !important;
-	border-radius: 9px;
-	object-fit: cover;
-}
-
-.fx-topics dd.lastpost > div {
-	float: none !important;
-	min-width: 0;
-}
-
-.fx-topics dd.lastpost > span,
-.fx-topics dd.lastpost > div > span {
-	display: block;
-	white-space: nowrap;
-}
-
-/* the name is inline text, whatever Forumotion's default rules say about strong / links / spans */
-.fx-topics dd.lastpost a.gensmall,
-.fx-topics dd.lastpost a.gensmall span,
-.fx-topics dd.lastpost a.gensmall strong,
-.fx-topics dd.lastpost > span > strong,
-.fx-topics dd.lastpost > div > span > strong {
-	display: inline !important;
-}
-
-.fx-topics dd.lastpost a.gensmall {
-	font-size: 0.85rem;
-	font-weight: 800;
-	text-decoration: none;
-}
-
-/* the "latest post" arrow: outlined button */
-.fx-topics dd.lastpost a:has(> img.sprite-icon_topic_latest) {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	box-sizing: border-box;
-	width: 24px;
-	height: 24px;
-	margin-left: 4px;
-	border: 1px solid var(--fx-border-strong);
-	border-radius: 8px;
-	vertical-align: middle;
-	transition: border-color 0.15s ease;
-}
-
-.fx-topics dd.lastpost a:has(> img.sprite-icon_topic_latest):hover {
-	border-color: var(--fx-accent);
-}
-
-/* replies / views: stacked in the last column behind a thin line; the number is bold, the label light */
-.fx-topics li.row dl.icon > dd.posts,
-.fx-topics li.row dl.icon > dd.views {
-	grid-column: 4;
-	padding-left: 18px;
-	border-left: 1px solid var(--fx-border);
-	color: var(--fx-text);
-	font-size: 0.98rem;
-	font-weight: 800;
-	line-height: 1.7;
-	text-align: left;
-	white-space: nowrap;
-}
-
-.fx-topics li.row dl.icon > dd.posts {
-	grid-row: 1;
-	align-self: end;
-	color: var(--fx-accent);
-}
-
-.fx-topics li.row dl.icon > dd.views {
-	grid-row: 2;
-	align-self: start;
-}
-
-.fx-topics dd .fx-label {
-	display: inline;
-	margin-left: 5px;
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-	font-weight: 700;
-}
-
-/* checkboxes of the multi-select lists */
-.fx-topics dl.icon > input[type="checkbox"],
-.fx-topics dd.dterm > input[type="radio"] {
-	accent-color: var(--fx-accent);
-}
-
-.fx-topics dl.icon > input[type="checkbox"] {
-	grid-column: 5;
-	grid-row: 1 / span 2;
-}
-
-.fx-topics li.row > dl.icon:has(> input[type="checkbox"]) {
-	grid-template-columns: 42px minmax(0, 1fr) 224px 124px auto;
-}
-
-/* dark mode: member names sit on a light chip so every group color stays readable */
-html[data-fx-theme="dark"] .fx-topics a:has(> .usr_grp_clr),
-html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
-	display: inline-flex;
-	align-items: center;
-	padding: 0 9px;
-	border-radius: 999px;
-	background: var(--fx-chip-bg);
-	color: var(--fx-chip-text);
-}
-
-/* no topics */
-.fx-topics li.row > dl:not(.icon) {
-	margin: 0;
-	padding: 26px 18px;
-	text-align: center;
-}
-
-.fx-topics li.row > dl:not(.icon) dt {
-	float: none;
-	width: auto;
-	margin: 0;
-	padding: 0;
-	color: var(--fx-muted);
-	font-size: 0.95rem;
-	font-weight: 700;
-}
-
-/* ---------- Small screens: icon + title, then last post, then the numbers ---------- */
-@media (max-width: 860px) {
-	.fx-topics li.row > dl.icon {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 10px 16px;
-		padding: 14px 16px;
-	}
-
-	.fx-topics li.row > dl.icon::before {
-		flex: 0 0 42px;
-		align-self: flex-start;
-	}
-
-	.fx-topics li.row > dl.icon::after {
-		top: 24px;
-		left: 26px;
-		margin-top: 0;
-	}
-
-	.fx-topics li.row dl.icon > dd.dterm {
-		flex: 1 1 calc(100% - 58px);
-	}
-
-	.fx-topics li.row dl.icon > dd.lastpost {
-		flex: 1 1 100%;
-	}
-
-	.fx-topics li.row dl.icon > dd.posts,
-	.fx-topics li.row dl.icon > dd.views {
-		flex: 0 0 auto;
-		padding-left: 0;
-		border-left: 0;
-	}
-}
-
-/* =========================================================
    9. POSTS  (viewtopic_body: one card per post)
-   Author header on top: diamond avatar, name, rank, awards and
+   Author header on top: diamond avatar, name, rank, awards (popup) and
    stats, with the post actions in a pill on the right. Then the
    message, then a footer tray (likes left, contact / vote / jump right).
    Light and dark both follow the --fx tokens; only the avatar
    ring gradient and its glow get their own dark values.
+
+   Changes in this version:
+   - multi-quote has its own icon (list-plus), no longer a copy icon
+   - "thanked" heart is filled and red; a thanked post gets a green
+     card, a glow and a "Thanked" pill (detected by the inline
+     background-color Forumotion adds)
+   - like / dislike are plain pills, no svg
+   - reputation is a coloured badge (class set by the template script)
+   - awards sit behind a "Show awards" button and open as a popup
+   - contact buttons use drawn icons (website, facebook, twitter,
+     pinterest, skype) instead of the old gif pictures
    ========================================================= */
 
 .fx-post {
@@ -2637,22 +24,36 @@ html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
 	--p-glow: rgba(59, 109, 240, 0.32);
 	--p-tint: rgba(59, 109, 240, 0.07);
 	--p-line: rgba(59, 109, 240, 0.11);
+	--p-green: #16a34a;
+	--p-green-soft: rgba(22, 163, 74, 0.12);
+	--p-green-ring: rgba(22, 163, 74, 0.40);
+	--p-like-red: #e11d48;
 	--p-diamond: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
 	--p-radius: 20px;
 
 	/* icons (masks) */
 	--p-ico-quote: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z%22/%3E%3Cpath d=%22M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z%22/%3E%3C/svg%3E");
-	--p-ico-mq: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%229%22 y=%229%22 width=%2213%22 height=%2213%22 rx=%222%22/%3E%3Cpath d=%22M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1%22/%3E%3C/svg%3E");
+	/* multi-quote: a list with a plus (was a "copy" icon) */
+	--p-ico-mq: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M11 12H3%22/%3E%3Cpath d=%22M16 6H3%22/%3E%3Cpath d=%22M16 18H3%22/%3E%3Cpath d=%22M18 9v6%22/%3E%3Cpath d=%22M21 12h-6%22/%3E%3C/svg%3E");
 	--p-ico-edit: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z%22/%3E%3Cpath d=%22m15 5 4 4%22/%3E%3C/svg%3E");
 	--p-ico-delete: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 6h18%22/%3E%3Cpath d=%22M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6%22/%3E%3Cpath d=%22M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2%22/%3E%3Cpath d=%22M10 11v6M14 11v6%22/%3E%3C/svg%3E");
 	--p-ico-ip: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M2 12h20%22/%3E%3Cpath d=%22M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z%22/%3E%3C/svg%3E");
 	--p-ico-report: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z%22/%3E%3Cpath d=%22M4 22v-7%22/%3E%3C/svg%3E");
 	--p-ico-thanks: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z%22/%3E%3C/svg%3E");
+	/* the same heart, filled: used when the post is already thanked */
+	--p-ico-thanks-on: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23000%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z%22/%3E%3C/svg%3E");
 	--p-ico-profile: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2%22/%3E%3Ccircle cx=%2212%22 cy=%227%22 r=%224%22/%3E%3C/svg%3E");
 	--p-ico-pm: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z%22/%3E%3C/svg%3E");
 	--p-ico-mail: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%224%22 width=%2220%22 height=%2216%22 rx=%222%22/%3E%3Cpath d=%22m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7%22/%3E%3C/svg%3E");
 	--p-ico-clock: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M12 6v6l4 2%22/%3E%3C/svg%3E");
 	--p-ico-noavatar: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%238b95a5%22%3E%3Ccircle cx=%2212%22 cy=%228.5%22 r=%224%22/%3E%3Cpath d=%22M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z%22/%3E%3C/svg%3E");
+	--p-ico-award: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%228%22 r=%226%22/%3E%3Cpath d=%22M15.477 12.89 17 22l-5-3-5 3 1.523-9.11%22/%3E%3C/svg%3E");
+
+	/* contact icons */
+	--p-ico-fb: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z%22/%3E%3C/svg%3E");
+	--p-ico-tw: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z%22/%3E%3C/svg%3E");
+	--p-ico-pin: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 17v5%22/%3E%3Cpath d=%22M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z%22/%3E%3C/svg%3E");
+	--p-ico-phone: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z%22/%3E%3C/svg%3E");
 }
 
 html[data-fx-theme="dark"] .fx-post {
@@ -2660,6 +61,10 @@ html[data-fx-theme="dark"] .fx-post {
 	--p-glow: rgba(124, 156, 255, 0.30);
 	--p-tint: rgba(124, 156, 255, 0.09);
 	--p-line: rgba(124, 156, 255, 0.10);
+	--p-green: #4ade80;
+	--p-green-soft: rgba(74, 222, 128, 0.14);
+	--p-green-ring: rgba(74, 222, 128, 0.45);
+	--p-like-red: #ff6b8b;
 }
 
 /* ---------- The card ---------- */
@@ -2708,6 +113,51 @@ hr#first-post-br {
 	border: 0;
 }
 
+/* ---------- THANKED POST ----------
+   Forumotion adds style="background-color:#ffffff" to a post the current member has thanked.
+   That inline style is the signal; !important is the only way to beat it (it would also be
+   plain white in dark mode). Posts in other states carry no background-color inline. */
+div.post.fx-post[style*="background-color"] {
+	background-color: var(--fx-surface) !important;
+	background-image: linear-gradient(180deg, var(--p-green-soft), transparent 180px) !important;
+	border-color: var(--p-green-ring);
+	box-shadow: 0 0 0 1px var(--p-green-ring), 0 14px 30px -14px var(--p-green-ring);
+}
+
+div.post.fx-post[style*="background-color"]:hover {
+	border-color: var(--p-green);
+}
+
+/* the "Thanked" pill sits on the top edge, right side (the avatar tip is on the left) */
+div.post.fx-post[style*="background-color"]::after {
+	content: "Thanked";
+	position: absolute;
+	top: -12px;
+	right: 24px;
+	z-index: 6;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 13px 4px 11px;
+	border-radius: 999px;
+	background: var(--p-green);
+	color: #ffffff;
+	font: 800 0.68rem/1.3 var(--fx-font);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	box-shadow: 0 6px 14px -4px var(--p-green-ring);
+	pointer-events: none;
+}
+
+html[data-fx-theme="dark"] div.post.fx-post[style*="background-color"]::after {
+	color: #052e16;
+}
+
+/* the author header of a thanked post carries the green tint too */
+div.post.fx-post[style*="background-color"] .fx-post__head {
+	background: linear-gradient(115deg, var(--p-green-soft), transparent 62%);
+}
+
 /* ---------- Author header ---------- */
 .fx-post__head {
 	position: relative;
@@ -2750,6 +200,11 @@ hr#first-post-br {
 	background: none;
 	float: none !important;
 	width: auto !important;
+}
+
+/* while an awards popup is open, this header must sit above the posts that follow */
+.fx-post .postprofile:has(.fx-awards__pop:not([hidden])) {
+	z-index: 30;
 }
 
 /* ---------- Diamond avatar ---------- */
@@ -2885,12 +340,10 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	display: none;
 }
 
-/* awards: tiles with a hover tooltip */
+/* ---------- Awards: a "Show awards" button, the awards open in a popup ---------- */
 .fx-post .postprofile dd.dd_award {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 6px;
+	position: relative;
+	display: block;
 	width: auto !important;
 	height: auto !important;
 	padding: 0;
@@ -2899,69 +352,125 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	box-shadow: none;
 }
 
-.fx-post .award {
-	position: relative;
-	display: block;
-	float: none;
-	width: 32px;
-	height: 32px;
+.fx-awards__btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
 	margin: 0;
+	padding: 4px 12px 4px 9px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 999px;
+	background: var(--fx-surface);
+	color: var(--fx-accent);
+	font: 800 0.72rem/1.4 var(--fx-font);
+	cursor: pointer;
+	transition: background-color 0.15s, border-color 0.15s;
+}
+
+.fx-awards__btn::before {
+	content: "";
+	width: 14px;
+	height: 14px;
+	background: currentColor;
+	-webkit-mask: var(--p-ico-award) center / contain no-repeat;
+	mask: var(--p-ico-award) center / contain no-repeat;
+}
+
+.fx-awards__btn:hover,
+.fx-awards__btn[aria-expanded="true"] {
+	border-color: var(--fx-accent);
+	background: var(--fx-accent-soft);
+}
+
+.fx-awards__btn:focus-visible {
+	outline: 2px solid var(--fx-accent);
+	outline-offset: 2px;
+}
+
+.fx-awards__pop {
+	position: absolute;
+	top: calc(100% + 10px);
+	left: 0;
+	z-index: 40;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	box-sizing: border-box;
+	width: 300px;
+	max-width: calc(100vw - 40px);
+	max-height: 320px;
+	padding: 8px;
+	overflow-y: auto;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 16px;
+	background: var(--fx-surface);
+	box-shadow: var(--fx-pop-shadow);
+	animation: fx-pop 0.16s ease-out;
+}
+
+/* the display rule above would override the hidden attribute */
+.fx-awards__pop[hidden] {
+	display: none;
+}
+
+/* each award is one row: picture, title, description (no hover tooltip needed in the popup) */
+.fx-awards__pop .award {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: auto;
+	height: auto;
+	padding: 8px 10px;
+	border-radius: 10px;
+	cursor: default;
+}
+
+.fx-awards__pop .award:hover {
+	background: var(--fx-surface-2);
+}
+
+.fx-awards__pop .award::before {
+	position: static;
+	flex: 0 0 36px;
+	width: 36px;
+	height: 36px;
+	inset: auto;
+}
+
+.fx-awards__pop .award:hover::before {
+	transform: none;
+}
+
+.fx-awards__pop .award_tooltiptext {
+	position: static;
+	display: block;
+	width: auto;
+	max-width: none;
 	padding: 0;
-	border: 0;
 	background: none;
 	box-shadow: none;
-	cursor: help;
-}
-
-.fx-post .award::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: 9px;
-	background: var(--award-image) center / contain no-repeat;
-	transition: transform 0.18s ease;
-}
-
-.fx-post .award:hover::before {
-	transform: translateY(-2px) rotate(-5deg) scale(1.1);
-}
-
-.fx-post .award_tooltiptext {
-	position: absolute;
-	bottom: calc(100% + 10px);
-	left: 50%;
-	z-index: 20;
-	display: block;
-	width: max-content;
-	max-width: 220px;
-	padding: 8px 12px;
-	border-radius: 10px;
-	background: var(--fx-text);
-	color: var(--fx-bg);
-	font-size: 0.74rem;
+	color: var(--fx-muted);
+	font-size: 0.78rem;
 	font-weight: 600;
 	line-height: 1.4;
-	text-align: left;
-	visibility: hidden;
-	opacity: 0;
-	transform: translate(-50%, 4px);
-	transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
-	pointer-events: none;
-	box-shadow: var(--fx-pop-shadow);
-}
-
-.fx-post .award:hover .award_tooltiptext {
 	visibility: visible;
 	opacity: 1;
-	transform: translate(-50%, 0);
+	transform: none;
+	pointer-events: auto;
 }
 
-.fx-post .award_tooltiptext_title {
-	margin: 0 0 2px;
-	font-size: 0.78rem;
+.fx-awards__pop .award:hover .award_tooltiptext {
+	transform: none;
+}
+
+.fx-awards__pop .award_tooltiptext_title {
+	margin: 0 0 1px;
+	color: var(--fx-text);
+	font-size: 0.86rem;
 	font-weight: 800;
 }
 
+/* stray "see more" text from the awards block */
 .fx-post .award_more:empty {
 	display: none;
 }
@@ -2972,7 +481,7 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	font-weight: 800;
 }
 
-/* stats: one chip per profile field */
+/* ---------- Stats: one chip per profile field ---------- */
 .fx-p-stats {
 	display: flex;
 	flex-wrap: wrap;
@@ -3008,6 +517,47 @@ html[data-fx-theme="dark"] .fx-p-name a {
 
 .fx-p-stat br {
 	display: none;
+}
+
+/* reputation: the template script swaps the "Reputation : 4" text for this badge */
+.fx-p-stat:has(.fx-rep) {
+	padding: 2px 4px 2px 11px;
+}
+
+.fx-rep {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.fx-rep__label {
+	color: var(--fx-muted);
+	font-weight: 700;
+}
+
+.fx-rep__num {
+	min-width: 26px;
+	padding: 0 9px;
+	border-radius: 999px;
+	font-size: 0.76rem;
+	font-weight: 800;
+	line-height: 1.7;
+	text-align: center;
+}
+
+.fx-rep--pos .fx-rep__num {
+	background: var(--p-green-soft);
+	color: var(--p-green);
+}
+
+.fx-rep--neg .fx-rep__num {
+	background: var(--fx-danger-soft);
+	color: var(--fx-danger);
+}
+
+.fx-rep--zero .fx-rep__num {
+	background: var(--fx-surface-2);
+	color: var(--fx-muted);
 }
 
 /* ---------- Action icons (shared by the top pill and the contact buttons) ----------
@@ -3083,32 +633,45 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	color: var(--fx-danger);
 }
 
-/* multi-quote: Forumotion swaps the image to the "_on_" file when it is selected */
+/* THANKS: already thanked (Forumotion shows the "thanks_on" picture and no link) = filled red heart */
+.fx-p-act--thanks:has(> img[src*="thanks_on"]) {
+	--p-i: var(--p-ico-thanks-on);
+	background: var(--fx-danger-soft);
+	color: var(--p-like-red);
+}
+
+.fx-p-act--thanks:has(> img[src*="thanks_on"]) > img {
+	cursor: default;
+}
+
+/* a small pop when the filled heart shows up */
+.fx-p-act--thanks:has(> img[src*="thanks_on"])::before {
+	animation: fx-heart 0.35s ease-out;
+}
+
+@keyframes fx-heart {
+	0% { transform: scale(0.6); }
+	60% { transform: scale(1.25); }
+	100% { transform: scale(1); }
+}
+
+/* MULTI-QUOTE: Forumotion swaps the image to the "_on_" file when it is selected */
 .fx-p-act--mq:has(> img[src*="_on_"]) {
 	background: var(--fx-accent);
 	color: var(--fx-on-accent);
 }
 
-/* extra contact fields from the admin panel keep their own picture */
+/* EXTRA CONTACT FIELDS (website, facebook, twitter, pinterest, skype ...):
+   same treatment, the icon is picked from the link. Anything unknown gets a globe. */
 .fx-p-act--extra {
-	width: auto;
-	min-width: 34px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+	--p-i: var(--p-ico-ip);
 }
 
-.fx-p-act--extra::before {
-	display: none;
-}
-
-.fx-p-act--extra > a,
-.fx-p-act--extra > img {
-	position: static;
-	width: auto;
-	height: auto;
-	opacity: 1;
-}
+.fx-p-act--extra:has(> a[href*="facebook."]) { --p-i: var(--p-ico-fb); }
+.fx-p-act--extra:has(> a[href*="twitter."]),
+.fx-p-act--extra:has(> a[href*="//x.com"]) { --p-i: var(--p-ico-tw); }
+.fx-p-act--extra:has(> a[href*="pinterest."]) { --p-i: var(--p-ico-pin); }
+.fx-p-act--extra:has(> a[href^="skype:"]) { --p-i: var(--p-ico-phone); }
 
 /* the top pill */
 .fx-post ul.fx-p-acts {
@@ -3138,6 +701,7 @@ html[data-fx-theme="dark"] .fx-p-name a {
 /* the contact group in the footer */
 .fx-p-contact {
 	display: inline-flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 2px;
 	padding: 3px;
@@ -3361,7 +925,7 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	margin-left: auto;
 }
 
-/* like / dislike pills */
+/* ---------- Likes ---------- */
 .fx-post .fa_like_div {
 	display: flex;
 	flex-wrap: wrap;
@@ -3374,78 +938,136 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	background: none;
 }
 
+/* "Stoic likes this post": a small chip with a filled heart, names in the accent color */
 .fx-post .fa_like_list {
 	flex: 0 0 100%;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	box-sizing: border-box;
 	margin: 0;
+	padding: 7px 14px;
+	border: 1px solid var(--fx-border);
+	border-radius: 12px;
+	background: var(--fx-surface);
 	color: var(--fx-muted);
-	font-size: 0.76rem;
+	font-size: 0.78rem;
 	font-weight: 600;
 }
 
+.fx-post .fa_like_list::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 14px;
+	height: 14px;
+	background: var(--p-like-red);
+	-webkit-mask: var(--p-ico-thanks-on) center / contain no-repeat;
+	mask: var(--p-ico-thanks-on) center / contain no-repeat;
+}
+
+.fx-post .fa_like_list a {
+	color: var(--fx-accent);
+	font-weight: 800;
+	text-decoration: none;
+}
+
+.fx-post .fa_like_list a:hover {
+	text-decoration: underline;
+}
+
+/* like / dislike: plain pills, text and a count (no svg) */
 .fx-post .rep-button {
 	display: inline-flex;
 	align-items: center;
-	gap: 7px;
+	gap: 8px;
 	width: auto;
 	height: auto;
 	min-width: 0;
 	margin: 0;
-	padding: 6px 14px;
-	border: 1px solid var(--fx-border);
+	padding: 7px 8px 7px 16px;
+	border: 1px solid var(--fx-border-strong);
 	border-radius: 999px;
 	background-color: var(--fx-surface);
 	background-image: none !important;
 	box-shadow: none;
-	color: var(--fx-muted);
-	font: 800 0.78rem/1.2 var(--fx-font);
+	color: var(--fx-text);
+	font: 800 0.8rem/1.2 var(--fx-font);
 	letter-spacing: 0;
 	text-indent: 0;
 	text-shadow: none;
 	text-transform: none;
 	cursor: pointer;
-	transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+	transition: color 0.15s, border-color 0.15s, background-color 0.15s, transform 0.1s;
 }
 
-.fx-post .rep-button svg {
-	flex: 0 0 auto;
-	width: 15px;
-	height: 15px;
+/* when there is no count yet, the pill keeps even padding */
+.fx-post .rep-button:not(:has(.rep-nb:not(:empty))) {
+	padding-right: 16px;
 }
 
-.fx-post .rep-button svg path {
-	fill: currentColor;
+.fx-post .rep-button:active {
+	transform: scale(0.97);
 }
 
 .fx-post .rep-button:hover {
-	border-color: var(--fx-accent);
-	background-color: var(--fx-accent-soft);
-	color: var(--fx-accent);
+	border-color: var(--p-green);
+	background-color: var(--p-green-soft);
+	color: var(--p-green);
 }
 
-.fx-post .rep-button.fa_dislike:hover {
+.fx-post .rep-button.fa_dislike:hover,
+.fx-post .rep-button.fa_disliked:hover {
 	border-color: var(--fx-danger);
 	background-color: var(--fx-danger-soft);
 	color: var(--fx-danger);
 }
 
-/* when the member has already voted */
-.fx-post .rep-button[class*="active"],
-.fx-post .rep-button[class*="voted"],
-.fx-post .rep-button[class*="selected"] {
-	border-color: var(--fx-accent);
-	background-color: var(--fx-accent-soft);
-	color: var(--fx-accent);
+.fx-post .rep-nb {
+	min-width: 22px;
+	padding: 0 7px;
+	border-radius: 999px;
+	background: var(--fx-surface-2);
+	color: var(--fx-muted);
+	font-size: 0.72rem;
+	line-height: 20px;
+	text-align: center;
 }
 
-.fx-post .rep-nb {
-	min-width: 18px;
-	padding: 0 6px;
-	border-radius: 999px;
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-	font-size: 0.7rem;
-	line-height: 18px;
-	text-align: center;
+/* a count of 0 or an empty one is not worth showing */
+.fx-post .rep-nb:empty {
+	display: none;
+}
+
+/* the member has voted: solid pill */
+.fx-post .rep-button.fa_liked {
+	border-color: var(--p-green);
+	background-color: var(--p-green);
+	color: #ffffff;
+}
+
+.fx-post .rep-button.fa_liked .rep-nb {
+	background: rgba(255, 255, 255, 0.25);
+	color: #ffffff;
+}
+
+.fx-post .rep-button.fa_disliked {
+	border-color: var(--fx-danger);
+	background-color: var(--fx-danger);
+	color: #ffffff;
+}
+
+.fx-post .rep-button.fa_disliked .rep-nb {
+	background: rgba(255, 255, 255, 0.25);
+	color: #ffffff;
+}
+
+html[data-fx-theme="dark"] .fx-post .rep-button.fa_liked {
+	color: #052e16;
+}
+
+html[data-fx-theme="dark"] .fx-post .rep-button.fa_liked .rep-nb {
+	background: rgba(5, 46, 22, 0.18);
+	color: #052e16;
 }
 
 /* +/- vote pill */
@@ -3516,7 +1138,7 @@ html[data-fx-theme="dark"] .fx-p-name a {
 
 .fx-post .vote-bar-plus {
 	width: 100%;
-	background: var(--fx-accent);
+	background: var(--p-green);
 }
 
 .fx-post .vote-bar-minus {
@@ -3613,8 +1235,11 @@ div.post.fx-post--hidden {
 @media (prefers-reduced-motion: reduce) {
 	.fx-p-avatar,
 	.fx-post .award::before,
-	.fx-post .award_tooltiptext {
+	.fx-post .award_tooltiptext,
+	.fx-awards__pop,
+	.fx-p-act--thanks::before {
 		transition: none;
+		animation: none;
 	}
 
 	.fx-post:hover .fx-p-avatar {
