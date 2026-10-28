@@ -3965,6 +3965,25 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	display: none;
 }
 
+.fx-post .award {
+	position: relative;
+	display: block;
+	float: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+}
+
+.fx-post .award::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 9px;
+	background: var(--award-image) center / contain no-repeat;
+}
+
 /* ---------- Awards: a "Show awards" button, the awards open in a popup ---------- */
 .fx-post .postprofile dd.dd_award {
 	position: relative;
@@ -4769,6 +4788,44 @@ html[data-fx-theme="dark"] .fx-post .rep-button.fa_liked .rep-nb {
 .fx-post .vote-bar-minus {
 	width: 100%;
 	background: var(--fx-danger);
+}
+
+.fx-post .vote-bar.fx-score {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6px;
+	width: auto;
+	height: auto;
+	margin: 0 4px;
+	overflow: visible;
+	border-radius: 0;
+	background: none;
+}
+
+.fx-score__up,
+.fx-score__down {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 0 9px;
+	border-radius: 999px;
+	font: 800 0.74rem/22px var(--fx-font);
+}
+
+.fx-score__up {
+	background: var(--p-green-soft);
+	color: var(--p-green);
+}
+
+.fx-score__down {
+	background: var(--fx-danger-soft);
+	color: var(--fx-danger);
+}
+
+.fx-score__down.is-zero {
+	background: var(--fx-surface-2);
+	color: var(--fx-muted);
 }
 
 /* back to top / down */
