@@ -4277,4 +4277,82 @@ div.post.fx-post--hidden {
 }
 
 /* dark mode: names on a light chip, like everywhere else in the theme */
-html[data
+html[data-fx-theme="dark"] .fx-act__panel--notif .fx-notif__text a:has(> .usr_grp_clr) {
+	padding: 0 8px;
+	border-radius: 999px;
+	background: var(--fx-chip-bg);
+}
+
+/* time with a small clock */
+.fx-act__panel--notif li.fx-notif__item .fx-notif__time {
+	grid-column: 2;
+	grid-row: 2;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin: 0;
+	padding: 0;
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.fx-act__panel--notif .fx-notif__time::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 11px;
+	height: 11px;
+	background: currentColor;
+	-webkit-mask: var(--n-ico-clock) center / contain no-repeat;
+	mask: var(--n-ico-clock) center / contain no-repeat;
+}
+
+/* delete cross: top right, shows on hover */
+.fx-act__panel--notif li.fx-notif__item a.fx-notif__del {
+	position: absolute !important;
+	top: 10px;
+	right: 10px;
+	display: block;
+	width: 26px;
+	height: 26px;
+	margin: 0;
+}
+
+/* ----- footer link ----- */
+.fx-act__panel--notif a.fx-notif__all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 14px 18px;
+}
+
+.fx-act__panel--notif a.fx-notif__all::after {
+	content: "";
+	width: 14px;
+	height: 14px;
+	background: currentColor;
+	-webkit-mask: var(--n-ico-arrow) center / contain no-repeat;
+	mask: var(--n-ico-arrow) center / contain no-repeat;
+	transition: transform 0.15s ease;
+}
+
+.fx-act__panel--notif a.fx-notif__all:hover::after {
+	transform: translateX(3px);
+}
+
+/* small screens */
+@media (max-width: 600px) {
+	.fx-act__panel--notif {
+		width: calc(100vw - 24px);
+	}
+}
+
+/* Stray <b><font color="cyen"> wrappers: let the real elements take part in the layout */
+b:has(> font[color="cyen"]),
+font[color="cyen"] {
+	display: contents;
+	color: inherit;
+	font: inherit;
+}
