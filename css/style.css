@@ -2637,8 +2637,9 @@ html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
      background-color Forumotion adds)
    - like / dislike are plain pills, no svg
    - reputation is a coloured badge (class set by the template script)
-   - awards: a small "Awards" pill (native <details>) that opens a popup
-     floating over the post, so nothing is pushed around
+   - awards: a small "Awards" pill that opens a floating popup (built by
+     the template script, placed on <body>), so nothing is pushed around
+     and no parent can clip it
    - contact buttons (.fx-ct) are all drawn icons: profile, message, mail,
      website, facebook, twitter / x, pinterest, instagram, youtube,
      linkedin, github, twitch, skype; the old gif pictures stay in the
@@ -2972,28 +2973,10 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	display: none;
 }
 
-/* ---------- Awards: a small pill, the awards open in a popup under it ---------- */
-
-/* one award: the picture comes from the --award-image variable Forumotion sets inline */
-.fx-post .award {
-	position: relative;
-	display: block;
-	float: none;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	box-shadow: none;
-}
-
-.fx-post .award::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: 9px;
-	background: var(--award-image) center / contain no-repeat;
-}
-
+/* ---------- Awards: a small pill, the awards open in a floating popup ----------
+   The awards Forumotion prints stay in a hidden box (.fx-awd__src). The template script copies
+   them into a card that sits on <body> (.fx-awd-float) and places it under the pill, so no
+   parent element can clip it or paint over it. */
 .fx-post .postprofile dd.dd_award {
 	position: relative;
 	display: block;
@@ -3007,34 +2990,31 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	box-shadow: none;
 }
 
-/* the pill (<summary>): medal, label, count, chevron */
-.fx-post summary.fx-awd__sum {
+.fx-awd__src {
+	display: none !important;
+}
+
+/* the pill: medal, label, count, chevron */
+.fx-post button.fx-awd__sum {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
+	width: auto;
+	height: auto;
 	margin: 0;
-	padding: 4px 9px 4px 9px;
+	padding: 4px 9px;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 999px;
 	background: var(--fx-surface);
 	color: var(--fx-accent);
 	font: 800 0.72rem/1.4 var(--fx-font);
-	list-style: none;
+	text-transform: none;
+	letter-spacing: 0;
 	cursor: pointer;
-	user-select: none;
-	-webkit-user-select: none;
 	transition: background-color 0.15s, border-color 0.15s;
 }
 
-.fx-post summary.fx-awd__sum::-webkit-details-marker {
-	display: none;
-}
-
-.fx-post summary.fx-awd__sum::marker {
-	content: "";
-}
-
-.fx-post summary.fx-awd__sum::before {
+.fx-post button.fx-awd__sum::before {
 	content: "";
 	flex: 0 0 auto;
 	width: 14px;
@@ -3044,7 +3024,7 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	mask: var(--p-ico-award) center / contain no-repeat;
 }
 
-.fx-post summary.fx-awd__sum::after {
+.fx-post button.fx-awd__sum::after {
 	content: "";
 	flex: 0 0 auto;
 	width: 12px;
@@ -3056,17 +3036,17 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	transition: transform 0.18s ease;
 }
 
-.fx-post details[open] > summary.fx-awd__sum::after {
+.fx-post button.fx-awd__sum[aria-expanded="true"]::after {
 	transform: rotate(180deg);
 }
 
-.fx-post summary.fx-awd__sum:hover,
-.fx-post details[open] > summary.fx-awd__sum {
+.fx-post button.fx-awd__sum:hover,
+.fx-post button.fx-awd__sum[aria-expanded="true"] {
 	border-color: var(--fx-accent);
 	background: var(--fx-accent-soft);
 }
 
-.fx-post summary.fx-awd__sum:focus-visible {
+.fx-post button.fx-awd__sum:focus-visible {
 	outline: 2px solid var(--fx-accent);
 	outline-offset: 2px;
 }
@@ -3083,63 +3063,62 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	text-align: center;
 }
 
-/* the popup floats over the post (absolute), it never pushes anything */
-.fx-post .fx-awd__pop {
-	position: absolute;
-	top: calc(100% + 10px);
-	left: 0;
-	z-index: 40;
+/* the floating card (created by the template script, lives on <body>) */
+.fx-awd-float {
+	position: fixed;
+	z-index: 1500;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 	box-sizing: border-box;
 	width: 300px;
-	max-width: calc(100vw - 32px);
-	max-height: 300px;
+	max-width: calc(100vw - 24px);
+	max-height: min(320px, calc(100vh - 24px));
+	margin: 0;
 	padding: 8px;
 	overflow-y: auto;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 16px;
 	background: var(--fx-surface);
 	box-shadow: var(--fx-pop-shadow);
-	transform-origin: top left;
+	color: var(--fx-text);
+	font-family: var(--fx-font);
+	text-align: left;
 	animation: fx-pop 0.16s ease-out;
 }
 
-/* closed: some older browsers keep a flex child visible inside a closed <details> */
-.fx-post details.fx-awd__d:not([open]) > .fx-awd__pop {
-	display: none;
-}
-
-/* while a popup is open, this author block sits above the posts that follow */
-.fx-post .postprofile:has(details.fx-awd__d[open]) {
-	z-index: 30;
-}
-
-/* each award is one row: picture tile, title, description */
-.fx-post .fx-awd__pop .award {
-	display: flex;
+/* each award is one row: picture tile, title, description.
+   !important because Forumotion's own award styles (size, tooltip position) load before this file. */
+.fx-awd-float .award {
+	position: relative !important;
+	display: flex !important;
 	align-items: center;
 	gap: 12px;
-	width: auto;
-	height: auto;
-	min-height: 0;
-	padding: 8px 10px;
+	float: none !important;
+	width: auto !important;
+	height: auto !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 8px 10px !important;
+	overflow: visible !important;
+	border: 0 !important;
 	border-radius: 12px;
+	background: none !important;
+	box-shadow: none !important;
 	cursor: default;
 	transition: background-color 0.15s;
 }
 
-.fx-post .fx-awd__pop .award:hover {
-	background: var(--fx-surface-2);
+.fx-awd-float .award:hover {
+	background: var(--fx-surface-2) !important;
 }
 
-.fx-post .fx-awd__pop .award::before {
-	position: static;
-	inset: auto;
+.fx-awd-float .award::before {
+	content: "" !important;
+	position: static !important;
 	flex: 0 0 42px;
-	width: 42px;
-	height: 42px;
+	width: 42px !important;
+	height: 42px !important;
 	border-radius: 12px;
 	background-color: var(--fx-surface-2);
 	background-image: var(--award-image);
@@ -3147,30 +3126,37 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	background-repeat: no-repeat;
 	background-size: 68%;
 	box-shadow: inset 0 0 0 1px var(--fx-border);
+	transform: none !important;
 }
 
-.fx-post .fx-awd__pop .award_tooltiptext {
-	position: static;
-	display: block;
+.fx-awd-float .award_tooltiptext {
+	position: static !important;
+	display: block !important;
 	flex: 1 1 auto;
-	width: auto;
+	width: auto !important;
 	min-width: 0;
-	max-width: none;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	box-shadow: none;
-	color: var(--fx-muted);
-	font: 600 0.78rem/1.4 var(--fx-font);
-	text-align: left;
-	visibility: visible;
-	opacity: 1;
-	transform: none;
-	pointer-events: auto;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: none !important;
+	box-shadow: none !important;
+	color: var(--fx-muted) !important;
+	font: 600 0.78rem/1.4 var(--fx-font) !important;
+	text-align: left !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	transform: none !important;
+	pointer-events: auto !important;
 }
 
-.fx-post .fx-awd__pop .award_tooltiptext_title {
+.fx-awd-float .award_tooltiptext::before,
+.fx-awd-float .award_tooltiptext::after {
+	display: none !important;
+}
+
+.fx-awd-float .award_tooltiptext_title {
 	display: block;
 	margin: 0 0 1px;
 	color: var(--fx-text);
@@ -4047,24 +4033,14 @@ div.post.fx-post--hidden {
 		width: 100%;
 		margin-left: 0;
 	}
-
-	/* the awards popup spans the author block instead of hanging off the pill */
-	.fx-post .postprofile dd.dd_award {
-		position: static;
-	}
-
-	.fx-post .fx-awd__pop {
-		right: 0;
-		width: auto;
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.fx-p-avatar,
 	.fx-post .award::before,
-	.fx-awd__pop,
+	.fx-awd-float,
 	.fx-p-act--thanks::before,
-	.fx-post summary.fx-awd__sum::after {
+	.fx-post button.fx-awd__sum::after {
 		transition: none;
 		animation: none;
 	}
