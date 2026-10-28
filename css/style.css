@@ -2624,1023 +2624,26 @@ html[data-fx-theme="dark"] .fx-topics a.usr_grp_clr {
 
 /* =========================================================
    9. POSTS  (viewtopic_body: one card per post)
-   Author header on top: diamond avatar, name, rank, awards and
-   stats, with the post actions in a pill on the right. Then the
-   message, then a footer tray (likes left, contact / vote / jump right).
-   Light and dark both follow the --fx tokens; only the avatar
-   ring gradient and its glow get their own dark values.
-   ========================================================= */
-
-.fx-post {
-	--p-g1: var(--fx-accent);
-	--p-g2: #8a63f6;
-	--p-glow: rgba(59, 109, 240, 0.32);
-	--p-tint: rgba(59, 109, 240, 0.07);
-	--p-line: rgba(59, 109, 240, 0.11);
-	--p-diamond: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-	--p-radius: 20px;
-
-	/* icons (masks) */
-	--p-ico-quote: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z%22/%3E%3Cpath d=%22M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z%22/%3E%3C/svg%3E");
-	--p-ico-mq: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%229%22 y=%229%22 width=%2213%22 height=%2213%22 rx=%222%22/%3E%3Cpath d=%22M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1%22/%3E%3C/svg%3E");
-	--p-ico-edit: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z%22/%3E%3Cpath d=%22m15 5 4 4%22/%3E%3C/svg%3E");
-	--p-ico-delete: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 6h18%22/%3E%3Cpath d=%22M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6%22/%3E%3Cpath d=%22M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2%22/%3E%3Cpath d=%22M10 11v6M14 11v6%22/%3E%3C/svg%3E");
-	--p-ico-ip: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M2 12h20%22/%3E%3Cpath d=%22M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z%22/%3E%3C/svg%3E");
-	--p-ico-report: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z%22/%3E%3Cpath d=%22M4 22v-7%22/%3E%3C/svg%3E");
-	--p-ico-thanks: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z%22/%3E%3C/svg%3E");
-	--p-ico-profile: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2%22/%3E%3Ccircle cx=%2212%22 cy=%227%22 r=%224%22/%3E%3C/svg%3E");
-	--p-ico-pm: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z%22/%3E%3C/svg%3E");
-	--p-ico-mail: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%224%22 width=%2220%22 height=%2216%22 rx=%222%22/%3E%3Cpath d=%22m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7%22/%3E%3C/svg%3E");
-	--p-ico-clock: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M12 6v6l4 2%22/%3E%3C/svg%3E");
-	--p-ico-noavatar: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%238b95a5%22%3E%3Ccircle cx=%2212%22 cy=%228.5%22 r=%224%22/%3E%3Cpath d=%22M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z%22/%3E%3C/svg%3E");
-}
-
-html[data-fx-theme="dark"] .fx-post {
-	--p-g2: #b59bff;
-	--p-glow: rgba(124, 156, 255, 0.30);
-	--p-tint: rgba(124, 156, 255, 0.09);
-	--p-line: rgba(124, 156, 255, 0.10);
-}
-
-/* ---------- The card ---------- */
-div.post.fx-post {
-	position: relative;
-	clear: both;
-	margin: 48px 0 0;               /* room for the avatar tip that floats above the card */
-	padding: 0;
-	border: 1px solid var(--fx-border);
-	border-radius: var(--p-radius);
-	background-color: var(--fx-surface);
-	background-image: none;
-	box-shadow: var(--fx-card-shadow);
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-	transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-div.post.fx-post:hover {
-	border-color: var(--fx-border-strong);
-}
-
-/* a post opened from a link (#123) gets an accent ring */
-div.post.fx-post:has(.fx-p-anchor:target) {
-	border-color: var(--fx-accent);
-	box-shadow: 0 0 0 3px var(--fx-accent-soft), var(--fx-card-shadow);
-}
-
-div.post.fx-post > .inner {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-}
-
-/* the old rounded-corner spans are not needed */
-div.post.fx-post .corners-top,
-div.post.fx-post .corners-bottom {
-	display: none;
-}
-
-hr#first-post-br {
-	height: 0;
-	margin: 0;
-	border: 0;
-}
-
-/* ---------- Author header ---------- */
-.fx-post__head {
-	position: relative;
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: 14px 20px;
-	padding: 16px 18px 16px 26px;
-	border-bottom: 1px solid var(--fx-border);
-	border-radius: var(--p-radius) var(--p-radius) 0 0;
-	background: linear-gradient(115deg, var(--p-tint), transparent 62%);
-}
-
-/* a faint diamond lattice that fades in toward the right edge */
-.fx-post__head::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	pointer-events: none;
-	background:
-		repeating-linear-gradient(45deg, var(--p-line) 0 1px, transparent 1px 26px),
-		repeating-linear-gradient(-45deg, var(--p-line) 0 1px, transparent 1px 26px);
-	-webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 100%);
-	mask-image: linear-gradient(90deg, transparent 38%, #000 100%);
-}
-
-.fx-post .postprofile {
-	position: relative;
-	z-index: 2;
-	display: flex;
-	align-items: center;
-	gap: 22px;
-	flex: 1 1 auto;
-	min-width: 0;
-	min-height: 0;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	float: none !important;
-	width: auto !important;
-}
-
-/* ---------- Diamond avatar ---------- */
-.fx-p-avatar {
-	position: relative;
-	flex: 0 0 auto;
-	align-self: flex-start;
-	width: 112px;
-	height: 112px;
-	margin: -36px 0 -8px;
-	filter: drop-shadow(0 10px 14px var(--p-glow));
-	transition: transform 0.25s ease;
-}
-
-.fx-post:hover .fx-p-avatar {
-	transform: translateY(-2px);
-}
-
-.fx-p-avatar__shape {
-	position: absolute;
-	inset: 0;
-	background: linear-gradient(135deg, var(--p-g1), var(--p-g2));
-	clip-path: var(--p-diamond);
-}
-
-.fx-p-avatar__shape > a {
-	position: absolute;
-	inset: 5px;
-	display: block;
-	background: var(--fx-surface-2);
-	clip-path: var(--p-diamond);
-}
-
-.fx-p-avatar__shape img {
-	display: block;
-	width: 100%;
-	height: 100%;
-	max-width: none !important;
-	max-height: none !important;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	object-fit: cover;
-}
-
-/* no avatar: the gradient diamond holds a neutral face */
-.fx-p-avatar__shape:empty::after {
-	content: "";
-	position: absolute;
-	inset: 5px;
-	background: var(--fx-surface-2) var(--p-ico-noavatar) center 62% / 56% no-repeat;
-	clip-path: var(--p-diamond);
-}
-
-/* ---------- Name, rank, awards, stats ---------- */
-.fx-post .postprofile dl {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 8px 12px;
-	flex: 1 1 auto;
-	min-width: 0;
-	margin: 0;
-	padding: 0;
-}
-
-.fx-post .postprofile dt,
-.fx-post .postprofile dd {
-	margin: 0;
-	padding: 0;
-	line-height: 1.3;
-}
-
-.fx-post .postprofile dt {
-	flex: 0 0 100%;
-}
-
-.fx-p-name {
-	font-size: 1.28rem;
-	font-weight: 800;
-	letter-spacing: -0.012em;
-	line-height: 1.25;
-}
-
-.fx-p-name a {
-	text-decoration: none;
-}
-
-.fx-p-name a:hover {
-	text-decoration: underline;
-}
-
-.fx-p-name .group-icon {
-	font-size: 1em;
-	vertical-align: -2px;
-}
-
-/* dark mode: names sit on a light chip so every group color stays readable */
-html[data-fx-theme="dark"] .fx-p-name a {
-	display: inline-flex;
-	align-items: center;
-	padding: 1px 12px;
-	border-radius: 999px;
-	background: var(--fx-chip-bg);
-	color: var(--fx-chip-text);
-	text-decoration: none;
-}
-
-.fx-p-rank {
-	display: inline-flex;
-	align-items: center;
-	gap: 7px;
-	color: var(--fx-accent);
-	font-size: 0.68rem;
-	font-weight: 800;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-}
-
-.fx-p-rank::before {
-	content: "";
-	width: 8px;
-	height: 8px;
-	background: linear-gradient(135deg, var(--p-g1), var(--p-g2));
-	clip-path: var(--p-diamond);
-}
-
-.fx-p-rank br {
-	display: none;
-}
-
-.fx-p-rank:empty {
-	display: none;
-}
-
-/* awards: tiles with a hover tooltip */
-.fx-post .postprofile dd.dd_award {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 6px;
-	width: auto !important;
-	height: auto !important;
-	padding: 0;
-	border: 0 !important;
-	background: none !important;
-	box-shadow: none;
-}
-
-.fx-post .award {
-	position: relative;
-	display: block;
-	float: none;
-	width: 32px;
-	height: 32px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	box-shadow: none;
-	cursor: help;
-}
-
-.fx-post .award::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: 9px;
-	background: var(--award-image) center / contain no-repeat;
-	transition: transform 0.18s ease;
-}
-
-.fx-post .award:hover::before {
-	transform: translateY(-2px) rotate(-5deg) scale(1.1);
-}
-
-.fx-post .award_tooltiptext {
-	position: absolute;
-	bottom: calc(100% + 10px);
-	left: 50%;
-	z-index: 20;
-	display: block;
-	width: max-content;
-	max-width: 220px;
-	padding: 8px 12px;
-	border-radius: 10px;
-	background: var(--fx-text);
-	color: var(--fx-bg);
-	font-size: 0.74rem;
-	font-weight: 600;
-	line-height: 1.4;
-	text-align: left;
-	visibility: hidden;
-	opacity: 0;
-	transform: translate(-50%, 4px);
-	transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
-	pointer-events: none;
-	box-shadow: var(--fx-pop-shadow);
-}
-
-.fx-post .award:hover .award_tooltiptext {
-	visibility: visible;
-	opacity: 1;
-	transform: translate(-50%, 0);
-}
-
-.fx-post .award_tooltiptext_title {
-	margin: 0 0 2px;
-	font-size: 0.78rem;
-	font-weight: 800;
-}
-
-.fx-post .award_more:empty {
-	display: none;
-}
-
-.fx-post .award_more:not(:empty) {
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-	font-weight: 800;
-}
-
-/* stats: one chip per profile field */
-.fx-p-stats {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-	flex: 0 0 100%;
-}
-
-.fx-p-stats:empty {
-	display: none;
-}
-
-.fx-p-stat {
-	display: inline-flex;
-	align-items: center;
-	padding: 2px 11px;
-	border: 1px solid var(--fx-border);
-	border-radius: 999px;
-	background: var(--fx-surface);
-	color: var(--fx-text);
-	font-size: 0.74rem;
-	font-weight: 800;
-	line-height: 1.5;
-	gap: 5px;
-	max-width: 100%;
-}
-
-/* the label carries an inline color from the admin panel; keep it on the theme */
-.fx-p-stat .label,
-.fx-p-stat .label span {
-	color: var(--fx-muted) !important;
-	font-weight: 700;
-}
-
-.fx-p-stat br {
-	display: none;
-}
-
-/* ---------- Action icons (shared by the top pill and the contact buttons) ----------
-   The real <img>/<a> from Forumotion stays in place, invisible, as the click target and the
-   accessible name. The picture is drawn with a mask, so it follows the theme color. */
-.fx-p-act {
-	position: relative;
-	flex: 0 0 auto;
-	width: 34px;
-	height: 34px;
-	border-radius: 10px;
-	color: var(--fx-muted);
-	transition: color 0.15s, background-color 0.15s;
-}
-
-.fx-p-act:empty {
-	display: none;
-}
-
-.fx-p-act::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	width: 18px;
-	height: 18px;
-	margin: auto;
-	background: currentColor;
-	-webkit-mask: var(--p-i) center / contain no-repeat;
-	mask: var(--p-i) center / contain no-repeat;
-	pointer-events: none;
-}
-
-.fx-p-act > a,
-.fx-p-act > img {
-	position: absolute;
-	inset: 0;
-	display: block;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	opacity: 0;
-	cursor: pointer;
-}
-
-.fx-p-act > a img {
-	display: block;
-	width: 100%;
-	height: 100%;
-}
-
-.fx-p-act:hover {
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-}
-
-.fx-p-act--thanks { --p-i: var(--p-ico-thanks); }
-.fx-p-act--mq { --p-i: var(--p-ico-mq); }
-.fx-p-act--quote { --p-i: var(--p-ico-quote); }
-.fx-p-act--edit { --p-i: var(--p-ico-edit); }
-.fx-p-act--delete { --p-i: var(--p-ico-delete); }
-.fx-p-act--ip { --p-i: var(--p-ico-ip); }
-.fx-p-act--report { --p-i: var(--p-ico-report); }
-.fx-p-act--profile { --p-i: var(--p-ico-profile); }
-.fx-p-act--pm { --p-i: var(--p-ico-pm); }
-.fx-p-act--mail { --p-i: var(--p-ico-mail); }
-
-.fx-p-act--delete:hover,
-.fx-p-act--report:hover {
-	background: var(--fx-danger-soft);
-	color: var(--fx-danger);
-}
-
-/* multi-quote: Forumotion swaps the image to the "_on_" file when it is selected */
-.fx-p-act--mq:has(> img[src*="_on_"]) {
-	background: var(--fx-accent);
-	color: var(--fx-on-accent);
-}
-
-/* extra contact fields from the admin panel keep their own picture */
-.fx-p-act--extra {
-	width: auto;
-	min-width: 34px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.fx-p-act--extra::before {
-	display: none;
-}
-
-.fx-p-act--extra > a,
-.fx-p-act--extra > img {
-	position: static;
-	width: auto;
-	height: auto;
-	opacity: 1;
-}
-
-/* the top pill */
-.fx-post ul.fx-p-acts {
-	position: relative;
-	z-index: 2;
-	display: flex;
-	flex: 0 0 auto;
-	align-items: center;
-	gap: 2px;
-	float: none;
-	margin: 0;
-	padding: 4px;
-	border: 1px solid var(--fx-border);
-	border-radius: 14px;
-	background: var(--fx-surface);
-	list-style: none;
-	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
-}
-
-.fx-post ul.fx-p-acts > li {
-	float: none;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-/* the contact group in the footer */
-.fx-p-contact {
-	display: inline-flex;
-	align-items: center;
-	gap: 2px;
-	padding: 3px;
-	border: 1px solid var(--fx-border);
-	border-radius: 13px;
-	background: var(--fx-surface);
-}
-
-.fx-p-contact .fx-p-act {
-	width: 30px;
-	height: 30px;
-}
-
-.fx-p-contact .fx-p-act::before {
-	width: 16px;
-	height: 16px;
-}
-
-.fx-p-contact:not(:has(.fx-p-act:not(:empty))) {
-	display: none;
-}
-
-/* ---------- Message ---------- */
-.fx-post .postbody {
-	float: none !important;
-	width: auto !important;
-	margin: 0;
-	padding: 22px 26px 0;
-	color: var(--fx-text);
-	font-family: var(--fx-font);
-}
-
-.fx-post__meta {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: 4px 16px;
-}
-
-.fx-post .topic-title {
-	display: flex;
-	align-items: center;
-	gap: 9px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	color: var(--fx-text);
-	font: 800 1.04rem/1.35 var(--fx-font);
-	letter-spacing: -0.005em;
-}
-
-.fx-post .topic-title::before {
-	content: "";
-	flex: 0 0 auto;
-	width: 10px;
-	height: 10px;
-	background: linear-gradient(135deg, var(--p-g1), var(--p-g2));
-	clip-path: var(--p-diamond);
-}
-
-.fx-post .topic-title > img[src$="empty.gif"] {
-	display: none;
-}
-
-.fx-post .topic-title a {
-	color: var(--fx-text);
-	text-decoration: none;
-}
-
-.fx-post .topic-title a:hover {
-	color: var(--fx-accent);
-}
-
-.fx-post .postbody .author {
-	margin: 0;
-	padding: 0;
-	line-height: 1.2;
-}
-
-.fx-p-date {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	color: var(--fx-muted);
-	font-size: 0.76rem;
-	font-weight: 700;
-	text-decoration: none;
-}
-
-.fx-p-date::before {
-	content: "";
-	width: 13px;
-	height: 13px;
-	background: currentColor;
-	-webkit-mask: var(--p-ico-clock) center / contain no-repeat;
-	mask: var(--p-ico-clock) center / contain no-repeat;
-}
-
-.fx-p-date:hover {
-	color: var(--fx-accent);
-}
-
-.fx-post .postbody .content {
-	min-height: 0;
-	margin: 14px 0 0;
-	padding: 0;
-	color: var(--fx-text);
-	font: 400 0.97rem/1.72 var(--fx-font);
-	overflow-wrap: anywhere;
-}
-
-.fx-post .postbody .content a.postlink {
-	color: var(--fx-accent);
-	font-weight: 700;
-}
-
-.fx-post .postbody .content img {
-	max-width: 100%;
-}
-
-.fx-post .postbody .content hr {
-	height: 1px;
-	margin: 16px 0;
-	border: 0;
-	background: var(--fx-border);
-}
-
-/* quotes and code */
-.fx-post .postbody .content blockquote {
-	margin: 14px 0;
-	padding: 12px 16px;
-	border: 1px solid var(--fx-border);
-	border-left: 4px solid var(--fx-accent);
-	border-radius: 12px;
-	background: var(--fx-surface-2);
-	color: var(--fx-text);
-	font-size: 0.92rem;
-}
-
-.fx-post .postbody .content blockquote cite {
-	display: block;
-	margin: 0 0 6px;
-	color: var(--fx-accent);
-	font-size: 0.78rem;
-	font-style: normal;
-	font-weight: 800;
-}
-
-.fx-post .postbody .content .codebox {
-	margin: 14px 0;
-	border: 1px solid var(--fx-border);
-	border-radius: 12px;
-	background: var(--fx-surface-2);
-	overflow: hidden;
-}
-
-.fx-post .postbody .content .codebox pre,
-.fx-post .postbody .content .codebox code {
-	color: var(--fx-text);
-	background: none;
-}
-
-/* attachments */
-.fx-post dl.attachbox {
-	margin: 16px 0 0;
-	padding: 12px 16px;
-	border: 1px solid var(--fx-border);
-	border-radius: 12px;
-	background: var(--fx-surface-2);
-	color: var(--fx-text);
-	font-size: 0.85rem;
-}
-
-.fx-post dl.attachbox dt {
-	margin: 0 0 6px;
-	color: var(--fx-muted);
-	font-weight: 800;
-}
-
-/* edited line + signature */
-.fx-post__edited {
-	margin: 12px 0 0;
-	color: var(--fx-muted);
-	font-size: 0.74rem;
-}
-
-.fx-post__edited:empty {
-	display: none;
-}
-
-.fx-post .signature_div {
-	margin: 18px 0 0;
-	padding: 12px 0 0;
-	border-top: 1px dashed var(--fx-border-strong);
-	color: var(--fx-muted);
-	font-size: 0.8rem;
-	line-height: 1.5;
-	overflow: hidden;
-}
-
-/* ---------- Footer tray ---------- */
-.fx-post__foot {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 10px 14px;
-	margin: 20px 0 0;
-	padding: 12px 18px 12px 26px;
-	border-top: 1px solid var(--fx-border);
-	border-radius: 0 0 var(--p-radius) var(--p-radius);
-	background: var(--fx-surface-2);
-}
-
-.fx-post__tools {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 10px;
-	margin-left: auto;
-}
-
-/* like / dislike pills */
-.fx-post .fa_like_div {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 8px;
-	float: none;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-}
-
-.fx-post .fa_like_list {
-	flex: 0 0 100%;
-	margin: 0;
-	color: var(--fx-muted);
-	font-size: 0.76rem;
-	font-weight: 600;
-}
-
-.fx-post .rep-button {
-	display: inline-flex;
-	align-items: center;
-	gap: 7px;
-	width: auto;
-	height: auto;
-	min-width: 0;
-	margin: 0;
-	padding: 6px 14px;
-	border: 1px solid var(--fx-border);
-	border-radius: 999px;
-	background-color: var(--fx-surface);
-	background-image: none !important;
-	box-shadow: none;
-	color: var(--fx-muted);
-	font: 800 0.78rem/1.2 var(--fx-font);
-	letter-spacing: 0;
-	text-indent: 0;
-	text-shadow: none;
-	text-transform: none;
-	cursor: pointer;
-	transition: color 0.15s, border-color 0.15s, background-color 0.15s;
-}
-
-.fx-post .rep-button svg {
-	flex: 0 0 auto;
-	width: 15px;
-	height: 15px;
-}
-
-.fx-post .rep-button svg path {
-	fill: currentColor;
-}
-
-.fx-post .rep-button:hover {
-	border-color: var(--fx-accent);
-	background-color: var(--fx-accent-soft);
-	color: var(--fx-accent);
-}
-
-.fx-post .rep-button.fa_dislike:hover {
-	border-color: var(--fx-danger);
-	background-color: var(--fx-danger-soft);
-	color: var(--fx-danger);
-}
-
-/* when the member has already voted */
-.fx-post .rep-button[class*="active"],
-.fx-post .rep-button[class*="voted"],
-.fx-post .rep-button[class*="selected"] {
-	border-color: var(--fx-accent);
-	background-color: var(--fx-accent-soft);
-	color: var(--fx-accent);
-}
-
-.fx-post .rep-nb {
-	min-width: 18px;
-	padding: 0 6px;
-	border-radius: 999px;
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-	font-size: 0.7rem;
-	line-height: 18px;
-	text-align: center;
-}
-
-/* +/- vote pill */
-.fx-post .vote {
-	display: inline-flex;
-	align-items: center;
-	gap: 2px;
-	float: none;
-	width: auto;
-	height: auto;
-	margin: 0;
-	padding: 3px;
-	border: 1px solid var(--fx-border);
-	border-radius: 999px;
-	background: var(--fx-surface);
-	color: var(--fx-muted);
-}
-
-.fx-post .vote-button {
-	float: none;
-	margin: 0;
-	padding: 0;
-}
-
-.fx-post .vote-button a {
-	display: grid;
-	place-items: center;
-	width: 24px;
-	height: 24px;
-	border-radius: 50%;
-	color: var(--fx-muted);
-	font-size: 0.95rem;
-	font-weight: 800;
-	line-height: 1;
-	text-decoration: none;
-}
-
-.fx-post .vote-button a:hover {
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-}
-
-.fx-post .vote-no-bar {
-	width: auto;
-	margin: 0 4px;
-	font-size: 0;
-}
-
-.fx-post .vote-no-bar::before {
-	content: "";
-	display: block;
-	width: 14px;
-	height: 2px;
-	border-radius: 2px;
-	background: var(--fx-border-strong);
-}
-
-.fx-post .vote-bar {
-	display: flex;
-	flex-direction: column-reverse;
-	width: 6px;
-	height: 24px;
-	margin: 0 4px;
-	overflow: hidden;
-	border-radius: 3px;
-	background: var(--fx-border);
-}
-
-.fx-post .vote-bar-plus {
-	width: 100%;
-	background: var(--fx-accent);
-}
-
-.fx-post .vote-bar-minus {
-	width: 100%;
-	background: var(--fx-danger);
-}
-
-/* back to top / down */
-.fx-p-jump {
-	display: inline-flex;
-	align-items: center;
-	gap: 2px;
-}
-
-.fx-p-jump a {
-	display: grid;
-	place-items: center;
-	width: 30px;
-	height: 30px;
-	border-radius: 9px;
-	color: var(--fx-muted);
-	transition: color 0.15s, background-color 0.15s;
-}
-
-.fx-p-jump a:hover {
-	background: var(--fx-accent-soft);
-	color: var(--fx-accent);
-}
-
-/* ---------- Hidden message ("show hidden message") ---------- */
-div.post.fx-post--hidden {
-	margin-top: 14px;
-}
-
-.fx-post__hidden {
-	margin: 0;
-	padding: 16px 20px;
-	color: var(--fx-muted);
-	font-size: 0.88rem;
-	font-weight: 700;
-	text-align: center;
-}
-
-.fx-post__hidden a {
-	color: var(--fx-accent);
-}
-
-/* ---------- Small screens: the header stacks, the actions drop under the name ---------- */
-@media (max-width: 720px) {
-	div.post.fx-post {
-		margin-top: 44px;
-		--p-radius: 16px;
-	}
-
-	.fx-post__head {
-		flex-wrap: wrap;
-		padding: 14px 14px 14px 16px;
-	}
-
-	.fx-post .postprofile {
-		flex: 1 1 100%;
-		gap: 16px;
-	}
-
-	.fx-p-avatar {
-		width: 92px;
-		height: 92px;
-		margin: -32px 0 -6px;
-	}
-
-	.fx-p-name {
-		font-size: 1.12rem;
-	}
-
-	.fx-post ul.fx-p-acts {
-		margin-left: auto;
-	}
-
-	.fx-post .postbody {
-		padding: 18px 18px 0;
-	}
-
-	.fx-post__foot {
-		padding: 12px 14px;
-	}
-
-	.fx-post__tools {
-		justify-content: space-between;
-		width: 100%;
-		margin-left: 0;
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.fx-p-avatar,
-	.fx-post .award::before,
-	.fx-post .award_tooltiptext {
-		transition: none;
-	}
-
-	.fx-post:hover .fx-p-avatar {
-		transform: none;
-	}
-}
-
-
-/* =========================================================
-   9. POSTS  (viewtopic_body: one card per post)
    Author header on top: diamond avatar, name, rank, awards (popup) and
    stats, with the post actions in a pill on the right. Then the
    message, then a footer tray (likes left, contact / vote / jump right).
    Light and dark both follow the --fx tokens; only the avatar
    ring gradient and its glow get their own dark values.
 
-   Changes in this version:
-   - multi-quote has its own icon (list-plus), no longer a copy icon
+   - post actions (thanks, multi-quote, quote, edit ...) are drawn icons;
+     multi-quote is a quote mark with a plus
    - "thanked" heart is filled and red; a thanked post gets a green
      card, a glow and a "Thanked" pill (detected by the inline
      background-color Forumotion adds)
    - like / dislike are plain pills, no svg
    - reputation is a coloured badge (class set by the template script)
-   - awards sit behind a "Show awards" button and open as a popup
-   - contact buttons use drawn icons (website, facebook, twitter,
-     pinterest, skype) instead of the old gif pictures
+   - awards: a small "Awards" pill (native <details>) that opens a popup
+     floating over the post, so nothing is pushed around
+   - contact buttons (.fx-ct) are all drawn icons: profile, message, mail,
+     website, facebook, twitter / x, pinterest, instagram, youtube,
+     linkedin, github, twitch, skype; the old gif pictures stay in the
+     page, invisible, as the click target
+   - vote bar is replaced by up / down counters (template script)
    ========================================================= */
 
 .fx-post {
@@ -3658,8 +2661,8 @@ div.post.fx-post--hidden {
 
 	/* icons (masks) */
 	--p-ico-quote: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z%22/%3E%3Cpath d=%22M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z%22/%3E%3C/svg%3E");
-	/* multi-quote: a list with a plus (was a "copy" icon) */
-	--p-ico-mq: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M11 12H3%22/%3E%3Cpath d=%22M16 6H3%22/%3E%3Cpath d=%22M16 18H3%22/%3E%3Cpath d=%22M18 9v6%22/%3E%3Cpath d=%22M21 12h-6%22/%3E%3C/svg%3E");
+	/* multi-quote: a quote mark with a plus */
+	--p-ico-mq: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(.4 .2) scale(.6)' stroke-width='3.3'%3E%3Cpath d='M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z'/%3E%3Cpath d='M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z'/%3E%3C/g%3E%3Cpath d='M18.2 13v8M14.2 17h8'/%3E%3C/svg%3E");
 	--p-ico-edit: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z%22/%3E%3Cpath d=%22m15 5 4 4%22/%3E%3C/svg%3E");
 	--p-ico-delete: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 6h18%22/%3E%3Cpath d=%22M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6%22/%3E%3Cpath d=%22M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2%22/%3E%3Cpath d=%22M10 11v6M14 11v6%22/%3E%3C/svg%3E");
 	--p-ico-ip: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3Cpath d=%22M2 12h20%22/%3E%3Cpath d=%22M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z%22/%3E%3C/svg%3E");
@@ -3679,6 +2682,15 @@ div.post.fx-post--hidden {
 	--p-ico-tw: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z%22/%3E%3C/svg%3E");
 	--p-ico-pin: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 17v5%22/%3E%3Cpath d=%22M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z%22/%3E%3C/svg%3E");
 	--p-ico-phone: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z%22/%3E%3C/svg%3E");
+	--p-ico-dot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='2.4' fill='%23000'/%3E%3C/svg%3E");
+	--p-ico-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+	--p-ico-ig: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='20' x='2' y='2' rx='5' ry='5'/%3E%3Cpath d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'/%3E%3Cpath d='M17.5 6.5h.01'/%3E%3C/svg%3E");
+	--p-ico-yt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17'/%3E%3Cpath d='m10 15 5-3-5-3z'/%3E%3C/svg%3E");
+	--p-ico-in: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z'/%3E%3Crect width='4' height='12' x='2' y='9'/%3E%3Ccircle cx='4' cy='4' r='2'/%3E%3C/svg%3E");
+	--p-ico-gh: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4'/%3E%3Cpath d='M9 18c-4.51 2-5-2-7-2'/%3E%3C/svg%3E");
+	--p-ico-tv: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7'/%3E%3C/svg%3E");
+	--p-ico-pt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9.6 19.2 11.4 11'/%3E%3Cpath d='M10.2 13c-.7-2.9.7-5.2 3.2-5.2 2 0 3.1 1.3 3.1 3 0 2.3-1.3 3.9-3 3.9-.9 0-1.6-.5-1.9-1.2'/%3E%3C/svg%3E");
+	--p-ico-chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 }
 
 html[data-fx-theme="dark"] .fx-post {
@@ -3827,11 +2839,6 @@ div.post.fx-post[style*="background-color"] .fx-post__head {
 	width: auto !important;
 }
 
-/* while an awards popup is open, this header must sit above the posts that follow */
-.fx-post .postprofile:has(.fx-awards__pop:not([hidden])) {
-	z-index: 30;
-}
-
 /* ---------- Diamond avatar ---------- */
 .fx-p-avatar {
 	position: relative;
@@ -3965,6 +2972,9 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	display: none;
 }
 
+/* ---------- Awards: a small pill, the awards open in a popup under it ---------- */
+
+/* one award: the picture comes from the --award-image variable Forumotion sets inline */
 .fx-post .award {
 	position: relative;
 	display: block;
@@ -3984,35 +2994,49 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	background: var(--award-image) center / contain no-repeat;
 }
 
-/* ---------- Awards: a "Show awards" button, the awards open in a popup ---------- */
 .fx-post .postprofile dd.dd_award {
 	position: relative;
 	display: block;
+	float: none;
 	width: auto !important;
 	height: auto !important;
+	margin: 0;
 	padding: 0;
 	border: 0 !important;
 	background: none !important;
 	box-shadow: none;
 }
 
-.fx-awards__btn {
+/* the pill (<summary>): medal, label, count, chevron */
+.fx-post summary.fx-awd__sum {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
 	margin: 0;
-	padding: 4px 12px 4px 9px;
+	padding: 4px 9px 4px 9px;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 999px;
 	background: var(--fx-surface);
 	color: var(--fx-accent);
 	font: 800 0.72rem/1.4 var(--fx-font);
+	list-style: none;
 	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
 	transition: background-color 0.15s, border-color 0.15s;
 }
 
-.fx-awards__btn::before {
+.fx-post summary.fx-awd__sum::-webkit-details-marker {
+	display: none;
+}
+
+.fx-post summary.fx-awd__sum::marker {
 	content: "";
+}
+
+.fx-post summary.fx-awd__sum::before {
+	content: "";
+	flex: 0 0 auto;
 	width: 14px;
 	height: 14px;
 	background: currentColor;
@@ -4020,97 +3044,137 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	mask: var(--p-ico-award) center / contain no-repeat;
 }
 
-.fx-awards__btn:hover,
-.fx-awards__btn[aria-expanded="true"] {
+.fx-post summary.fx-awd__sum::after {
+	content: "";
+	flex: 0 0 auto;
+	width: 12px;
+	height: 12px;
+	background: currentColor;
+	opacity: 0.7;
+	-webkit-mask: var(--p-ico-chev) center / contain no-repeat;
+	mask: var(--p-ico-chev) center / contain no-repeat;
+	transition: transform 0.18s ease;
+}
+
+.fx-post details[open] > summary.fx-awd__sum::after {
+	transform: rotate(180deg);
+}
+
+.fx-post summary.fx-awd__sum:hover,
+.fx-post details[open] > summary.fx-awd__sum {
 	border-color: var(--fx-accent);
 	background: var(--fx-accent-soft);
 }
 
-.fx-awards__btn:focus-visible {
+.fx-post summary.fx-awd__sum:focus-visible {
 	outline: 2px solid var(--fx-accent);
 	outline-offset: 2px;
 }
 
-.fx-awards__pop {
+/* number of awards, added by the template script */
+.fx-awd__n {
+	min-width: 18px;
+	padding: 0 6px;
+	border-radius: 999px;
+	background: var(--fx-accent);
+	color: var(--fx-on-accent);
+	font-size: 0.66rem;
+	line-height: 18px;
+	text-align: center;
+}
+
+/* the popup floats over the post (absolute), it never pushes anything */
+.fx-post .fx-awd__pop {
 	position: absolute;
 	top: calc(100% + 10px);
 	left: 0;
 	z-index: 40;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 2px;
 	box-sizing: border-box;
 	width: 300px;
-	max-width: calc(100vw - 40px);
-	max-height: 320px;
+	max-width: calc(100vw - 32px);
+	max-height: 300px;
 	padding: 8px;
 	overflow-y: auto;
 	border: 1px solid var(--fx-border-strong);
 	border-radius: 16px;
 	background: var(--fx-surface);
 	box-shadow: var(--fx-pop-shadow);
+	transform-origin: top left;
 	animation: fx-pop 0.16s ease-out;
 }
 
-/* the display rule above would override the hidden attribute */
-.fx-awards__pop[hidden] {
+/* closed: some older browsers keep a flex child visible inside a closed <details> */
+.fx-post details.fx-awd__d:not([open]) > .fx-awd__pop {
 	display: none;
 }
 
-/* each award is one row: picture, title, description (no hover tooltip needed in the popup) */
-.fx-awards__pop .award {
+/* while a popup is open, this author block sits above the posts that follow */
+.fx-post .postprofile:has(details.fx-awd__d[open]) {
+	z-index: 30;
+}
+
+/* each award is one row: picture tile, title, description */
+.fx-post .fx-awd__pop .award {
 	display: flex;
 	align-items: center;
 	gap: 12px;
 	width: auto;
 	height: auto;
+	min-height: 0;
 	padding: 8px 10px;
-	border-radius: 10px;
+	border-radius: 12px;
 	cursor: default;
+	transition: background-color 0.15s;
 }
 
-.fx-awards__pop .award:hover {
+.fx-post .fx-awd__pop .award:hover {
 	background: var(--fx-surface-2);
 }
 
-.fx-awards__pop .award::before {
+.fx-post .fx-awd__pop .award::before {
 	position: static;
-	flex: 0 0 36px;
-	width: 36px;
-	height: 36px;
 	inset: auto;
+	flex: 0 0 42px;
+	width: 42px;
+	height: 42px;
+	border-radius: 12px;
+	background-color: var(--fx-surface-2);
+	background-image: var(--award-image);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 68%;
+	box-shadow: inset 0 0 0 1px var(--fx-border);
 }
 
-.fx-awards__pop .award:hover::before {
-	transform: none;
-}
-
-.fx-awards__pop .award_tooltiptext {
+.fx-post .fx-awd__pop .award_tooltiptext {
 	position: static;
 	display: block;
+	flex: 1 1 auto;
 	width: auto;
+	min-width: 0;
 	max-width: none;
+	margin: 0;
 	padding: 0;
+	border: 0;
 	background: none;
 	box-shadow: none;
 	color: var(--fx-muted);
-	font-size: 0.78rem;
-	font-weight: 600;
-	line-height: 1.4;
+	font: 600 0.78rem/1.4 var(--fx-font);
+	text-align: left;
 	visibility: visible;
 	opacity: 1;
 	transform: none;
 	pointer-events: auto;
 }
 
-.fx-awards__pop .award:hover .award_tooltiptext {
-	transform: none;
-}
-
-.fx-awards__pop .award_tooltiptext_title {
+.fx-post .fx-awd__pop .award_tooltiptext_title {
+	display: block;
 	margin: 0 0 1px;
 	color: var(--fx-text);
-	font-size: 0.86rem;
+	font-size: 0.88rem;
 	font-weight: 800;
 }
 
@@ -4204,9 +3268,10 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	color: var(--fx-muted);
 }
 
-/* ---------- Action icons (shared by the top pill and the contact buttons) ----------
+/* ---------- Action icons (the pill at the top right of every post) ----------
    The real <img>/<a> from Forumotion stays in place, invisible, as the click target and the
-   accessible name. The picture is drawn with a mask, so it follows the theme color. */
+   accessible name. The picture is drawn with a mask, so it follows the theme color.
+   --p-i is the icon; if a button has none, a small dot is drawn instead of a solid square. */
 .fx-p-act {
 	position: relative;
 	flex: 0 0 auto;
@@ -4229,8 +3294,8 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	height: 18px;
 	margin: auto;
 	background: currentColor;
-	-webkit-mask: var(--p-i) center / contain no-repeat;
-	mask: var(--p-i) center / contain no-repeat;
+	-webkit-mask: var(--p-i, var(--p-ico-dot)) center / contain no-repeat;
+	mask: var(--p-i, var(--p-ico-dot)) center / contain no-repeat;
 	pointer-events: none;
 }
 
@@ -4261,15 +3326,13 @@ html[data-fx-theme="dark"] .fx-p-name a {
 }
 
 .fx-p-act--thanks { --p-i: var(--p-ico-thanks); }
-.fx-p-act--mq { --p-i: var(--p-ico-mq); }
+.fx-p-act--mq,
+.fx-p-act.fx-mq { --p-i: var(--p-ico-mq); }
 .fx-p-act--quote { --p-i: var(--p-ico-quote); }
 .fx-p-act--edit { --p-i: var(--p-ico-edit); }
 .fx-p-act--delete { --p-i: var(--p-ico-delete); }
 .fx-p-act--ip { --p-i: var(--p-ico-ip); }
 .fx-p-act--report { --p-i: var(--p-ico-report); }
-.fx-p-act--profile { --p-i: var(--p-ico-profile); }
-.fx-p-act--pm { --p-i: var(--p-ico-pm); }
-.fx-p-act--mail { --p-i: var(--p-ico-mail); }
 
 .fx-p-act--delete:hover,
 .fx-p-act--report:hover {
@@ -4300,22 +3363,11 @@ html[data-fx-theme="dark"] .fx-p-name a {
 }
 
 /* MULTI-QUOTE: Forumotion swaps the image to the "_on_" file when it is selected */
-.fx-p-act--mq:has(> img[src*="_on_"]) {
+.fx-p-act--mq:has(> img[src*="_on_"]),
+.fx-p-act.fx-mq:has(> img[src*="_on_"]) {
 	background: var(--fx-accent);
 	color: var(--fx-on-accent);
 }
-
-/* EXTRA CONTACT FIELDS (website, facebook, twitter, pinterest, skype ...):
-   same treatment, the icon is picked from the link. Anything unknown gets a globe. */
-.fx-p-act--extra {
-	--p-i: var(--p-ico-ip);
-}
-
-.fx-p-act--extra:has(> a[href*="facebook."]) { --p-i: var(--p-ico-fb); }
-.fx-p-act--extra:has(> a[href*="twitter."]),
-.fx-p-act--extra:has(> a[href*="//x.com"]) { --p-i: var(--p-ico-tw); }
-.fx-p-act--extra:has(> a[href*="pinterest."]) { --p-i: var(--p-ico-pin); }
-.fx-p-act--extra:has(> a[href^="skype:"]) { --p-i: var(--p-ico-phone); }
 
 /* the top pill */
 .fx-post ul.fx-p-acts {
@@ -4342,8 +3394,12 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	list-style: none;
 }
 
-/* the contact group in the footer */
-.fx-p-contact {
+/* ---------- Contact buttons (footer): profile, message, mail, website, social ----------
+   Every button is a .fx-ct__i. Inside it Forumotion prints <a><img></a>; the link stays as the
+   click target, the picture is invisible and the icon is drawn with a mask. The icon is picked
+   from the picture name (built-in fields) or from the link address (custom fields). Anything
+   unknown gets a chain-link icon. --c-hover is the color the icon takes on hover. */
+.fx-ct {
 	display: inline-flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -4354,19 +3410,96 @@ html[data-fx-theme="dark"] .fx-p-name a {
 	background: var(--fx-surface);
 }
 
-.fx-p-contact .fx-p-act {
-	width: 30px;
-	height: 30px;
-}
-
-.fx-p-contact .fx-p-act::before {
-	width: 16px;
-	height: 16px;
-}
-
-.fx-p-contact:not(:has(.fx-p-act:not(:empty))) {
+.fx-ct:not(:has(.fx-ct__i:not(:empty))) {
 	display: none;
 }
+
+.fx-ct__i {
+	--c-i: var(--p-ico-link);
+	--c-hover: var(--fx-accent);
+	position: relative;
+	flex: 0 0 auto;
+	width: 30px;
+	height: 30px;
+	border-radius: 9px;
+	color: var(--fx-muted);
+	font-size: 0;
+	line-height: 0;
+	transition: color 0.15s, background-color 0.15s;
+}
+
+.fx-ct__i:empty {
+	display: none;
+}
+
+.fx-ct__i::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	width: 16px;
+	height: 16px;
+	margin: auto;
+	background: currentColor;
+	-webkit-mask: var(--c-i) center / contain no-repeat;
+	mask: var(--c-i) center / contain no-repeat;
+	pointer-events: none;
+}
+
+.fx-ct__i > a {
+	position: absolute;
+	inset: 0;
+	display: block;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: inherit;
+	background: none;
+	font-size: 0;
+	cursor: pointer;
+}
+
+.fx-ct__i img {
+	position: absolute;
+	inset: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	opacity: 0;
+}
+
+.fx-ct__i:hover {
+	background: var(--fx-accent-soft);
+	background: color-mix(in srgb, var(--c-hover) 13%, transparent);
+	color: var(--c-hover);
+}
+
+/* built-in fields: by picture name */
+.fx-ct__i:has(img[src*="icon_user_profile"]) { --c-i: var(--p-ico-profile); }
+.fx-ct__i:has(img[src*="icon_contact_pm"]) { --c-i: var(--p-ico-pm); }
+.fx-ct__i:has(img[src*="icon_contact_email"]) { --c-i: var(--p-ico-mail); }
+.fx-ct__i:has(img[src*="icon_contact_www"]) { --c-i: var(--p-ico-link); }
+.fx-ct__i:has(img[src*="icon_contact_fb"]) { --c-i: var(--p-ico-fb); --c-hover: #1877f2; }
+.fx-ct__i:has(img[src*="icon_contact_twitter"]) { --c-i: var(--p-ico-tw); --c-hover: #1d9bf0; }
+.fx-ct__i:has(img[src*="icon_contact_pinterest"]) { --c-i: var(--p-ico-pt); --c-hover: #e60023; }
+.fx-ct__i:has(img[src*="icon_contact_skype"]) { --c-i: var(--p-ico-phone); --c-hover: #00aff0; }
+
+/* custom fields and anything else: by link address */
+.fx-ct__i:has(> a[href*="facebook."]) { --c-i: var(--p-ico-fb); --c-hover: #1877f2; }
+.fx-ct__i:has(> a[href*="twitter."]),
+.fx-ct__i:has(> a[href*="//x.com"]),
+.fx-ct__i:has(> a[href*="//www.x.com"]) { --c-i: var(--p-ico-tw); --c-hover: #1d9bf0; }
+.fx-ct__i:has(> a[href*="pinterest."]) { --c-i: var(--p-ico-pt); --c-hover: #e60023; }
+.fx-ct__i:has(> a[href*="instagram."]) { --c-i: var(--p-ico-ig); --c-hover: #e1306c; }
+.fx-ct__i:has(> a[href*="youtube."]),
+.fx-ct__i:has(> a[href*="youtu.be"]) { --c-i: var(--p-ico-yt); --c-hover: #ff0000; }
+.fx-ct__i:has(> a[href*="linkedin."]) { --c-i: var(--p-ico-in); --c-hover: #0a66c2; }
+.fx-ct__i:has(> a[href*="github."]) { --c-i: var(--p-ico-gh); --c-hover: var(--fx-text); }
+.fx-ct__i:has(> a[href*="twitch."]) { --c-i: var(--p-ico-tv); --c-hover: #9146ff; }
+.fx-ct__i:has(> a[href^="skype:"]) { --c-i: var(--p-ico-phone); --c-hover: #00aff0; }
+.fx-ct__i:has(> a[href^="mailto:"]) { --c-i: var(--p-ico-mail); }
 
 /* ---------- Message ---------- */
 .fx-post .postbody {
@@ -4714,7 +3847,7 @@ html[data-fx-theme="dark"] .fx-post .rep-button.fa_liked .rep-nb {
 	color: #052e16;
 }
 
-/* +/- vote pill */
+/* ---------- +/- vote pill ---------- */
 .fx-post .vote {
 	display: inline-flex;
 	align-items: center;
@@ -4769,6 +3902,7 @@ html[data-fx-theme="dark"] .fx-post .rep-button.fa_liked .rep-nb {
 	background: var(--fx-border-strong);
 }
 
+/* the raw bar (only visible if the template script did not run) */
 .fx-post .vote-bar {
 	display: flex;
 	flex-direction: column-reverse;
@@ -4790,6 +3924,7 @@ html[data-fx-theme="dark"] .fx-post .rep-button.fa_liked .rep-nb {
 	background: var(--fx-danger);
 }
 
+/* the bar after the template script turned it into counters: up and down votes as two small pills */
 .fx-post .vote-bar.fx-score {
 	display: flex;
 	flex-direction: row;
@@ -4912,14 +4047,24 @@ div.post.fx-post--hidden {
 		width: 100%;
 		margin-left: 0;
 	}
+
+	/* the awards popup spans the author block instead of hanging off the pill */
+	.fx-post .postprofile dd.dd_award {
+		position: static;
+	}
+
+	.fx-post .fx-awd__pop {
+		right: 0;
+		width: auto;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.fx-p-avatar,
 	.fx-post .award::before,
-	.fx-post .award_tooltiptext,
-	.fx-awards__pop,
-	.fx-p-act--thanks::before {
+	.fx-awd__pop,
+	.fx-p-act--thanks::before,
+	.fx-post summary.fx-awd__sum::after {
 		transition: none;
 		animation: none;
 	}
