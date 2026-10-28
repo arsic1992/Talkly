@@ -4049,3 +4049,69 @@ div.post.fx-post--hidden {
 		transform: none;
 	}
 }
+/* ---------- Topic row pagination: forced, beats Forumotion defaults ---------- */
+.fx-topics .fx-topic-meta .pagination {
+	order: 2;
+	display: inline-flex;
+	align-items: center;
+	float: none;
+	width: auto;
+	height: auto;
+	margin: 0 0 0 auto;
+	padding: 0;
+	color: var(--fx-muted);
+	font-size: 0.74rem;          /* was 0, which also hid the "..." */
+	font-weight: 800;
+	line-height: 1;
+	text-indent: 0;
+}
+
+.fx-topics .fx-topic-meta .pagination > span {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: var(--fx-muted);
+	font-size: 0.74rem;
+}
+
+.fx-topics .fx-topic-meta .pagination .page-sep {
+	display: none;
+}
+
+.fx-topics .fx-topic-meta .pagination > span > a,
+.fx-topics .fx-topic-meta .pagination > span > a:link,
+.fx-topics .fx-topic-meta .pagination > span > a:visited {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: auto;
+	min-width: 24px;
+	height: 24px;
+	margin: 0;
+	padding: 0 7px;
+	border: 1px solid var(--fx-border-strong);
+	border-radius: 8px;
+	background: transparent none !important;
+	color: var(--fx-muted) !important;
+	-webkit-text-fill-color: var(--fx-muted);
+	font-size: 0.74rem !important;
+	font-weight: 800;
+	line-height: 1;
+	text-indent: 0 !important;
+	text-shadow: none;
+	text-decoration: none;
+	visibility: visible;
+	opacity: 1;
+	overflow: visible;
+	transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.fx-topics .fx-topic-meta .pagination > span > a:hover,
+.fx-topics .fx-topic-meta .pagination > span > a:link:hover,
+.fx-topics .fx-topic-meta .pagination > span > a:visited:hover {
+	border-color: var(--fx-accent);
+	background: var(--fx-accent-soft) !important;
+	color: var(--fx-accent) !important;
+	-webkit-text-fill-color: var(--fx-accent);
+}
