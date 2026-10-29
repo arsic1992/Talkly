@@ -4836,24 +4836,40 @@ html[data-fx-theme="dark"] .topic-actions.fx-ta {
 	animation: fx-pop 0.16s ease-out;
 }
 
-.fx-ta #plus_menu .title-overview {
+/* Forumotion paints the menu's text blocks and links with its own backgrounds, borders and colors
+   (blue blocks, white pills). Everything inside is wiped first, then styled below. */
+.fx-ta #plus_menu :is(p, strong, a, hr, span, div) {
+	box-sizing: border-box;
+	float: none !important;
+	height: auto;
 	margin: 0;
-	padding: 8px 12px 6px;
-	border: 0;
+	border: 0 !important;
 	background: none !important;
-	color: var(--fx-muted);
+	box-shadow: none !important;
+	text-shadow: none !important;
+	filter: none !important;
+	text-indent: 0;
+	opacity: 1;
+}
+
+.fx-ta #plus_menu .title-overview {
+	padding: 8px 12px 6px !important;
+	color: var(--fx-muted) !important;
 	font-size: 0.7rem;
+	line-height: 1.3;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
 }
 
 .fx-ta #plus_menu .title-overview strong {
+	display: inline;
+	padding: 0 !important;
+	color: inherit !important;
 	font-weight: 800;
 }
 
 .fx-ta #plus_menu .left-overview {
-	margin: 0;
-	padding: 0;
+	padding: 0 !important;
 	text-align: left;
 }
 
@@ -4861,6 +4877,8 @@ html[data-fx-theme="dark"] .topic-actions.fx-ta {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
+	padding: 0 !important;
+	color: inherit !important;
 	font-weight: 700;
 }
 
@@ -4868,27 +4886,32 @@ html[data-fx-theme="dark"] .topic-actions.fx-ta {
 	display: none;
 }
 
-.fx-ta #plus_menu .left-overview a {
-	display: block;
-	padding: 9px 12px;
-	border-radius: 10px;
-	color: var(--fx-text);
-	font-weight: 700;
-	text-decoration: none;
+.fx-ta #plus_menu .left-overview a,
+.fx-ta #plus_menu .left-overview a:link,
+.fx-ta #plus_menu .left-overview a:visited {
+	display: block !important;
+	width: auto !important;
+	padding: 9px 12px !important;
+	border-radius: 10px !important;
+	color: var(--fx-text) !important;
+	-webkit-text-fill-color: var(--fx-text);
+	font: 700 0.86rem/1.4 var(--fx-font) !important;
+	text-decoration: none !important;
 	transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.fx-ta #plus_menu .left-overview a:hover {
-	background: var(--fx-surface-2);
-	color: var(--fx-accent);
+.fx-ta #plus_menu .left-overview a:hover,
+.fx-ta #plus_menu .left-overview a:link:hover,
+.fx-ta #plus_menu .left-overview a:visited:hover {
+	background: var(--fx-surface-2) !important;
+	color: var(--fx-accent) !important;
+	-webkit-text-fill-color: var(--fx-accent);
 }
 
 .fx-ta #plus_menu hr.dashed {
-	height: 0;
-	margin: 6px 8px;
-	border: 0;
-	border-top: 1px dashed var(--fx-border-strong);
-	background: none;
+	height: 0 !important;
+	margin: 6px 8px !important;
+	border-top: 1px dashed var(--fx-border-strong) !important;
 }
 
 /* ---------- Wide bars: everything on one row, breadcrumb in the middle ---------- */
